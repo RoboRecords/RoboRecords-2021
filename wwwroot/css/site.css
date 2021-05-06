@@ -10,6 +10,7 @@ a.navbar-brand {
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
+
 }
 
 .btn-primary {
@@ -17,10 +18,12 @@ a {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
-
+.bg-blue-gradient {
+  background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(0,15,149,1) 100%);
+}
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #1b6ec2;
+ background-color: #1b6ec2;
   border-color: #1861ac;
 }
 
@@ -59,13 +62,17 @@ html {
 }
 
 body {
+  background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('https://localhost:44333/data/images/vanillabg.png');
+  color: white;
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
 .footer {
+  clear: both;
   position: absolute;
   bottom: 0;
   width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  background: linear-gradient(180deg, rgba(0,15,149,1) 0%,rgba(2,0,36,1) 100%);
+  white-space: normal;
+  line-height: 30px; /* Vertically center the text there */
 }

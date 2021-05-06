@@ -6558,8 +6558,10 @@ button.bg-warning:focus {
 }
 
 .bg-danger {
-  background-color: #dc3545 !important;
+  background-image: linear-gradient(to right, red , blue); !important;
 }
+
+
 
 a.bg-danger:hover, a.bg-danger:focus,
 button.bg-danger:hover,
@@ -10003,6 +10005,7 @@ a.text-dark:hover, a.text-dark:focus {
   }
   .container {
     min-width: 992px !important;
+    
   }
   .navbar {
     display: none;
