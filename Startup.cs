@@ -15,11 +15,12 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MySql.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCore.Identity.Mongo;
+using AspNetCore.Identity.Mongo.Model;
 using RoboRecords.Services;
 
 namespace RoboRecords
@@ -38,6 +39,18 @@ namespace RoboRecords
         {
             services.AddRazorPages();
             services.AddSingleton<DatabaseService>();
+            
+            services.AddIdentityMongoDbProvider<MongoUser>(identity =>
+                {
+                    identity.Password.RequiredLength = 6;
+                    identity.Password.RequireNonAlphanumeric = false;
+                    // other options
+                } ,
+                mongo =>
+                {
+                    mongo.ConnectionString = Configuration["DbConnectionString"];
+                    // other options
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +72,7 @@ namespace RoboRecords
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
