@@ -21,6 +21,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspNetCore.Identity.Mongo;
 using AspNetCore.Identity.Mongo.Model;
+using RoboRecords.Models;
 using RoboRecords.Services;
 
 namespace RoboRecords
@@ -39,11 +40,13 @@ namespace RoboRecords
         {
             services.AddRazorPages();
             services.AddSingleton<DatabaseService>();
-            
-            services.AddIdentityMongoDbProvider<MongoUser>(identity =>
+
+            services.AddIdentityMongoDbProvider<RoboUser>(identity =>
                 {
                     identity.Password.RequiredLength = 6;
                     identity.Password.RequireNonAlphanumeric = false;
+                    identity.User.AllowedUserNameCharacters =
+                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+#";
                 },
                 mongo =>
                 {
@@ -64,7 +67,7 @@ namespace RoboRecords
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
