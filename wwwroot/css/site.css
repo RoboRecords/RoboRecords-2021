@@ -12,14 +12,11 @@ a {
   color: #0366d6;
 
 }
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
 .bg-blue-gradient {
   background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(0,15,149,1) 100%);
+}
+.bg-black-gradient {
+  background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(255,255,255,1) 100%);
 }
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
@@ -57,16 +54,97 @@ button.accept-policy {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   position: relative;
   min-height: 100%;
 }
 
-body {
+.home-bg {
   background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/vanillabg.png');
+}
+
+.games-bg {
+  background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/cydmbg.png');
+}
+
+
+
+body {
   color: white;
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
+.flex-container {
+  display:flex;
+}
+
+
+#loginBox {
+  border:20px groove  #000099;
+  border-radius: 20px;
+  margin-right: 2vw;
+  width: 35vw;
+  height: 20vw;
+  background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ),#000099;
+  clear: both;
+}
+.btn-blue {
+  background: #1414ff;
+  color: white;
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+.btn-orange {
+  margin: auto;
+  width: 50%;
+  background:#ff7409;
+  color:white;
+  padding: 10px;
+}
+#attractRegister {
+  display: block;
+  border-radius: 10px;
+  text-align: center;
+  padding: 10px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 40px;
+  line-height: 1.4;
+  position: relative;
+
+  background: #ff7409;
+}
+#attractLogin {
+  display: block;
+  border-radius: 10px;
+  text-align: center;
+  padding: 10px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 40px;
+  line-height: 1.4;
+  position: relative;
+
+  background: #1b1bff;
+}
+#registerBox{
+  border:20px groove #803700;
+  border-radius: 20px;
+  margin-right: 2vw;
+  width: 35vw;
+  height: 40vw;
+  background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), #602500;
+  background-size: contain;
+  
+
+}
+
 .footer {
   clear: both;
   position: absolute;
