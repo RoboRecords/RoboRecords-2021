@@ -44,12 +44,10 @@ namespace RoboRecords
                 {
                     identity.Password.RequiredLength = 6;
                     identity.Password.RequireNonAlphanumeric = false;
-                    // other options
-                } ,
+                },
                 mongo =>
                 {
-                    mongo.ConnectionString = Configuration["DbConnectionString"];
-                    // other options
+                    mongo.ConnectionString = Configuration["DbUsersConnectionString"];
                 });
         }
 
