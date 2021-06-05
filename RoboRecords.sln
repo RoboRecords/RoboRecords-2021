@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoboRecords", "RoboRecords.csproj", "{39500A6F-663E-42B2-BB7C-1D81F2E5096D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{8B1C7661-7214-4B79-8F2D-DD7CA80D4626}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{39500A6F-663E-42B2-BB7C-1D81F2E5096D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39500A6F-663E-42B2-BB7C-1D81F2E5096D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39500A6F-663E-42B2-BB7C-1D81F2E5096D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B1C7661-7214-4B79-8F2D-DD7CA80D4626}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B1C7661-7214-4B79-8F2D-DD7CA80D4626}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B1C7661-7214-4B79-8F2D-DD7CA80D4626}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B1C7661-7214-4B79-8F2D-DD7CA80D4626}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

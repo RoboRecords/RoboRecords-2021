@@ -14,4 +14,37 @@
     <Folder Include="wwwroot\assets" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="RoboTests\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="RoboTests\obj\project.packagespec.json" />
+    <_ContentIncludedByDefault Remove="RoboTests\obj\RoboTests.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\bin\Debug\net5.0\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\bin\Debug\net5.0\appsettings.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\bin\Debug\net5.0\RoboRecords.deps.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\bin\Debug\net5.0\RoboRecords.runtimeconfig.dev.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\bin\Debug\net5.0\RoboRecords.runtimeconfig.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\bin\Debug\net5.0\UnitTests.deps.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\bin\Debug\net5.0\UnitTests.runtimeconfig.dev.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\bin\Debug\net5.0\UnitTests.runtimeconfig.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\obj\project.packagespec.json" />
+    <_ContentIncludedByDefault Remove="UnitTests\obj\UnitTests.csproj.nuget.dgspec.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="UnitTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="UnitTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="UnitTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="UnitTests\**" />
+  </ItemGroup>
+
 </Project>
