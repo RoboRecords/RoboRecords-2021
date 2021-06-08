@@ -87,6 +87,9 @@ body {
   color: white;
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  font-family: "Untitled2", Roboto;
+  src: url("../assets/Font/Untilted2.ttf");
+  text-shadow: 2px 2px #272727, 0px 2px #272727, 2px 0px #272727;
 }
 
 .flex-container {
@@ -95,8 +98,9 @@ body {
 
 
 #loginBox {
-  border:20px groove  #000099;
-  border-radius: 20px;
+
+  border: 20px outset #000099;
+  border-radius: 10px;
   margin-right: 2vw;
   width: 35vw;
   height: 20vw;
@@ -145,8 +149,8 @@ body {
   background: #1b1bff;
 }
 #registerBox{
-  border:20px groove #803700;
-  border-radius: 20px;
+  border:20px outset #803700;
+ border-radius: 10px;
   margin-right: 2vw;
   width: 35vw;
   height: 40vw;
