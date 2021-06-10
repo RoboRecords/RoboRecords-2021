@@ -87,9 +87,13 @@ body {
   color: white;
   /* Margin bottom by footer height */
   margin-bottom: 60px;
-  font-family: "Untitled2", Roboto;
-  src: url("../assets/Font/Untilted2.ttf");
+  font-family: "SRB2", Roboto;
   text-shadow: 2px 2px #272727, 0px 2px #272727, 2px 0px #272727;
+}
+
+@font-face {
+  font-family: "SRB2";
+  src: url("../assets/Font/SRB2.ttf");
 }
 
 .flex-container {
