@@ -91,11 +91,34 @@ body {
   text-shadow: 2px 2px #272727, 0px 2px #272727, 2px 0px #272727;
 }
 
+.number-display
+{
+  color: #e4e4e4;
+  font-family: "SRB2Numbers", Roboto;
+  font-size: large;
+  text-shadow: 4px 0 #272727, 0 4px #272727;
+}
+
+.title-font
+{
+  font-family: "SRB2Title", Roboto;
+  text-shadow: 2px 2px #272727, 4px 4px #272727;
+}
+
 @font-face {
   font-family: "SRB2";
   src: url("../assets/Font/SRB2.ttf");
 }
 
+@font-face {
+  font-family: "SRB2Numbers";
+  src: url("../assets/Font/SRB2Numbers.ttf");
+}
+
+@font-face {
+  font-family: "SRB2Title";
+  src: url("../assets/Font/SRB2Title.ttf");
+}
 .flex-container {
   display:flex;
 }
@@ -131,7 +154,7 @@ body {
   border-radius: 10px;
   text-align: center;
   padding: 10px;
-  font-weight: 700;
+  /*font-weight: 700;*/
   margin-bottom: 10px;
   font-size: 40px;
   line-height: 1.4;
@@ -144,7 +167,7 @@ body {
   border-radius: 10px;
   text-align: center;
   padding: 10px;
-  font-weight: 700;
+  /*font-weight: 700;*/
   margin-bottom: 10px;
   font-size: 40px;
   line-height: 1.4;
@@ -154,7 +177,7 @@ body {
 }
 #registerBox{
   border:20px outset #803700;
- border-radius: 10px;
+  border-radius: 10px;
   margin-right: 2vw;
   width: 35vw;
   height: 40vw;
