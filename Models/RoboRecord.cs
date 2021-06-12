@@ -181,7 +181,6 @@ namespace RoboRecords.Models
         public string GetFileName()
         {
             return RoboLevel.MakeMapString(LevelNumber) + "-" + DefaultNameString + ".lmp";
-            return null;
         }
     }
 }
