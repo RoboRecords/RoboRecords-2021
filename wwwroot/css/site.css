@@ -105,6 +105,13 @@ body {
   text-shadow: 2px 2px #272727, 4px 4px #272727;
 }
 
+.title-font-number
+{
+  color: #ffff00;
+  font-family: "SRB2Title", Roboto;
+  text-shadow: 2px 2px #272727, 4px 4px #272727;
+}
+
 @font-face {
   font-family: "SRB2";
   src: url("../assets/Font/SRB2.ttf");
@@ -212,6 +219,20 @@ body {
 
   /*background: #1b1bff;*/
   background: rgba(0.05, 0.05, 1, 0.5);
+}
+
+.levelBox{
+  display: inline-block;
+  border:4px outset #1b1bff;
+  border-radius: 2px;
+  width: 16vw;
+  height: 10vw;
+  min-width: 320px;
+  min-height: 200px;
+  background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ),#000099;
+  margin: 10px;
+  background-size: cover;
+  vertical-align: top;
 }
 
 .footer {

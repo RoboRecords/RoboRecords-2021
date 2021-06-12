@@ -22,15 +22,20 @@ namespace RoboRecords.Models
     {
         public string Name;
         public string IdName;
+
+        public string GetAspLink()
+        {
+            return "/GamePage?id=" + IdName;
+        }
         public string IconPath;
-        public List<RoboLevel> Levels;
+        public List<LevelGroup> LevelGroups;
 
         public RoboGame(string name)
         {
             Name = name;
             var regex = new Regex("[^a-zA-Z0-9_-]");
             IdName = regex.Replace(name, "").ToLower();
-            Levels = new List<RoboLevel>();
+            LevelGroups = new List<LevelGroup>();
         }
     }
 }

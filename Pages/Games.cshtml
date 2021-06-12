@@ -23,7 +23,7 @@
     @foreach (var game in Games.RoboGames)
     {
         <div class="gameBox box-shadow" style="background-image: url(@game.IconPath); background-position: center;">
-            <a href=@game.IdName style="color: white; text-underline-offset: 10px">
+            <a href=@game.GetAspLink() style="color: white; text-underline-offset: 10px">
                 <div style="width: 100%; height: 100%">
                 <span class="gameText title-font">@game.Name</span>
                     

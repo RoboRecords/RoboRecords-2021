@@ -19,6 +19,7 @@ namespace RoboRecords.Models
 {
     public class RoboLevel
     {
+        public string IconUrl;
         // Map id, Techno Hill Zone 1 = 4
         private int _levelNumber;
         // Map string, eg. "MAP01".
@@ -73,6 +74,9 @@ namespace RoboRecords.Models
             LevelName = levelName;
             Act = act;
             Records = new List<RoboRecord>();
+            
+            // REPLACE WITH SOME DATA BASE STUFF LATER!!!
+            IconUrl = "../assets/images/mappics/" + MapString + "P.png";
         }
     }
 }
