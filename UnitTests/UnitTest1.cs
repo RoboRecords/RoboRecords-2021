@@ -54,7 +54,7 @@ namespace UnitTests
             
             Assert.Equal(mapNumber, roboRecord.LevelNumber);
             Assert.Equal(tics, roboRecord.Tics);
-            Assert.Equal(character, roboRecord.Character);
+            Assert.Equal(character, roboRecord.Character.NameId);
             Assert.Equal(mapName, roboRecord.GetFileName());
         }
     }

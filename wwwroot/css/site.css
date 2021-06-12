@@ -96,7 +96,7 @@ body {
   color: #e4e4e4;
   font-family: "SRB2Numbers", Roboto;
   font-size: large;
-  text-shadow: 4px 0 #272727, 0 4px #272727;
+  text-shadow: 2px 0 #272727, 0 2px #272727;
 }
 
 .title-font
@@ -227,8 +227,8 @@ body {
   border-radius: 2px;
   width: 16vw;
   height: 10vw;
-  min-width: 320px;
-  min-height: 200px;
+  min-width: 400px;
+  min-height: 250px;
   background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ),#000099;
   margin: 10px;
   background-size: cover;

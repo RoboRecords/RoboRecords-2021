@@ -17,8 +17,53 @@ namespace RoboRecords.Pages
         {
             CurrentGame = new RoboGame("Invalid Game");
 
+            var record1 = new RoboRecord(new RoboUser("Lemon", 1), null);
+            record1.Tics = 420;
+            record1.Character = CharacterManager.GetCharacterById("sonic");
+            
+            var record2 = new RoboRecord(new RoboUser("R3FR1G3R4T0R", 1), null);
+            record2.Tics = 421;
+            record2.Character = CharacterManager.GetCharacterById("sonic");
+            
+            var record3 = new RoboRecord(new RoboUser("Easy mode SRB2", 1), null);
+            record3.Tics = 419;
+            record3.Character = CharacterManager.GetCharacterById("tails");
+            
+            var record4 = new RoboRecord(new RoboUser("Red Sonic", 1), null);
+            record4.Tics = 666;
+            record4.Character = CharacterManager.GetCharacterById("knuckles");
+            
+            var record5 = new RoboRecord(new RoboUser("Red Sonic", 1), null);
+            record5.Tics = 6969;
+            record5.Character = CharacterManager.GetCharacterById("knuckles");
+            
+            var record6 = new RoboRecord(new RoboUser("ZeriTAS", 1), null);
+            record6.Tics = 6969;
+            record6.Character = CharacterManager.GetCharacterById("amy");
+            
+            var record7 = new RoboRecord(new RoboUser("Emily", 1), null);
+            record7.Tics = 54321;
+            record7.Character = CharacterManager.GetCharacterById("fang");
+            
+            var record8 = new RoboRecord(new RoboUser("DUCKERS", 1), null);
+            record8.Tics = 12345;
+            record8.Character = CharacterManager.GetCharacterById("metalsonic");
+            
+            var record9 = new RoboRecord(new RoboUser("R3FR1G3R4T0R", 1), null);
+            record9.Tics = 1337;
+            record9.Character = CharacterManager.GetCharacterById("sonic");
+            
             var gfz1 = new RoboLevel(1, "Green Flower Zone", 1);
+            gfz1.Records.Add(record1);
+            gfz1.Records.Add(record2);
+            gfz1.Records.Add(record3);
+            gfz1.Records.Add(record4);
+            gfz1.Records.Add(record5);
+            gfz1.Records.Add(record6);
+            gfz1.Records.Add(record7);
+            gfz1.Records.Add(record8);
             var gfz2 = new RoboLevel(2, "Green Flower Zone", 2);
+            gfz2.Records.Add(record9);
             var gfz3 = new RoboLevel(3, "Green Flower Zone", 3);
             
             var thz1 = new RoboLevel(4, "Techno Hill Zone", 1);

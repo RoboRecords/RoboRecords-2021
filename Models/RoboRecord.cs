@@ -24,7 +24,7 @@ namespace RoboRecords.Models
         public uint Tics;
         public UInt16 Rings;
         public uint Score;
-        public string Character; 
+        public RoboCharacter Character; 
         
         
         // X in 2.X
@@ -132,13 +132,27 @@ namespace RoboRecords.Models
             // Player Info
             // Player name
             curByte += 16;
-            Character = DataReader.ReadByteString(ref curByte, 16, bytes).TrimEnd('\0');
+            Character = CharacterManager.GetCharacterById(DataReader.ReadByteString(ref curByte, 16, bytes).TrimEnd('\0'));
 
             return ReadStatus.Success;
         }
 
+        public static string GetTimeFromTics(uint tics)
+        {
+            uint minutes = tics / 2100;
+            uint seconds = tics / 35 % 60;
+            var centiseconds = (tics * 100 / 35) % 100;
+            return minutes > 0
+                ? minutes + ":" + seconds.ToString("D2") + "." + centiseconds.ToString("D2")
+                : seconds.ToString("D2") + "." + centiseconds.ToString("D2");
+        }
+
+        
         public RoboRecord(RoboUser uploader, byte[] fileBytes)
         {
+            Uploader = uploader;
+            UploadTime = DateTime.Now;
+            
             if (fileBytes == null)
                 return;
 
@@ -155,8 +169,6 @@ namespace RoboRecords.Models
             switch (readStatus)
             {
                 case ReadStatus.Success:
-                    Uploader = uploader;
-                    UploadTime = DateTime.Now;
                     FileBytes = fileBytes;
                     break;
                 case ReadStatus.ErrorInvalid:

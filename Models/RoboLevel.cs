@@ -67,6 +67,41 @@ namespace RoboRecords.Models
             }
             return "MAP" + numberForm;
         }
+
+        public RoboRecord GetBestRecord(RoboCharacter character)
+        {
+            RoboRecord bestRecord = null;
+            uint bestTime = UInt32.MaxValue;
+            foreach (var record in Records.FindAll(rec => rec.Character.NameId == character.NameId))
+            {
+                if (bestTime > record.Tics)
+                {
+                    bestRecord = record;
+                    bestTime = record.Tics;
+                }
+            }
+
+            return bestRecord;
+        }
+        
+        public List<RoboRecord> GetBestRecords(bool allowNonStandard = false)
+        {
+            var records = new List<RoboRecord>();
+            foreach (var record in Records)
+            {
+                if (allowNonStandard ||
+                    CharacterManager.StandardCharacters.FindIndex(c => c.NameId == record.Character.NameId) != -1)
+                {
+                    var bestRecord = GetBestRecord(record.Character);
+                    if (bestRecord != null)
+                    {
+                        records.Add(bestRecord);
+                    }
+                }
+            }
+
+            return records;
+        }
         
         public RoboLevel(int levelNumber, string levelName, int act)
         {
