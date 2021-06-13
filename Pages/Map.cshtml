@@ -1,0 +1,214 @@
+@page
+@using RoboRecords.Models
+@model RoboRecords.Pages.Map
+
+@{
+    var actString = "";
+    if (Map.CurrentLevel.Act > 0)
+    {
+        actString = " " + Map.CurrentLevel.Act;
+    }
+    ViewData["Title"] = @Map.CurrentLevel.LevelName + actString;
+}
+
+<!DOCTYPE html>
+
+<!--
+ Map.cshtml: FrontEnd for the games website's page
+ Copyright (C) 2021, Lemin <Leminn>, Refrag <R3FR4G> and Ors <Riku-S>
+ 
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ See the 'LICENSE' file for more details.
+-->
+
+
+<html lang="en">
+<body>
+
+<div class="text-center">
+    <h1 class="title-font">@Map.CurrentGame.Name</h1>
+    <h2 class="title-font">@Map.CurrentLevel.LevelName 
+        @if (Map.CurrentLevel.Act > 0)
+        {
+            <span>act</span>
+            <span class="title-font-number" style="font-size: 64px"> @Map.CurrentLevel.Act </span>
+        }</h2>
+</div>
+<div style="position: center">
+    <table style="margin: auto">
+        <tr class="title-font" style="text-align: center">
+            <th style="font-weight: unset">
+                
+            </th>
+            <th style="font-weight: unset">
+                Player
+            </th>
+            <th style="font-weight: unset">
+                WR Time
+            </th>
+            <th style="font-weight: unset">
+                Version
+            </th>
+            <th style="font-weight: unset">
+                Date
+            </th>
+            <th>
+                
+            </th>
+        </tr>
+        @foreach (var character in CharacterManager.StandardCharacters)
+        {
+            var record = Map.CurrentLevel.GetBestRecord(character);
+            if (record != null)
+            {
+                var listName = "list_" + character.NameId;
+                
+                
+                <tr>
+                    <td class="row-link" onclick="toggle('@listName')">
+                        <img src=@character.IconUrl alt=@character.Name width="32px"> @character.Name
+                    </td>
+                    <td>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" style="color: white">
+                            @record.Uploader.UserNameNoDiscrim
+                        </a>
+                    </td>
+                    <td style="text-align: right">
+                        <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span>
+                    </td>
+                    <td>
+                        @record.VersionString
+                    </td>
+                    <td>
+                        @record.UploadTime.ToString("d")
+                    </td>
+                    <td>
+                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                            <img class="icon-link" src="../assets/images/icons/download.png" alt="DL" width="32px">
+                        </a>
+                    </td>
+                </tr>
+                
+                <tr style="margin: 0; height: 0"></tr>
+                <tr class="hide-at-start" style="text-align: center;" id=@listName>
+                    <td colspan="6">
+                        <span class="title-font">Records for @character.Name</span>
+                        <table style="margin: auto">
+                            <tr class="title-font">
+                                <th>
+
+                                </th>
+                                <th style="font-weight: unset">
+                                    Player
+                                </th>
+                                <th style="font-weight: unset">
+                                    Time
+                                </th>
+                                <th style="font-weight: unset">
+                                    Version
+                                </th>
+                                <th style="font-weight: unset">
+                                    Date
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                            @foreach (var characterRecord in Map.CurrentLevel.GetCharacterRecords(character))
+                            {
+                                <tr>
+                                    <td>
+                                        <img src=@character.IconUrl alt=@character.Name width="32px">
+                                    </td>
+                                    <td>
+                                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" style="color: white">
+                                            @characterRecord.Uploader.UserNameNoDiscrim
+                                        </a>
+                                    </td>
+                                    <td style="text-align: right">
+                                        <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(characterRecord.Tics) </span>
+                                    </td>
+                                    <td>
+                                        @characterRecord.VersionString
+                                    </td>
+                                    <td>
+                                        @characterRecord.UploadTime.ToString("d")
+                                    </td>
+                                    <td>
+                                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                                            <img class="icon-link" src="../assets/images/icons/download.png" alt="DL" width="32px">
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colsplan="6"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            }
+        }
+        <tr>
+            <td colspan="6">
+                Click a character to open their leaderboards.
+            </td>
+        </tr>
+    </table>
+</div>
+
+</body>
+
+<style>
+    nav {
+    background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(0,15,149,1) 100%);
+    }
+    footer {
+     
+    }
+    body {
+      background: linear-gradient( rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 75) ), url(@Map.CurrentGame.IconPath) center;
+      background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    }
+    table
+    {
+    
+    }
+    tr:nth-child(even)
+    {
+        background: rgba(32, 32, 32, 0.50);
+    }
+    tr:nth-child(odd)
+    {
+        background: rgba(64, 64, 64, 0.50);
+    }
+    tr:first-child th:first-child
+    {
+        border-radius: 0.6em 0 0 0;
+    }
+    tr:first-child th:last-child
+    {
+        border-radius: 0 0.6em 0 0;
+    }
+    tr:first-child
+    {
+        background-color: #404040;
+    }
+    tr:last-child td:first-child
+    {
+        background: rgba(32, 32, 32, 0.50);
+        border-radius: 0 0 0.6em 0.6em;
+        padding: 15px;
+    }
+    td, th
+    {
+    padding-left: 15px;
+    padding-right: 15px;
+    }
+</style>
+</html>

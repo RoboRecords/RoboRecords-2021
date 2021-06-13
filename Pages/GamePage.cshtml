@@ -26,7 +26,7 @@
 </div>
 <body class="">
 
-<div class="" style="position: center; text-align: center;">
+<div class="game-list" style="position: center; text-align: center;">
     @foreach (var levelGroup in GamePage.CurrentGame.LevelGroups)
     {
         <br>
@@ -34,8 +34,8 @@
         <br>
         foreach (var level in levelGroup.Levels)
         {
-            <div class="levelBox" style="background-image: url(@level.IconUrl); image-rendering: pixelated; max-width: unset" >
-                <a href=url(@level.MapString) style="color: white; text-decoration: none;">
+            <div class="levelBox" style="background-image: url(@level.IconUrl); image-rendering: pixelated; max-width: unset">
+                <a href=@String.Format("/Map?game={0}&map={1}", GamePage.CurrentGame.IdName, level.LevelNumber) style="color: white; text-decoration: none;">
                     <div style="width: 100%; height: 100%; position: relative">
                         <div style="text-align: right;">
                             @if (levelGroup.WriteLevelNames)
@@ -50,14 +50,15 @@
                             }
                         </div>
                         <span style="position:absolute; bottom: 4px; left: 4px; text-align: left; line-height: 120%">
-                        @foreach (var character in CharacterManager.StandardCharacters)
-                        {
-                            var record = level.GetBestRecord(character);
-                            if (record != null)
+                            @foreach (var character in CharacterManager.StandardCharacters)
                             {
-                                <img src=@character.IconUrl alt=@character.Name width="24px"> <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span><span> - @record.Uploader.UserNameNoDiscrim</span><br>
+                                var record = level.GetBestRecord(character);
+                                if (record != null)
+                                {
+                                    <img src=@character.IconUrl alt=@character.Name width="24px">
+                                    <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span><span> @record.Uploader.UserNameNoDiscrim</span><br>
+                                }
                             }
-                        }
                         </span>
                     </div>
                 </a>
@@ -82,8 +83,5 @@
   background-repeat: no-repeat;
   background-attachment: fixed;
     }
-    .container
-    {
-        max-width: unset;
-    }
+
 </style>

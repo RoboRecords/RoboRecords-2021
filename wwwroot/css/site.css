@@ -21,8 +21,9 @@ a.navbar-brand {
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
-
+  text-underline-offset: 5px;
 }
+
 .bg-blue-gradient {
   background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(0,15,149,1) 100%);
 }
@@ -227,12 +228,42 @@ body {
   border-radius: 2px;
   width: 16vw;
   height: 10vw;
-  min-width: 400px;
-  min-height: 250px;
+  min-width: 352px;
+  min-height: 220px;
   background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ),#000099;
-  margin: 10px;
+  margin: 5px;
   background-size: cover;
   vertical-align: top;
+}
+
+@media (min-width: 1200px) {
+  .game-list {
+    margin-left: -100px;
+    margin-right: -100px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .game-list {
+    margin-left: -100px;
+    margin-right: -100px;
+  }
+}
+
+
+.icon-link:hover
+{
+  background-color: rgba(192, 192, 192, 0.5);
+}
+
+.icon-link
+{
+  border-radius: 5px;
+}
+
+.row-link:hover
+{
+  background-color: rgba(192, 192, 192, 0.5);
 }
 
 .footer {

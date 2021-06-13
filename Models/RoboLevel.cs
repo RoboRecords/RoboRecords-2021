@@ -11,9 +11,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using AspNetCore.Identity.Mongo.Model;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace RoboRecords.Models
 {
@@ -102,7 +99,36 @@ namespace RoboRecords.Models
 
             return records;
         }
+
+        int SortByTime(RoboRecord a, RoboRecord b)
+        {
+            return (int)a.Tics - (int)b.Tics;
+        }
         
+        public List<RoboRecord> GetCharacterRecords(RoboCharacter character)
+        {
+            // Add all the records done with a character to a list
+            var allRecordsWithCharacter = new List<RoboRecord>();
+            foreach (var record in Records.FindAll(rec => rec.Character.NameId == character.NameId))
+            {
+                allRecordsWithCharacter.Add(record);
+            }
+            // Sort the list of all records for the next part
+            allRecordsWithCharacter.Sort(SortByTime);
+            
+            // Add only the first, meaning best times by each player to the record list.
+            var records = new List<RoboRecord>();
+            foreach (var record in  allRecordsWithCharacter)
+            {
+                if (records.FindIndex(rec => rec.Uploader.UserNameNoDiscrim == record.Uploader.UserNameNoDiscrim && rec.Uploader.Discriminator == record.Uploader.Discriminator) == -1)
+                {
+                    records.Add(record);
+                }
+            }
+            
+            return records;
+        }
+
         public RoboLevel(int levelNumber, string levelName, int act)
         {
             LevelNumber = levelNumber;

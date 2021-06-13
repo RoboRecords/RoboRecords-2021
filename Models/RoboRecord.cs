@@ -144,7 +144,7 @@ namespace RoboRecords.Models
             var centiseconds = (tics * 100 / 35) % 100;
             return minutes > 0
                 ? minutes + ":" + seconds.ToString("D2") + "." + centiseconds.ToString("D2")
-                : seconds.ToString("D2") + "." + centiseconds.ToString("D2");
+                : seconds + "." + centiseconds.ToString("D2");
         }
 
         

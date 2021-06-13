@@ -30,6 +30,21 @@ namespace RoboRecords.Models
         public string IconPath;
         public List<LevelGroup> LevelGroups;
 
+        public RoboLevel GetLevelByNumber(int number)
+        {
+            foreach (var levelGroup in LevelGroups)
+            {
+                foreach (var level in levelGroup.Levels)
+                {
+                    if (level.LevelNumber == number)
+                    {
+                        return level;
+                    }
+                }
+            }
+            return null;
+        }
+        
         public RoboGame(string name)
         {
             Name = name;
