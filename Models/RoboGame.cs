@@ -14,12 +14,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using AspNetCore.Identity.Mongo.Model;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace RoboRecords.Models
 {
     public class RoboGame
     {
+        [BsonId]
+        private ObjectId _objectId { get; }
+        
         public string Name;
         public string IdName;
 

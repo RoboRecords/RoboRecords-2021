@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace RoboRecords.Models
 {
-    public struct RoboCharacter
+    public class RoboCharacter
     {
         public string Name;
         public string NameId;

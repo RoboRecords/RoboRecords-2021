@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace RoboRecords.Models
 {
-    public struct LevelGroup
+    public class LevelGroup
     {
         public string Name;
         public List<RoboLevel> Levels;
