@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Web;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RoboRecords.Models;
+using RoboRecords.Services;
 
 namespace RoboRecords.Pages
 {
@@ -10,6 +12,13 @@ namespace RoboRecords.Pages
         public static RoboGame CurrentGame;
         public static RoboLevel CurrentLevel;
         private List<RoboGame> _roboGames;
+        private DatabaseService _databaseService;
+
+        public Map(DatabaseService databaseService)
+        {
+            _databaseService = databaseService;
+        }
+        
         public void OnGet()
         {
             CurrentGame = new RoboGame("Invalid Game");
@@ -120,13 +129,9 @@ namespace RoboRecords.Pages
             var levelGroupChallenge = new LevelGroup(name: "Challenge Levels", new List<RoboLevel>{hhz, agz, atz}, true);
 
             var groups = new List<LevelGroup> {levelGroupGfz, levelGroupThz, levelGroupDsz, levelGroupCez, levelGroupAcz, levelGroupRvz, levelGroupErz, levelGroupBcz, levelGroupBonus, levelGroupChallenge};
-            
-            _roboGames = new List<RoboGame>();
-            // Replace the next bit by actually getting the game from a database
-            _roboGames.Add(new RoboGame("Sonic Robo Blast 2 v2.2"){LevelGroups = groups, IconPath = "../assets/images/gfz2bg.png"});
-            _roboGames.Add(new RoboGame("srb2 Cyberdime Realm"){IconPath = "../assets/images/cydmbg.png"});
-            _roboGames.Add(new RoboGame("Sonic Robo Blast 3 LUL"){IconPath = "../assets/images/dreamhill1.png"});
-            
+
+            _roboGames = _databaseService.GetGames();
+
             var gameId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("game");
             var mapId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("map");
 
