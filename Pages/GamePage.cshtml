@@ -35,7 +35,7 @@
         foreach (var level in levelGroup.Levels)
         {
             <div class="levelBox" style="background-image: url(@level.IconUrl); image-rendering: pixelated; max-width: unset">
-                <a href=@String.Format("/Map?game={0}&map={1}", GamePage.CurrentGame.IdName, level.LevelNumber) style="color: white; text-decoration: none;">
+                <a href=@String.Format("/Map?game={0}&map={1}", GamePage.CurrentGame.UrlName, level.LevelNumber) style="color: white; text-decoration: none;">
                     <div style="width: 100%; height: 100%; position: relative">
                         <div style="text-align: right;">
                             @if (levelGroup.WriteLevelNames)

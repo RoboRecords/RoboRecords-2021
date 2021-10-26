@@ -15,6 +15,8 @@ namespace RoboRecords.Models
 {
     public class RoboCharacter
     {
+        public int DbId;
+        
         public string Name;
         public string NameId;
         public string IconUrl;
@@ -28,6 +30,12 @@ namespace RoboRecords.Models
             NameId = nameId;
 
             IconUrl = "../assets/images/characters/" + nameId + ".png";
+        }
+
+        // Needed for the database context
+        public RoboCharacter()
+        {
+            
         }
     }
 }

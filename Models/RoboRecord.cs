@@ -12,27 +12,26 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using AspNetCore.Identity.Mongo.Model;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace RoboRecords.Models
 {
     public class RoboRecord
     {
+        public int DbId;
+        
         public int Index;
-        public RoboUser Uploader;
-        public uint Tics;
-        public UInt16 Rings;
-        public uint Score;
-        public RoboCharacter Character; 
-        
-        
+        public virtual RoboUser Uploader { get; set; }
+        public long Tics;
+        public long Rings;
+        public long Score;
+        public virtual RoboCharacter Character { get; set; }
+
         // X in 2.X
         private int _majorVersion;
         // 9 in 2.2.9
         private int _subVersion;
         // "v2.2.9", for example
-        private string _versionString;
+        private string _versionString = "v2.2.9"; //FIXME: Don't hardcode the default version string
         public int MajorVersion
         {
             get => _majorVersion;
@@ -137,16 +136,21 @@ namespace RoboRecords.Models
             return ReadStatus.Success;
         }
 
-        public static string GetTimeFromTics(uint tics)
+        public static string GetTimeFromTics(long tics)
         {
-            uint minutes = tics / 2100;
-            uint seconds = tics / 35 % 60;
+            long minutes = tics / 2100;
+            long seconds = tics / 35 % 60;
             var centiseconds = (tics * 100 / 35) % 100;
             return minutes > 0
                 ? minutes + ":" + seconds.ToString("D2") + "." + centiseconds.ToString("D2")
                 : seconds + "." + centiseconds.ToString("D2");
         }
-
+        
+        // Needed for the database context
+        public RoboRecord()
+        {
+            UploadTime = DateTime.Now;
+        }
         
         public RoboRecord(RoboUser uploader, byte[] fileBytes)
         {

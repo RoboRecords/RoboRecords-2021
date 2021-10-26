@@ -6,11 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.Identity.Mongo" Version="8.1.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.12.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\assets" />
     <Folder Include="wwwroot\assets\images\icons" />
   </ItemGroup>
@@ -71,6 +66,11 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.8" />
   </ItemGroup>
 
 </Project>

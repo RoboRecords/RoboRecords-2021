@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using RoboRecords.DatabaseContexts;
 using RoboRecords.Models;
 using RoboRecords.Services;
 
@@ -12,11 +14,12 @@ namespace RoboRecords.Pages
         public static RoboGame CurrentGame;
         public static RoboLevel CurrentLevel;
         private List<RoboGame> _roboGames;
-        private DatabaseService _databaseService;
 
-        public Map(DatabaseService databaseService)
+        private RoboRecordsDbContext _dbContext;
+
+        public Map(RoboRecordsDbContext dbContext)
         {
-            _databaseService = databaseService;
+            _dbContext = dbContext;
         }
         
         public void OnGet()
@@ -130,14 +133,32 @@ namespace RoboRecords.Pages
 
             var groups = new List<LevelGroup> {levelGroupGfz, levelGroupThz, levelGroupDsz, levelGroupCez, levelGroupAcz, levelGroupRvz, levelGroupErz, levelGroupBcz, levelGroupBonus, levelGroupChallenge};
 
-            _roboGames = _databaseService.GetGames();
+            //Save hardcoded game data to the database
+            /*_roboGames = new List<RoboGame>();
+            _roboGames.Add(new RoboGame("Sonic Robo Blast 2 v2.2"){LevelGroups = groups, IconPath = "../assets/images/gfz2bg.png"});
+            _roboGames.Add(new RoboGame("srb2 Cyberdime Realm"){IconPath = "../assets/images/cydmbg.png"});
+            _roboGames.Add(new RoboGame("Sonic Robo Blast 3 LUL"){IconPath = "../assets/images/dreamhill1.png"});
+            foreach (RoboGame game in _roboGames)
+            {
+                _dbContext.RoboGames.Add(game);
+            }
+
+            _dbContext.SaveChanges();*/
+
+            //Get the data from the database
+            //FIXME: This doesn't feel like the right way to do it, figure out how this works better
+            _dbContext.RoboRecords.Include(e => e.Uploader).ToListAsync().Wait();
+            _dbContext.RoboRecords.Include(e => e.Character).ToListAsync().Wait();
+            _dbContext.RoboRecords.Include(e => e.Uploader).ToListAsync().Wait();
+            _dbContext.LevelGroups.Include(e => e.Levels).ToListAsync().Wait();
+            _roboGames = _dbContext.RoboGames.Include(e => e.LevelGroups).ToListAsync().Result;
 
             var gameId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("game");
             var mapId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("map");
 
             if (gameId != null)
             {
-                var roboGame = _roboGames.Find(game => game.IdName == gameId);
+                var roboGame = _roboGames.Find(game => game.UrlName == gameId);
                 if (roboGame != null)
                 {
                     CurrentGame = roboGame;

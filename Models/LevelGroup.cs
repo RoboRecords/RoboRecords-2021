@@ -1,13 +1,14 @@
 using System.Collections.Generic;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+using Microsoft.EntityFrameworkCore;
 
 namespace RoboRecords.Models
 {
     public class LevelGroup
     {
+        public int DbId;
+        
         public string Name;
-        public List<RoboLevel> Levels;
+        public virtual IList<RoboLevel> Levels { get; set; }
         public bool WriteLevelNames;
 
         public LevelGroup(string name, List<RoboLevel> levels = null, bool writeLevelNames = false)
@@ -17,6 +18,11 @@ namespace RoboRecords.Models
             levels ??= new List<RoboLevel>();
 
             Levels = levels;
+        }
+
+        // Needed for the database context
+        public LevelGroup()
+        {
         }
     }
 }

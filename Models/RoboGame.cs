@@ -13,26 +13,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using AspNetCore.Identity.Mongo.Model;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace RoboRecords.Models
 {
     public class RoboGame
     {
-        [BsonId]
-        private ObjectId _objectId { get; }
+        public int DbId;
         
         public string Name;
-        public string IdName;
+        public string UrlName;
 
         public string GetAspLink()
         {
-            return "/GamePage?id=" + IdName;
+            return "/GamePage?id=" + UrlName;
         }
         public string IconPath;
-        public List<LevelGroup> LevelGroups;
+        public virtual IList<LevelGroup> LevelGroups { get; set; }
 
         public RoboLevel GetLevelByNumber(int number)
         {
@@ -53,7 +49,7 @@ namespace RoboRecords.Models
         {
             Name = name;
             var regex = new Regex("[^a-zA-Z0-9_-]");
-            IdName = regex.Replace(name, "").ToLower();
+            UrlName = regex.Replace(name, "").ToLower();
             LevelGroups = new List<LevelGroup>();
         }
     }

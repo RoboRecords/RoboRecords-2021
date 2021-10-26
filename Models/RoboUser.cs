@@ -10,20 +10,26 @@
  */
 
 using System;
-using AspNetCore.Identity.Mongo.Model;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace RoboRecords.Models
 {
-    public class RoboUser : MongoUser
+    public class RoboUser
     {
+        public int DbId;
+        
         public short Discriminator;
 
         public string UserNameNoDiscrim;
-        public RoboUser(string userName, short discriminator) : base(string.Concat(userName, '#', discriminator))
+        public RoboUser(string userName, short discriminator)
         {
             Discriminator = discriminator;
             UserNameNoDiscrim = userName;
+        }
+
+        // Needed for the database context
+        public RoboUser()
+        {
+            
         }
     }
 }

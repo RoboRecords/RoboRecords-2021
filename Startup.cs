@@ -19,8 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCore.Identity.Mongo;
-using AspNetCore.Identity.Mongo.Model;
+using Microsoft.EntityFrameworkCore;
+using RoboRecords.DatabaseContexts;
 using RoboRecords.Models;
 using RoboRecords.Services;
 
@@ -31,6 +31,17 @@ namespace RoboRecords
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            RoboRecordsDbContext.SetConnectionString(Configuration["TempSqlConnectionString"]);
+            InitDatabase();
+        }
+        
+        private static void InitDatabase()
+        {
+            // Context is the database reference. 'Using context' means the connection is temporary and will be closed at the end
+            using (var context = new RoboRecordsDbContext())
+            {
+                context.Database.EnsureCreated(); // Checks to see if database exists and will create it if not.
+            }
         }
 
         public IConfiguration Configuration { get; }
@@ -39,19 +50,10 @@ namespace RoboRecords
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddSingleton<DatabaseService>();
 
-            services.AddIdentityMongoDbProvider<RoboUser>(identity =>
-                {
-                    identity.Password.RequiredLength = 6;
-                    identity.Password.RequireNonAlphanumeric = false;
-                    identity.User.AllowedUserNameCharacters =
-                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+#";
-                },
-                mongo =>
-                {
-                    mongo.ConnectionString = Configuration["DbUsersConnectionString"];
-                });
+            services.AddDbContext<RoboRecordsDbContext>(ServiceLifetime.Scoped);
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

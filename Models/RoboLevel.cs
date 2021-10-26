@@ -11,11 +11,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RoboRecords.Models
 {
     public class RoboLevel
     {
+        public int DbId;
+        
         public string IconUrl;
         // Map id, Techno Hill Zone 1 = 4
         private int _levelNumber;
@@ -31,7 +34,7 @@ namespace RoboRecords.Models
                 _mapString = MakeMapString(value);
             }
         }
-        public List<RoboRecord> Records;
+        public virtual IList<RoboRecord> Records { get; set; }
         // eg. Green Flower Zone
         public string LevelName;
         // 1 in Green Flower Zone Act 1
@@ -68,8 +71,8 @@ namespace RoboRecords.Models
         public RoboRecord GetBestRecord(RoboCharacter character)
         {
             RoboRecord bestRecord = null;
-            uint bestTime = UInt32.MaxValue;
-            foreach (var record in Records.FindAll(rec => rec.Character.NameId == character.NameId))
+            long bestTime = UInt32.MaxValue;
+            foreach (var record in Records.Where(rec => rec.Character.NameId == character.NameId))
             {
                 if (bestTime > record.Tics)
                 {
@@ -109,7 +112,7 @@ namespace RoboRecords.Models
         {
             // Add all the records done with a character to a list
             var allRecordsWithCharacter = new List<RoboRecord>();
-            foreach (var record in Records.FindAll(rec => rec.Character.NameId == character.NameId))
+            foreach (var record in Records.Where(rec => rec.Character.NameId == character.NameId))
             {
                 allRecordsWithCharacter.Add(record);
             }
@@ -138,6 +141,11 @@ namespace RoboRecords.Models
             
             // REPLACE WITH SOME DATA BASE STUFF LATER!!!
             IconUrl = "../assets/images/mappics/" + MapString + "P.png";
+        }
+
+        // Needed for the database context
+        public RoboLevel()
+        {
         }
     }
 }

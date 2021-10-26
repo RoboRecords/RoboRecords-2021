@@ -123,7 +123,7 @@ namespace RoboRecords.Pages
 
             if (id != null)
             {
-                var roboGame = _roboGames.Find(game => game.IdName == id);
+                var roboGame = _roboGames.Find(game => game.UrlName == id);
                 if (roboGame != null)
                 {
                     CurrentGame = roboGame;
