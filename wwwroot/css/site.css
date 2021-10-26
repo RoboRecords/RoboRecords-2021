@@ -35,6 +35,13 @@ a {
  background-color: #1b6ec2;
   border-color: #1861ac;
 }
+html,body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+}
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -76,6 +83,8 @@ html {
 
 .home-bg {
   background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/vanillabg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .games-bg {
@@ -88,28 +97,28 @@ body {
   color: white;
   /* Margin bottom by footer height */
   margin-bottom: 60px;
-  font-family: "SRB2", Roboto;
+  font-family: "SRB2", 'Roboto', sans-serif;
   text-shadow: 2px 2px #272727, 0px 2px #272727, 2px 0px #272727;
 }
 
 .number-display
 {
   color: #e4e4e4;
-  font-family: "SRB2Numbers", Roboto;
+  font-family: "SRB2Numbers", 'Roboto', sans-serif;
   font-size: large;
   text-shadow: 2px 0 #272727, 0 2px #272727;
 }
 
 .title-font
 {
-  font-family: "SRB2Title", Roboto;
+  font-family: "SRB2Title", 'Roboto', sans-serif;
   text-shadow: 2px 2px #272727, 4px 4px #272727;
 }
 
 .title-font-number
 {
   color: #ffff00;
-  font-family: "SRB2Title", Roboto;
+  font-family: "SRB2Title", 'Roboto', sans-serif;
   text-shadow: 2px 2px #272727, 4px 4px #272727;
 }
 
@@ -132,16 +141,6 @@ body {
 }
 
 
-#loginBox {
-
-  border: 20px outset #000099;
-  border-radius: 10px;
-  margin-right: 2vw;
-  width: 35vw;
-  height: 20vw;
-  background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ),#000099;
-  clear: both;
-}
 .btn-blue {
   background: #1414ff;
   color: white;
@@ -159,38 +158,50 @@ body {
 }
 #attractRegister {
   display: block;
-  border-radius: 10px;
+  border-radius: 1.1vw;
   text-align: center;
-  padding: 10px;
+  padding: 5vh;
   /*font-weight: 700;*/
-  margin-bottom: 10px;
-  font-size: 40px;
-  line-height: 1.4;
+  margin-bottom: 2vh;
+  margin-top: 2vh;
+    
+  font-size: 5vh;
+  line-height: 1.4vh;
   position: relative;
 
   background: #ff7409;
 }
+
 #attractLogin {
   display: block;
-  border-radius: 10px;
+  border-radius: 1.1vw;
   text-align: center;
-  padding: 10px;
+  padding: 5vh;
   /*font-weight: 700;*/
-  margin-bottom: 10px;
-  font-size: 40px;
-  line-height: 1.4;
+  margin-bottom: 2vh;
+  margin-top: 2vh;
+  font-size: 5vh;
+  line-height: 1.4vh;
   position: relative;
 
   background: #1b1bff;
 }
-#registerBox{
-  border:20px outset #803700;
+
+#loginBox {
   border-radius: 10px;
-  margin-right: 2vw;
-  width: 35vw;
-  height: 40vw;
+  width: 100%;
+  height: 50vh;
+  background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ),#000099;
+  font-size: 1.5vh;
+  clear: both;
+}
+#registerBox{
+  border-radius: 5px;
+  width: 100%;
+  font-size: 1.5vh;
+  margin-bottom: 2vh;
+  height: 80vh;
   background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), #602500;
-  background-size: contain;
 }
 
 .gameBox{

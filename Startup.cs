@@ -22,7 +22,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RoboRecords.DatabaseContexts;
 using RoboRecords.Models;
-using RoboRecords.Services;
 
 namespace RoboRecords
 {

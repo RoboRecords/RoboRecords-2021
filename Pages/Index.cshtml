@@ -16,23 +16,39 @@
     ViewData["Title"] = "Home";
     
 }
-<html lang="en" class="home-bg">
-<div class="text-center">
-    <h1 class="fade-in display-1"><span class="title-font">RoboRecords</span></h1>
-    <h3 class="fade-in-slower"> <em> Track and submit SRB2 Speedrunning records. </em></h3>
-</div>
 
-</html>
+<div class="container">
+
+    <div class="text-center">
+        <h1 class="fade-in display-1"><span class="title-font">RoboRecords</span></h1>
+        <h3 class="fade-in-slower"> <em> Track and submit SRB2 Speedrunning records. </em></h3>
+    </div>
+
+</div>
+<div class="container">
+    <p class="lead">Welcome</p>
+</div>
 <style>
-    nav {
-    background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(0,15,149,1) 100%);
-    }
-    footer {
-     
-    }
     body {
       background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/vanillabg.png');
+            background-size: cover;
+            background-repeat: no-repeat;
     }
+    
+    
+     screen and (max-width: 800px) {
+      h1 {
+             font-size: 6vw !important;
+         }
+         
+         h3 {
+             font-size: 4vw;
+         }
+    
+     }
+
+   
+    
 </style>
 @* <div class="container mt-xl-5"> *@
 @*     <button type="button" class="btn btn-primary btn-lg float-sm-left mb-auto">Log-in</button> *@

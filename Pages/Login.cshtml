@@ -15,19 +15,20 @@
 @{
     ViewData["Title"] = "Login";
 }
-<div class="d-flex flex-sm-row flex-column">
-    <div id="registerBox" class="p-2 box-shadow"> 
+<div class="container"> 
+<div class="row">
+    <div id="registerBox" class="col-md-6" > 
         <span class="title-font" id="attractRegister">Register</span>
         <div class="form-group">
             <label for="exampleInputEmail1">Email:</label>
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">You use this email to log into the site. We will not share your email with any thid parties.</small>
+            <small id="emailHelp" class="form-text text-muted">You use this email to log into the site.</small>
         </div>
-          <div class="form-group">
-                    <label for="exampleInputUsername1">Username:</label>
-                    <input type="email" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp" placeholder="Enter username">
-                    <small id="emailHelp" class="form-text text-muted">This is what you will be known as on the RoboRecords.</small>
-                </div>
+        <div class="form-group">
+            <label for="exampleInputUsername1">Username:</label>
+            <input type="email" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp" placeholder="Enter username">
+            <small id="emailHelp" class="form-text text-muted">This is what you will be known as on the RoboRecords.</small>
+        </div>
 
         <div class="form-group">
             <label for="exampleInputPassword1">Password:</label>
@@ -41,12 +42,12 @@
         <hr size="2" width="100%" color="red">
         <button class="btn col-sm-4 col-sm-offset-4 btn-orange btn-lg">Register</button>
     </div>
-    <div id="loginBox" class="p-2 box-shadow">
+    <div id="loginBox" class="col-md-6">
         <label class="title-font" id="attractLogin">Login</label>
         
         <div class="form-group">
-            <label for="exampleInputEmail2">Email:</label>
-            <input type="email" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email">
+            <label for="exampleInputEmail2">Email/Username:</label>
+            <input type="email" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Email/Username">
         </div>
         
         <div class="form-group">
@@ -56,11 +57,19 @@
         <button class="btn col-sm-4 col-sm-offset-4 btn-blue btn-lg">Login</button>
     </div>
 </div>
-
+</div>
 
 
 <style type="text/css">
     body {
       background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/login.png');
+            background-size: 100%;
+            background-repeat: no-repeat;
     }
-</style>
+    #registerBox {
+         border:15px solid #803700;
+    }
+    #loginBox {
+      border: 15px solid #000099;
+    }
+    </style>
