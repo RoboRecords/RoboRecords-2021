@@ -1,0 +1,47 @@
+
+
+@page
+@using RoboRecords.Models
+@model RoboRecords.Pages.Submit
+
+@{
+    ViewData["Title"] = "Submit";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Submit</title>
+</head>
+<body>
+<div>
+    Please submit a replay.
+</div>
+<div class="container" >
+    <INPUT id="oFile" type="file" runat="server" NAME="oFile"><br>
+</div>
+</body>
+<style>
+    body {
+      background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/vanillabg.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+    }
+    
+    
+     screen and (max-width: 800px) {
+      h1 {
+             font-size: 6vw !important;
+         }
+         
+         h3 {
+             font-size: 4vw;
+         }
+    
+     }
+
+   
+    
+</style>
+</html>
