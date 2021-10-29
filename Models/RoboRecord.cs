@@ -73,7 +73,6 @@ namespace RoboRecords.Models
         }
         private ReadStatus ReadDemo(byte[] bytes)
         {
-            FileBytes = bytes;
             int curByte = 0;
 
             // read demo header
@@ -168,27 +167,29 @@ namespace RoboRecords.Models
             catch
             {
                 readStatus = ReadStatus.ErrorReading;
+                Console.WriteLine("Error: Couldn't read bytes.");
             }
             // Read the file and get tics and shit
             switch (readStatus)
             {
                 case ReadStatus.Success:
                     FileBytes = fileBytes;
+                    Console.WriteLine("File read successfully!");
                     break;
                 case ReadStatus.ErrorInvalid:
-                    Debug.WriteLine("Error: Invalid demo file.");
+                    Console.WriteLine("Error: Invalid demo file.");
                     break;
                 case ReadStatus.ErrorUnfinished:
-                    Debug.WriteLine("Error: Unfinished demo.");
+                    Console.WriteLine("Error: Unfinished demo.");
                     break;
                 case ReadStatus.ErrorNotSrb2:
-                    Debug.WriteLine("Error, not an SRB2 demo!");
+                    Console.WriteLine("Error, not an SRB2 demo!");
                     break;
                 case ReadStatus.ErrorReading:
-                    Debug.WriteLine("Error, couldn't read the demo!");
+                    Console.WriteLine("Error, couldn't read the demo!");
                     break;
                 default:
-                    Debug.WriteLine("Error: Unknown error.");
+                    Console.WriteLine("Error: Unknown error.");
                     break;
             }
         }

@@ -2,6 +2,7 @@
 
 @page
 @using RoboRecords.Models
+@using Microsoft.AspNetCore.Http
 @model RoboRecords.Pages.Submit
 
 @{
@@ -18,8 +19,78 @@
 <div>
     Please submit a replay.
 </div>
-<div class="container" >
-    <INPUT id="oFile" type="file" runat="server" NAME="oFile"><br>
+<div class="container">
+    <form enctype="multipart/form-data" method="post">
+        <dl>
+            <dt>
+                <label asp-for="FileUpload.FormFiles"></label>
+            </dt>
+            <dd>
+                <input asp-for="FileUpload.FormFiles" type="file" multiple />
+                <span asp-validation-for="FileUpload"></span>
+            </dd>
+        </dl>
+        <input asp-page-handler="Upload" class="btn" type="submit" value="Upload" />
+        <div ID="RecordList" runat="server" ClientIDMode="static" ></div>
+        
+    </form>
+    Submissions:
+    @if (Submit.RecordList.Count > 0)
+    {
+        <table>
+            <tr class="title-font" style="text-align: center">
+                <th style="font-weight: unset">
+
+                </th>
+                <th style="font-weight: unset">
+                    Level
+                </th>
+                <th style="font-weight: unset">
+                    Time
+                </th>
+                <th style="font-weight: unset">
+                    Version
+                </th>
+            </tr>
+
+            @foreach (var record in Submit.RecordList)
+            {
+                RoboGame roboGame = Submit.Game;
+                var level = roboGame.GetLevelByNumber(record.LevelNumber);
+                if (level != null)
+                {
+                    var levelString = level.LevelName + " " + level.Act;
+                    <tr class="title-font" style="text-align: center">
+                        <th style="font-weight: unset">
+                            @if (record.Character != null)
+                            {
+                                <img src=@record.Character.IconUrl alt=@record.Character.Name width="32px">
+                            }
+                        </th>
+                        <th style="font-weight: unset">
+                            @levelString
+                        </th>
+                        <th style="font-weight: unset">
+                            <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span>
+                        </th>
+                        <th style="font-weight: unset">
+                            @record.VersionString
+                        </th>
+                    </tr>
+                }
+            }
+
+        </table>
+    }
+    else
+    {
+        <p>
+            No submission yet. Please submit a replay.
+        </p>
+    }
+
+
+
 </div>
 </body>
 <style>
@@ -40,8 +111,37 @@
          }
     
      }
-
    
-    
+        tr:nth-child(even)
+        {
+            background: rgba(32, 32, 32, 0.50);
+        }
+        tr:nth-child(odd)
+        {
+            background: rgba(64, 64, 64, 0.50);
+        }
+        tr:first-child th:first-child
+        {
+            border-radius: 0.6em 0 0 0;
+        }
+        tr:first-child th:last-child
+        {
+            border-radius: 0 0.6em 0 0;
+        }
+        tr:first-child
+        {
+            background-color: #404040;
+        }
+        tr:last-child td:first-child
+        {
+            background: rgba(32, 32, 32, 0.50);
+            border-radius: 0 0 0.6em 0.6em;
+            padding: 15px;
+        }
+        td, th
+        {
+        padding-left: 15px;
+        padding-right: 15px;
+        }
 </style>
 </html>
