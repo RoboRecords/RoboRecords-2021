@@ -26,12 +26,12 @@ namespace RoboRecords.Models
         public long Score;
         public virtual RoboCharacter Character { get; set; }
 
-        // X in 2.X
+        // 202 -> 2.2
         private int _majorVersion;
         // 9 in 2.2.9
         private int _subVersion;
         // "v2.2.9", for example
-        private string _versionString = "v2.2.9"; //FIXME: Don't hardcode the default version string
+        private string _versionString = "Undefined"; // Should NEVER be the case after successful initialization
         public int MajorVersion
         {
             get => _majorVersion;
@@ -48,7 +48,8 @@ namespace RoboRecords.Models
         {
             _majorVersion = majorVersion;
             _subVersion = subVersion;
-            _versionString = "2." + majorVersion + "." + subVersion;
+            // Major version: 202, Minor version: 9 -> Version string: 2.2.9
+            _versionString = majorVersion / 100 + "." + majorVersion % 100 + "." + subVersion;
         }
 
         public byte[] FileBytes;
@@ -85,6 +86,8 @@ namespace RoboRecords.Models
             // Demo Version
             _majorVersion = DataReader.ReadUInt8(ref curByte, bytes);
             _subVersion = DataReader.ReadUInt8(ref curByte, bytes);
+            SetVersion(_majorVersion, _subVersion);
+            
             UInt16 demoVersion = DataReader.ReadUInt16(ref curByte, bytes);
 
             // Demo Checksum
