@@ -45,9 +45,9 @@ namespace RoboRecords.Pages
             Game = roboGames[1]; // TODO: CHANGE THIS HARDCODED CRAP TO SUPPORT THE CURRENT SELECTED GAME
         }
 
-        public IActionResult OnPostUploadAsync(ReplayUploadDb fileUpload)
+        public IActionResult OnPostAsync(ReplayUploadDb fileUpload)
         {
-            if (fileUpload == null || fileUpload.FormFiles == null || fileUpload.FormFiles.Count < 0)
+            if (fileUpload == null || fileUpload.FormFiles == null || fileUpload.FormFiles.Count == 0)
             {
                 // TODO: Error message thing or something
                 return null;
@@ -80,6 +80,35 @@ namespace RoboRecords.Pages
             // Don't rely on or trust the FileName property without validation.
 
             // return new OkObjectResult(new {count = files.Count, size});
+            return null;
+        }
+
+        public IActionResult OnPostUploadAsync()
+        {
+            // TODO: Upload things to the server
+            // Should NEVER happen
+            if (RecordList.Count == 0)
+            {
+                return null;
+            }
+            return RedirectToPage();
+        }
+        
+        public IActionResult OnPostCancelAsync()
+        {
+            // Refresh the page to cancel the uploads
+            return RedirectToPage();
+        }
+
+        public IActionResult OnPostDeleteAsync(int rec)
+        {
+            // Should NEVER happen
+            if (RecordList.Count <= rec)
+            {
+                return null;
+            }
+
+            RecordList.RemoveAt(rec);
             return null;
         }
     }

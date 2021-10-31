@@ -30,13 +30,13 @@
                 <span asp-validation-for="FileUpload"></span>
             </dd>
         </dl>
-        <input asp-page-handler="Upload" class="btn" type="submit" value="Upload" />
-        <div ID="RecordList" runat="server" ClientIDMode="static" ></div>
+        <input asp-page-handler="Post" type="submit" value="Submit" />
         
     </form>
     Submissions:
     @if (Submit.RecordList.Count > 0)
     {
+        <div>
         <table>
             <tr class="title-font" style="text-align: center">
                 <th style="font-weight: unset">
@@ -51,10 +51,14 @@
                 <th style="font-weight: unset">
                     Version
                 </th>
+                <th style="font-weight: unset">
+                    
+                </th>
             </tr>
 
-            @foreach (var record in Submit.RecordList)
+            @for (var recordCount = 0; recordCount < Submit.RecordList.Count; recordCount++)
             {
+                var record = Submit.RecordList[recordCount];
                 RoboGame roboGame = Submit.Game;
                 var level = roboGame.GetLevelByNumber(record.LevelNumber);
                 if (level != null)
@@ -76,11 +80,28 @@
                         <th style="font-weight: unset">
                             @record.VersionString
                         </th>
+                        <th style="font-weight: unset">
+                            <form asp-page-handler="delete" method="post">
+                                <button>X</button>
+                                <input type="hidden" name="rec" value="@recordCount" />
+                            </form>
+                        </th>
                     </tr>
                 }
             }
+            <tr>
+                <td colspan="5" style="alignment: right">
+                    <form enctype="multipart/form-data" method="post">
+                        <input asp-page-handler="Cancel" type="submit" value="Cancel" />
+                        <input asp-page-handler="Upload" type="submit" value="Upload to leaderboards" />
+                    </form>
+                </td>
+            </tr>
 
         </table>
+
+        </div>
+
     }
     else
     {
