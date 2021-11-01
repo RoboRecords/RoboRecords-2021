@@ -1,0 +1,205 @@
+@page
+@using RoboRecords.Models
+@using Google.Protobuf.WellKnownTypes
+@model RoboRecords.Pages.EditGame
+
+@{
+    ViewData["Title"] = "Edit game";
+}
+
+<!DOCTYPE html>
+
+@section Scripts {
+    <script>
+    class LevelForm
+    {
+        constructor(name, act, number, iconPath) 
+        {
+            this.levelName = name;
+            this.act = act;
+            this.levelNumber = number;
+            this.iconPath = iconPath;
+        }
+    }
+    
+    class LevelGroupForm
+    {
+        constructor(name, writeNames, levels)
+        {
+            this.groupName = name;
+            this.writeNames = writeNames.toString() === "True" ? true : false;
+            this.levels = levels.slice();
+        }
+    }
+
+    class EditGameForm
+    {
+        groupName = "";
+        urlName = "";
+        iconPath = "";
+        levelGroups = [];
+        
+        init()
+        {
+            console.log("Creating a form object");
+            this.name = "@EditGame.Game.Name";
+            this.urlName = "@EditGame.Game.UrlName";
+            this.iconPath = "@EditGame.Game.IconPath";
+            this.levelGroups = [];
+            let tempLevels = [];
+            
+            @for (var groupCount = 0; groupCount < EditGame.Game.LevelGroups.Count; groupCount++)
+            {
+                var group = EditGame.Game.LevelGroups[groupCount];
+                <text>
+                tempLevels = [];
+                </text>
+                @for (var levelCount = 0; levelCount < EditGame.Game.LevelGroups[groupCount].Levels.Count; levelCount++)
+                {
+                    var level = group.Levels[levelCount];
+                    <text>
+                    tempLevels.push(new LevelForm("@level.LevelName", @level.Act, @level.LevelNumber, "@level.IconUrl"));
+                    </text>
+                }
+                <text>
+                this.levelGroups.push(new LevelGroupForm("@group.Name", "@group.WriteLevelNames", tempLevels))
+                </text>
+            }
+            console.log("Created a form object");
+        }
+        
+        draw()
+        {
+            let formDiv = document.getElementById("group_div");
+            let html_str = "";
+            for (let groupCount = 0; groupCount < this.levelGroups.length; groupCount++)
+            {
+                let group = this.levelGroups[groupCount];
+                
+                html_str += `
+                <div style="background: #204080; padding: 10px; margin-bottom: 10px">
+                    <dt>
+                        <label for="group_` + groupCount +`_name">Name</label>
+                    </dt>
+                    <dd>
+                        <input id="group_` + groupCount +`_name" name="group_` + groupCount +`_name" placeholder="Green Flower Zone" value="` + group.groupName + `"/>
+                    </dd>
+                    <dt>
+                        <label for="group_` + groupCount +`_write_names">Write Level Names</label>
+                    </dt>
+                    <dd>
+                        <input id="group_` + groupCount +`_write_names" type="checkbox" e="group_` + groupCount +`_write_names" value="` + group.writeNames.toString() + `"/>
+                    </dd>
+                    <dt>
+                        <label>Levels</label>
+                    </dt>
+                `
+                
+                for (let levelCount = 0; levelCount < group.levels.length; levelCount++)
+                {
+                    let level = group.levels[levelCount];
+                    html_str += `
+                    <div style="background: #408020; padding: 10px; margin-bottom: 10px">
+                        <dt>
+                            <label for="level_` + groupCount +`_` + levelCount +`_name">Level Name</label>
+                        </dt>
+                        <dd>
+                            <input id="level_` + groupCount +`_` + levelCount +`_name" name="level_` + groupCount +`_` + levelCount +`_name" placeholder="Green Flower Zone" value="` + level.levelName + `"/>
+                        </dd>
+                        <dt>
+                            <label for="level_` + groupCount +`_` + levelCount +`_act">Act</label>
+                        </dt>
+                        <dd>
+                            <input type="number" id="level_` + groupCount +`_` + levelCount +`_act" name="level_` + groupCount +`_` + levelCount +`_act" placeholder="` + levelCount + 1 +`" value="` + level.act + `"/>
+                        </dd>
+                        <dt>
+                            <label for="level_` + groupCount +`_` + levelCount +`_number"></label>
+                        </dt>
+                        <dd>
+                            <input type="number" id="level_` + groupCount +`_` + levelCount +`_number" name="level_` + groupCount +`_` + levelCount +`_number" placeholder="1" value="` + level.levelNumber + `"/>
+                        </dd>
+                        <dt>
+                            <label for="level_` + groupCount +`_` + levelCount +`_path"></label>
+                        </dt>
+                        <dd>
+                            <input id="level_` + groupCount +`_` + levelCount +`_path" name="level_` + groupCount +`_` + levelCount +`_path" placeholder="../assets/images/mappics/MAP01P.png" value="` + level.iconPath + `"/>
+                        </dd>
+                        <button>X</button>
+                    </div>
+                    `
+
+                }
+                        
+                
+                html_str += `
+                    <button>X</button>
+                    <button type="button" onclick="AddLevel()">Add level</button>
+                </div>
+                `
+            }
+            formDiv.innerHTML = html_str;
+        }
+        
+        constructor()
+        {
+            this.init();
+            this.draw();
+        }
+    }
+    
+    let editGameForm;
+    
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        editGameForm = new EditGameForm();
+    });
+    </script>
+}
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div>
+    <h1>Edit game</h1>
+    
+    <form enctype="multipart/form-data" method="post" id="game_div">
+        <dl>
+            <dt>
+                <label asp-for="GameEdit.Name"></label>
+            </dt>
+            <dd>
+                <input asp-for="GameEdit.Name" type="text" placeholder="Sonic Robo Blast 2 v2.2" value="@EditGame.Game.Name"/>
+            </dd>
+            <dt>
+                <label asp-for="GameEdit.UrlName"></label>
+            </dt>
+            <dd>
+                <input asp-for="GameEdit.UrlName" type="text" placeholder="srb2v22" value="@EditGame.Game.UrlName"/>
+            </dd>
+            <dt>
+                <label asp-for="GameEdit.LevelGroups"></label>
+            </dt>
+            
+            <div id="group_div"></div>
+        </dl>
+        <button>Add level group</button>
+        <input type="button" value="Cancel"/>
+        <input type="submit"/>
+    </form>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+</div>
+</body>
+
+<style>
+    body {
+        background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/vanillabg.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
+</html>
