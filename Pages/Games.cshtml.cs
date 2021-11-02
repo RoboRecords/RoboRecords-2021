@@ -20,7 +20,7 @@ namespace RoboRecords.Pages
 
             // Returns all games, including the levels and records.
             // TODO: Return only the games without joined data. We don't need it here.
-            RoboGames = DbSelector.GetAllGameData();
+            RoboGames = DbSelector.GetGames();
         }
     }
 }

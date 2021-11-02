@@ -11,7 +11,7 @@ namespace RoboRecords.DbInteraction
 {
     public class DbSelector
     {
-        public static List<RoboGame> GetAllGameData ()
+        public static List<RoboGame> GetAllGameData()
         {
             List<RoboGame> _roboGames = new List<RoboGame>();
 
@@ -29,7 +29,7 @@ namespace RoboRecords.DbInteraction
                 .ThenInclude(records => records.Uploader)
                 .ToListAsync().Result;
             }
-            
+
 
             // Sort the levels by act, as they may not be in order in the database
             if (_roboGames.Count > 0)
@@ -44,6 +44,20 @@ namespace RoboRecords.DbInteraction
                 }
 
             return _roboGames;
-    }
+        }
+
+        public static List<RoboGame> GetGames()
+        {
+            List<RoboGame> _roboGames = new List<RoboGame>();
+
+            // SELECT * FROM RoboGames, no JOINs. Used for Games page.
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                _roboGames = context.RoboGames
+                .ToListAsync().Result;
+            }
+
+            return _roboGames;
+        }
     }
 }
