@@ -3,7 +3,7 @@ using RoboRecords.Models;
 
 namespace RoboRecords.DatabaseContexts
 {
-    public class RoboRecordsDbContext : DbContext
+    public partial class RoboRecordsDbContext : DbContext
     {
         private static string _connectionString;
 
@@ -17,6 +17,8 @@ namespace RoboRecords.DatabaseContexts
 
         public DbSet<RoboUser> RoboUsers { get; set; }
         public DbSet<RoboCharacter> RoboCharacters { get; set; }
+
+        public DbSet<RoboLevel> RoboLevels { get; set; }
 
         public DbSet<RoboRecord> RoboRecords { get; set; }
 

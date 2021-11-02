@@ -39,7 +39,13 @@ namespace RoboRecords
             // Context is the database reference. 'Using context' means the connection is temporary and will be closed at the end
             using (var context = new RoboRecordsDbContext())
             {
-                context.Database.EnsureCreated(); // Checks to see if database exists and will create it if not.
+                if (context.Database.EnsureCreated()) // Checks to see if database exists and will create it if not.
+                                                      // Returns true if database didn't exist.
+                {
+                    // Seed database here
+                    Seed.InitialData();
+                }
+                
             }
         }
 
