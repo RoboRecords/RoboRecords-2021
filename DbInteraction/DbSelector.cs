@@ -60,11 +60,43 @@ namespace RoboRecords.DbInteraction
             return _roboGames;
         }
 
+        public static RoboGame GetGameFromID(string id)
+        {
+            RoboGame _roboGame;
+            // SELECT * FROM RoboGames WHERE UrlName = id
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                _roboGame = context.RoboGames.Where(e => e.UrlName == id).FirstOrDefault();
+            }
+
+            return _roboGame;
+        }
+
+        /*public static RoboLevel GetGameLevelFromMapId(string gameid, string mapid)
+        {
+            RoboLevel _roboLevel;
+            // SELECT * FROM RoboGames, no JOINs. Used for Games page.
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                _roboLevel = context.RoboGames
+                    .Where(e => e.UrlName == gameid)
+                    .Include(e => e.LevelGroups)
+                    .ThenInclude(levelGroup => levelGroup.Levels)
+                    .Select(level => new RoboLevel
+                    { 
+                    DbId = level.DbId,
+                    Act = level.
+                    })
+            }
+
+            return _roboLevel;
+        }*/
+
         public static List<RoboGame> GetGamesWithLevels()
         {
             List<RoboGame> _roboGames = new List<RoboGame>();
 
-            // SELECT * FROM RoboGames, JOIN all foreign keys
+            // SELECT * FROM RoboGames, JOIN levels
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 _roboGames = context.RoboGames

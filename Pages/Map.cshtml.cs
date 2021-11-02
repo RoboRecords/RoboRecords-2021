@@ -57,6 +57,7 @@ namespace RoboRecords.Pages
             if (gameId != null)
             {
                 var roboGame = _roboGames.Find(game => game.UrlName == gameId);
+                // var roboGame = DbSelector.GetGameFromID(gameId);
                 if (roboGame != null)
                 {
                     CurrentGame = roboGame;
