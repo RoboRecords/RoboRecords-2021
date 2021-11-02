@@ -47,7 +47,8 @@ namespace RoboRecords.Pages
             }
             else
             {
-                Game = roboGames[0]; // SRB2 2.2 default for testing. Should be changed to throw an error if not found.
+                // SRB2 2.2 default for testing. Should be changed to throw an error if not found.
+                Game = roboGames.Find(game => game.UrlName == "sonicroboblast2v22"); 
             }
         }
 
