@@ -31,7 +31,7 @@ namespace RoboRecords.DbInteraction
             }
 
 
-            // Sort the levels by act, as they may not be in order in the database
+            // Sort the levels by level number, as they may not be in order in the database
             if (_roboGames.Count > 0)
                 foreach (var roboGame in _roboGames)
                 {
@@ -56,6 +56,35 @@ namespace RoboRecords.DbInteraction
                 _roboGames = context.RoboGames
                 .ToListAsync().Result;
             }
+
+            return _roboGames;
+        }
+
+        public static List<RoboGame> GetGamesWithLevels()
+        {
+            List<RoboGame> _roboGames = new List<RoboGame>();
+
+            // SELECT * FROM RoboGames, JOIN all foreign keys
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                _roboGames = context.RoboGames
+                .Include(e => e.LevelGroups)
+                .ThenInclude(levelGroups => levelGroups.Levels)
+                .ToListAsync().Result;
+            }
+
+
+            // Sort the levels by level number, as they may not be in order in the database
+            if (_roboGames.Count > 0)
+                foreach (var roboGame in _roboGames)
+                {
+                    if (roboGame.LevelGroups.Count > 0)
+                        foreach (var levelGroup in roboGame.LevelGroups)
+                        {
+                            List<RoboLevel> sortedList = levelGroup.Levels.OrderBy(l => l.LevelNumber).ToList();
+                            levelGroup.Levels = sortedList;
+                        }
+                }
 
             return _roboGames;
         }

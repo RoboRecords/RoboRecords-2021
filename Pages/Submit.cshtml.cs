@@ -16,12 +16,14 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RoboRecords.DatabaseContexts;
+using RoboRecords.DbInteraction;
 using RoboRecords.Models;
 
 namespace RoboRecords.Pages
@@ -31,18 +33,22 @@ namespace RoboRecords.Pages
         public static List<RoboRecord> RecordList;
         [BindProperty]
         public ReplayUploadDb FileUpload { get; set; }
-        private RoboRecordsDbContext _dbContext;
         public static RoboGame Game;
 
-        public Submit(RoboRecordsDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
         public void OnGet()
         {
             RecordList = new List<RoboRecord>();
-            var roboGames = _dbContext.RoboGames.Include(e => e.LevelGroups).Include("LevelGroups.Levels").ToListAsync().Result;
-            Game = roboGames[1]; // TODO: CHANGE THIS HARDCODED CRAP TO SUPPORT THE CURRENT SELECTED GAME
+            var roboGames = DbSelector.GetGamesWithLevels();
+
+            var gameId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("game");
+            if (gameId != null)
+            {
+                Game = roboGames.Find(game => game.UrlName == gameId);
+            }
+            else
+            {
+                Game = roboGames[0]; // SRB2 2.2 default for testing. Should be changed to throw an error if not found.
+            }
         }
 
         public IActionResult OnPostAsync(ReplayUploadDb fileUpload)
