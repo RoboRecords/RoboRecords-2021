@@ -19,7 +19,7 @@ namespace RoboRecords.Models
     public class RoboGame
     {
         public int DbId;
-        
+
         public string Name;
         public string UrlName;
 
@@ -44,13 +44,26 @@ namespace RoboRecords.Models
             }
             return null;
         }
-        
+
         public RoboGame(string name)
         {
             Name = name;
             var regex = new Regex("[^a-zA-Z0-9_-]");
             UrlName = regex.Replace(name, "").ToLower();
             LevelGroups = new List<LevelGroup>();
+        }
+
+        public override string ToString()
+        {
+            string roboString = $"RoboGame\nID: {DbId}\nName: {Name}\nURLName: {UrlName}\n" +
+                $"Level Groups:\n";
+
+            if (LevelGroups.Count > 0)
+                foreach (LevelGroup group in LevelGroups)
+                {
+                    roboString += $" {group.Name}\n{group}";
+                }
+            return roboString;
         }
     }
 }

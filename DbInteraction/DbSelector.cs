@@ -3,6 +3,7 @@ using System;
 using System.Web;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using RoboRecords.DatabaseContexts;
 using RoboRecords.Models;
 using System.Linq;
@@ -72,25 +73,43 @@ namespace RoboRecords.DbInteraction
             return _roboGame;
         }
 
-        /*public static RoboLevel GetGameLevelFromMapId(string gameid, string mapid)
+        public static RoboLevel GetGameLevelFromMapId(string gameid, string _mapid)
         {
-            RoboLevel _roboLevel;
-            // SELECT * FROM RoboGames, no JOINs. Used for Games page.
+            // SELECT * FROM RoboLevels where gameid and mapid --- Took 6 hours to figure this one out; Zenya
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
-                _roboLevel = context.RoboGames
-                    .Where(e => e.UrlName == gameid)
-                    .Include(e => e.LevelGroups)
-                    .ThenInclude(levelGroup => levelGroup.Levels)
-                    .Select(level => new RoboLevel
-                    { 
-                    DbId = level.DbId,
-                    Act = level.
-                    })
-            }
+                int mapid = 0;
+                int.TryParse(_mapid, out mapid);
 
-            return _roboLevel;
-        }*/
+                RoboLevel query = context.RoboGames
+                    .Include(g => g.LevelGroups)
+                    .ThenInclude(l => l.Levels)
+                    .ThenInclude(l => l.Records)
+                    .ThenInclude(r => r.Character)
+                    .Include(g => g.LevelGroups)
+                    .ThenInclude(l => l.Levels)
+                    .ThenInclude(l => l.Records)
+                    .ThenInclude(r => r.Uploader)
+                    .Where(g => g.UrlName == gameid && g.LevelGroups.Any(l => l.Levels.Any(level => level.LevelNumber == mapid)))
+                    .Select(g => g.LevelGroups.Where(e => e.Levels.Any(o => o.LevelNumber == mapid))
+                    .Select(e => e.Levels.FirstOrDefault(l => l.LevelNumber == mapid))
+                    .FirstOrDefault())
+                    .FirstOrDefault();
+
+                if (query != null)
+                    return query;
+                else
+                    return new RoboLevel()
+                    {
+                        DbId = -1,
+                        LevelName = "Invalid Level",
+                        LevelNumber = 9001,
+                        Act = 0,
+                        IconUrl = "",
+                        Records = new List<RoboRecord>()
+                    };
+            }
+        }
 
         public static List<RoboGame> GetGamesWithLevels()
         {

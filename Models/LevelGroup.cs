@@ -24,5 +24,17 @@ namespace RoboRecords.Models
         public LevelGroup()
         {
         }
+
+        public override string ToString()
+        {
+            string levelstrings = "";
+            if (Levels.Count > 0)
+            foreach (RoboLevel level in Levels)
+                {
+                    levelstrings += $"  {level}\n";
+                }
+
+            return levelstrings;
+        }
     }
 }

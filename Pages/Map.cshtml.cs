@@ -48,13 +48,16 @@ namespace RoboRecords.Pages
                 .ToListAsync().Result;*/
 
             // Returns all games, including the levels and records.
-            // TODO: Return only the current level so sorting is done by SQL server. Less data transfer required.
-            _roboGames = DbSelector.GetAllGameData();
+            // TODO: Return only the current level so sorting is done by SQL server. Less data transfer required. - DONE, Zenya
+            // _roboGames = DbSelector.GetAllGameData();
 
             var gameId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("game");
             var mapId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("map");
 
-            if (gameId != null)
+            CurrentGame = DbSelector.GetGameFromID(gameId);
+            CurrentLevel = DbSelector.GetGameLevelFromMapId(gameId, mapId);
+
+            /*if (gameId != null)
             {
                 var roboGame = _roboGames.Find(game => game.UrlName == gameId);
                 // var roboGame = DbSelector.GetGameFromID(gameId);
@@ -74,7 +77,7 @@ namespace RoboRecords.Pages
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 }

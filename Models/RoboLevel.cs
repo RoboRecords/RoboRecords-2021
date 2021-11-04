@@ -18,7 +18,7 @@ namespace RoboRecords.Models
     public class RoboLevel
     {
         public int DbId;
-        
+
         public string IconUrl;
         // Map id, Techno Hill Zone 1 = 4
         private int _levelNumber;
@@ -27,7 +27,7 @@ namespace RoboRecords.Models
 
         public int LevelNumber
         {
-            get =>_levelNumber;
+            get => _levelNumber;
             set
             {
                 _levelNumber = value;
@@ -46,7 +46,7 @@ namespace RoboRecords.Models
         public static string MakeMapString(int levelNumber)
         {
             var numberForm = "";
-            
+
             if (levelNumber < 0 || levelNumber > MaxLevelNumber)
             {
                 return "Invalid-map-number";
@@ -59,10 +59,10 @@ namespace RoboRecords.Models
             else
             {
                 // Map number is expressed with a leading letter and a digit/letter
-                var firstChar = (char) ((levelNumber - 100) / 36 + 'A');
+                var firstChar = (char)((levelNumber - 100) / 36 + 'A');
                 var remainder = (levelNumber - 100) % 36;
                 var secondChar = remainder < 10 ? (char)(remainder + '0') : (char)(remainder - 10 + 'A');
-                char[] chars = {firstChar, secondChar};
+                char[] chars = { firstChar, secondChar };
                 numberForm = new string(chars);
             }
             return "MAP" + numberForm;
@@ -83,7 +83,7 @@ namespace RoboRecords.Models
 
             return bestRecord;
         }
-        
+
         public List<RoboRecord> GetBestRecords(bool allowNonStandard = false)
         {
             var records = new List<RoboRecord>();
@@ -107,7 +107,7 @@ namespace RoboRecords.Models
         {
             return (int)a.Tics - (int)b.Tics;
         }
-        
+
         public List<RoboRecord> GetCharacterRecords(RoboCharacter character)
         {
             // Add all the records done with a character to a list
@@ -118,17 +118,17 @@ namespace RoboRecords.Models
             }
             // Sort the list of all records for the next part
             allRecordsWithCharacter.Sort(SortByTime);
-            
+
             // Add only the first, meaning best times by each player to the record list.
             var records = new List<RoboRecord>();
-            foreach (var record in  allRecordsWithCharacter)
+            foreach (var record in allRecordsWithCharacter)
             {
                 if (records.FindIndex(rec => rec.Uploader.UserNameNoDiscrim == record.Uploader.UserNameNoDiscrim && rec.Uploader.Discriminator == record.Uploader.Discriminator) == -1)
                 {
                     records.Add(record);
                 }
             }
-            
+
             return records;
         }
 
@@ -138,7 +138,7 @@ namespace RoboRecords.Models
             LevelName = levelName;
             Act = act;
             Records = new List<RoboRecord>();
-            
+
             // REPLACE WITH SOME DATA BASE STUFF LATER!!!
             IconUrl = "../assets/images/mappics/" + MapString + "P.png";
         }
@@ -146,6 +146,14 @@ namespace RoboRecords.Models
         // Needed for the database context
         public RoboLevel()
         {
+        }
+
+        public override string ToString()
+        {
+            if (Act > 0)
+                return $"{LevelName} Act {Act}";
+            else
+                return $"{LevelName}";
         }
     }
 }
