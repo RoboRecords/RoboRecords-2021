@@ -75,6 +75,7 @@
             for (let groupCount = 0; groupCount < this.levelGroups.length; groupCount++)
             {
                 let group = this.levelGroups[groupCount];
+                let checked_str = group.writeNames ? "checked" : "";
                 
                 html_str += `
                 <div style="background: #204080; padding: 10px; margin-bottom: 10px">
@@ -88,7 +89,7 @@
                         <label for="group_` + groupCount +`_write_names">Write Level Names</label>
                     </dt>
                     <dd>
-                        <input id="group_` + groupCount +`_write_names" type="checkbox" e="group_` + groupCount +`_write_names" value="` + group.writeNames.toString() + `"/>
+                        <input id="group_` + groupCount +`_write_names" type="checkbox" e="group_` + groupCount +`_write_names" ` + checked_str +`/>
                     </dd>
                     <dt>
                         <label>Levels</label>
@@ -110,7 +111,7 @@
                             <label for="level_` + groupCount +`_` + levelCount +`_act">Act</label>
                         </dt>
                         <dd>
-                            <input type="number" id="level_` + groupCount +`_` + levelCount +`_act" name="level_` + groupCount +`_` + levelCount +`_act" placeholder="` + levelCount + 1 +`" value="` + level.act + `"/>
+                            <input type="number" id="level_` + groupCount +`_` + levelCount +`_act" name="level_` + groupCount +`_` + levelCount +`_act" placeholder="` +  (levelCount + 1) +`" value="` + level.act + `"/>
                         </dd>
                         <dt>
                             <label for="level_` + groupCount +`_` + levelCount +`_number"></label>
@@ -124,7 +125,7 @@
                         <dd>
                             <input id="level_` + groupCount +`_` + levelCount +`_path" name="level_` + groupCount +`_` + levelCount +`_path" placeholder="../assets/images/mappics/MAP01P.png" value="` + level.iconPath + `"/>
                         </dd>
-                        <button>X</button>
+                        <button type="button" onclick="remove_level(` + groupCount + `, ` + levelCount + `)">X</button>
                     </div>
                     `
 
@@ -132,12 +133,52 @@
                         
                 
                 html_str += `
-                    <button>X</button>
-                    <button type="button" onclick="AddLevel()">Add level</button>
+                    <button type="button" onclick="remove_group(` + groupCount + `)">X</button>
+                    <button type="button" onclick="add_level(` + groupCount + `)">Add level</button>
                 </div>
                 `
             }
             formDiv.innerHTML = html_str;
+        }
+        
+        read_fields()
+        {
+            for (let i = 0; i < this.levelGroups.length; i++)    
+            {
+                this.levelGroups[i].levels = [];
+            }
+            this.levelGroups = [];
+            
+            let groupCount = 0;
+            while (document.getElementById("group_" + groupCount +"_name") != null)
+            {
+                let group_str = "group_" + groupCount;
+                let groupName = document.getElementById(group_str +"_name").value;
+                let writeNames = document.getElementById(group_str +"_write_names").checked ? "True" : "False";
+                
+                let levelCount = 0;
+                
+                let tempLevels = [];
+                
+                while (document.getElementById("level_" + groupCount + "_" + levelCount + "_name") != null)
+                {
+                    let level_str = "level_" + groupCount + "_" + levelCount;
+                    let levelName = document.getElementById(level_str +"_name").value;
+                    let act = document.getElementById(level_str +"_act").value;
+                    let levelNumber = document.getElementById(level_str +"_number").value;
+                    let iconPath = document.getElementById(level_str +"_path").value;
+                    let level = new LevelForm(levelName, act,  levelNumber, iconPath);
+                    
+                    levelCount++;
+                    
+                    console.log(level.levelName + ", " + level.act + ", " + level.levelNumber + ", " + level.iconPath);
+                    
+                    tempLevels.push(level);
+                }
+                let group = new LevelGroupForm(groupName, writeNames, tempLevels);
+                this.levelGroups.push(group);
+                groupCount++;
+            }
         }
         
         constructor()
@@ -153,6 +194,39 @@
         console.log( "ready!" );
         editGameForm = new EditGameForm();
     });
+    
+    function read_fields()
+    {
+        editGameForm.read_fields();
+    }
+    
+    function add_level(group_num)
+    {
+        editGameForm.read_fields();
+        editGameForm.levelGroups[group_num].levels.push(new LevelForm("New Level", editGameForm.levelGroups[group_num].levels.length + 1, 0, ""));
+        editGameForm.draw();
+    }
+    
+    function remove_level(group_num, level_num)
+    {
+        editGameForm.read_fields();
+        editGameForm.levelGroups[group_num].levels.splice(level_num, 1);
+        editGameForm.draw();
+    }
+    
+    function add_group()
+    {
+        editGameForm.read_fields();
+        editGameForm.levelGroups.push(new LevelGroupForm("New Group", "False", []))
+        editGameForm.draw();
+    }
+    
+    function remove_group(group_num)
+    {
+        editGameForm.read_fields();
+        editGameForm.levelGroups.splice(group_num, 1);
+        editGameForm.draw();
+    }
     </script>
 }
 
@@ -184,7 +258,7 @@
             
             <div id="group_div"></div>
         </dl>
-        <button>Add level group</button>
+        <button type="button" onclick="add_group()">Add level group</button>
         <input type="button" value="Cancel"/>
         <input type="submit"/>
     </form>
