@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RoboRecords.DatabaseContexts;
+using RoboRecords.DbInteraction;
 using RoboRecords.Models;
 
 namespace RoboRecords.Pages
@@ -20,7 +21,7 @@ namespace RoboRecords.Pages
         
         public void OnGet()
         {
-            var roboGames = _dbContext.RoboGames.Include(e => e.LevelGroups).Include("LevelGroups.Levels").ToListAsync().Result;
+            var roboGames = DbSelector.GetGamesWithLevels();
             Game = roboGames[1]; // TODO: CHANGE THIS HARDCODED CRAP TO SUPPORT THE CURRENT SELECTED GAME
         }
     }
