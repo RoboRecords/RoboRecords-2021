@@ -59,5 +59,10 @@ namespace RoboRecords.DbInteraction
             if (!exists)
                 DbInserter.AddRecordToLevel(record, level);
         }
+
+        public static void TryReadPK3()
+        {
+            WadReader.GetMainCFGFromPK3(@"C:\SRB2\SL_CyberDimeRealm-v1.5.1.pk3");
+        }
     }
 }
