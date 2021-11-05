@@ -38,6 +38,11 @@ namespace RoboRecords.Pages
         public void OnGet()
         {
             RecordList = new List<RoboRecord>();
+            // TODO: Change to only select current level, as this won't make Entity Framework
+            // generate an UPDATE for the whole RoboGame object.
+            // Not gonna start changing stuff here, as it might break the Submit page.
+            // Same method as in Map page can be used to get just the level.
+            // DbInserter.AddRecord just
             var roboGames = DbSelector.GetGamesWithLevels();
 
             var gameId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("game");
@@ -47,7 +52,7 @@ namespace RoboRecords.Pages
             }
             else
             {
-                // SRB2 2.2 default for testing. Should be changed to throw an error if not found.
+                // SRB2 2.2 default for testing. Should be changed to throw an error.
                 Game = roboGames.Find(game => game.UrlName == "sonicroboblast2v22");
             }
         }

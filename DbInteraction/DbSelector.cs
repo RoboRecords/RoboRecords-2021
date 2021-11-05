@@ -47,6 +47,77 @@ namespace RoboRecords.DbInteraction
             return _roboGames;
         }
 
+        // Get the game matching the url and include level data.
+        internal static RoboGame GetGameWithLevelsFromID(string id)
+        {
+            RoboGame _roboGame;
+
+            // SELECT * FROM RoboGames, JOIN levels
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                _roboGame = context.RoboGames
+                .Include(e => e.LevelGroups)
+                .ThenInclude(levelGroups => levelGroups.Levels)
+                .Where(e => e.UrlName == id)
+                .FirstOrDefault();
+            }
+
+
+            // Sort the levels by level number, as they may not be in order in the database
+            if (_roboGame != null)
+            {
+                if (_roboGame.LevelGroups.Count > 0)
+                    foreach (var levelGroup in _roboGame.LevelGroups)
+                    {
+                        List<RoboLevel> sortedList = levelGroup.Levels.OrderBy(l => l.LevelNumber).ToList();
+                        levelGroup.Levels = sortedList;
+                    }
+                return _roboGame;
+            }
+            else
+            {
+                return new RoboGame("Invalid Game");
+            }
+        }
+
+        // Get the game matching the url and include level and record data.
+        internal static RoboGame GetGameWithRecordsFromID(string id)
+        {
+            RoboGame _roboGame;
+
+            // SELECT * FROM RoboGames, JOIN levels
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                _roboGame = context.RoboGames
+                .Include(e => e.LevelGroups)
+                .ThenInclude(levelGroups => levelGroups.Levels)
+                .ThenInclude(levels => levels.Records)
+                .ThenInclude(records => records.Character)
+                .Include(e => e.LevelGroups)
+                .ThenInclude(levelGroups => levelGroups.Levels)
+                .ThenInclude(levels => levels.Records)
+                .ThenInclude(records => records.Uploader)
+                .FirstOrDefault();
+            }
+
+
+            // Sort the levels by level number, as they may not be in order in the database
+            if (_roboGame != null)
+            {
+                if (_roboGame.LevelGroups.Count > 0)
+                    foreach (var levelGroup in _roboGame.LevelGroups)
+                    {
+                        List<RoboLevel> sortedList = levelGroup.Levels.OrderBy(l => l.LevelNumber).ToList();
+                        levelGroup.Levels = sortedList;
+                    }
+                return _roboGame;
+            }
+            else
+            {
+                return new RoboGame("Invalid Game");
+            }
+        }
+
         public static List<RoboGame> GetGames()
         {
             List<RoboGame> _roboGames = new List<RoboGame>();
@@ -61,16 +132,34 @@ namespace RoboRecords.DbInteraction
             return _roboGames;
         }
 
+        public static RoboUser GetUserFromUserName (string uname, short disc)
+        {
+            RoboUser _roboUser;
+            // Return user with given username and discriminator. Return "invalid user" if not found.
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                _roboUser = context.RoboUsers.Where(e => e.UserNameNoDiscrim == uname && e.Discriminator == disc).FirstOrDefault();
+            }
+
+            if (_roboUser != null)
+                return _roboUser;
+            else
+                return new RoboUser("Invalid User", -1);
+        }
+
         public static RoboGame GetGameFromID(string id)
         {
             RoboGame _roboGame;
-            // SELECT * FROM RoboGames WHERE UrlName = id
+            // SELECT * FROM RoboGames WHERE UrlName = id. Return "invalid game" if not found.
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 _roboGame = context.RoboGames.Where(e => e.UrlName == id).FirstOrDefault();
             }
 
-            return _roboGame;
+            if (_roboGame != null)
+                return _roboGame;
+            else
+                return new RoboGame("Invalid Game");
         }
 
         public static RoboLevel GetGameLevelFromMapId(string gameid, string _mapid)
@@ -115,7 +204,7 @@ namespace RoboRecords.DbInteraction
         {
             List<RoboGame> _roboGames = new List<RoboGame>();
 
-            // SELECT * FROM RoboGames, JOIN levels
+            // SELECT * FROM RoboGames, JOIN levels.
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 _roboGames = context.RoboGames

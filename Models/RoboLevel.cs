@@ -72,14 +72,15 @@ namespace RoboRecords.Models
         {
             RoboRecord bestRecord = null;
             long bestTime = UInt32.MaxValue;
-            foreach (var record in Records.Where(rec => rec.Character.NameId == character.NameId))
-            {
-                if (bestTime > record.Tics)
+            if (Records != null && Records.Count() > 0)
+                foreach (var record in Records.Where(rec => rec.Character.NameId == character.NameId))
                 {
-                    bestRecord = record;
-                    bestTime = record.Tics;
+                    if (bestTime > record.Tics)
+                    {
+                        bestRecord = record;
+                        bestTime = record.Tics;
+                    }
                 }
-            }
 
             return bestRecord;
         }

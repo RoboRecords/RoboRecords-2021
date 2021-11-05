@@ -11,33 +11,34 @@ namespace RoboRecords.Pages
 {
     public class GamePage : PageModel
     {
-        private List<RoboGame> _roboGames;
+        // private List<RoboGame> _roboGames;
         public static RoboGame CurrentGame;
 
         public void OnGet()
         {
             CurrentGame = new RoboGame("Invalid Game");
 
-            _roboGames = new List<RoboGame>();
+            // _roboGames = new List<RoboGame>();
             // Replace the next bit by actually getting the game from a database --- DONE, Zenya
             //_roboGames.Add(new RoboGame("Sonic Robo Blast 2 v2.2"){LevelGroups = groups, IconPath = "../assets/images/gfz2bg.png"});
             //_roboGames.Add(new RoboGame("srb2 Cyberdime Realm"){IconPath = "../assets/images/cydmbg.png"});
             //_roboGames.Add(new RoboGame("Sonic Robo Blast 3 LUL"){IconPath = "../assets/images/dreamhill1.png"});
 
             // Returns all games, including the levels and records.
-            // TODO: Return only the current game so sorting is done by SQL server. Less data transfer required.
+            // TODO: Return only the current game so sorting is done by SQL server. Less data transfer required. --- DONE, Zenya
 
-            _roboGames = DbSelector.GetAllGameData();
+            // _roboGames = DbSelector.GetAllGameData();
 
             var id = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("id");
 
             if (id != null)
             {
-                var roboGame = _roboGames.Find(game => game.UrlName == id);
-                if (roboGame != null)
-                {
-                    CurrentGame = roboGame;
-                }
+                CurrentGame = DbSelector.GetGameWithRecordsFromID(id);
+            }
+            else
+            {
+                // SRB2 2.2 default for testing. Should be changed to throw an error if not found.
+                CurrentGame = DbSelector.GetGameWithRecordsFromID("sonicroboblast2v22");
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,7 +19,9 @@ namespace RoboRecords.Pages
 
         public void OnGet()
         {
-
+            // Zenya's methods to test if database interactions work properly. These are not supposed to be called.
+            //DbInteraction.DbTester.TestUpdate();
+            //DbInteraction.DbTester.TestRecord(); // This will do nothing if TestUpdate isn't run first. This shouldn't cause a crash.
         }
     }
 }

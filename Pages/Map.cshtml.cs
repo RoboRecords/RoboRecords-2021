@@ -14,7 +14,7 @@ namespace RoboRecords.Pages
     {
         public static RoboGame CurrentGame;
         public static RoboLevel CurrentLevel;
-        private List<RoboGame> _roboGames;
+        // private List<RoboGame> _roboGames;
 
         // Initiative to move all database interactions to one place. --- Zenya
         /*
