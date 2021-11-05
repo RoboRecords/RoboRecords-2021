@@ -10,20 +10,31 @@
  */
 
 using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace RoboRecords.Models
 {
-    public class RoboUser
+    public class RoboUser : IdentityUser
     {
         public int DbId;
         
-        public short Discriminator;
+        public short Discriminator { get; set; }
 
-        public string UserNameNoDiscrim;
+        public string UserNameNoDiscrim { get; set; }
+
         public RoboUser(string userName, short discriminator)
         {
             Discriminator = discriminator;
             UserNameNoDiscrim = userName;
+            UserName = userName + '#' + discriminator;
+        }
+        
+        public RoboUser(string email, string userName, short discriminator)
+        {
+            Email = email;
+            Discriminator = discriminator;
+            UserNameNoDiscrim = userName;
+            UserName = userName + '#' + discriminator;
         }
 
         // Needed for the database context

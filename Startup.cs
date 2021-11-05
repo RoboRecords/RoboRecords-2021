@@ -19,9 +19,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RoboRecords.DatabaseContexts;
 using RoboRecords.Models;
+using RoboRecords.Services;
 
 namespace RoboRecords
 {
@@ -31,6 +34,7 @@ namespace RoboRecords
         {
             Configuration = configuration;
             RoboRecordsDbContext.SetConnectionString(Configuration["TempSqlConnectionString"]);
+            IdentityContext.SetConnectionString(Configuration["TempSqlConnectionString"]);
             InitDatabase();
         }
         
@@ -47,6 +51,13 @@ namespace RoboRecords
                 }
                 
             }
+            
+            //FIXME: This does not seem to properly work in this context, had to put this before the first call to 
+            //EnsureCreated and even then it created errors (but it still worked enough for the register functionality)
+            using (var context = new IdentityContext())
+            {
+                context.Database.EnsureCreated();
+            }
         }
 
         public IConfiguration Configuration { get; }
@@ -57,6 +68,17 @@ namespace RoboRecords
             services.AddRazorPages();
 
             services.AddDbContext<RoboRecordsDbContext>(ServiceLifetime.Scoped);
+            services.AddDbContext<IdentityContext>(ServiceLifetime.Scoped);
+
+            services.AddIdentityCore<RoboUser>().AddEntityFrameworkStores<IdentityContext>();
+            services.AddScoped<RoboUserManager>();
+            
+            //TODO: Set up the remaining options like password related stuff
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.User.AllowedUserNameCharacters =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+#";
+            });
 
             services.AddControllers();
         }
