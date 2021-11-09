@@ -32,14 +32,17 @@ namespace RoboRecords.Models
         {
             string[] lines = maincfg.Split('\n');
             var levelEntries = new List<LevelEntry>();
+            var levels = new List<RoboLevel>();
 
-            string lvlnum = @"[Ll][Ee][Vv][Ee][Ll]\s([a-fA-f0-9]{2})";
+            string lvlnum = @"[Ll][Ee][Vv][Ee][Ll]\s([a-zA-Z0-9]{1,2})";
             string lvlname = @"[Ll][Ee][Vv][Ee][Ll][Nn][Aa][Mm][Ee]\s?\=\s?([A-Za-z ]+)";
             string lvlact = @"[Aa][Cc][Tt]\s?\=\s?(\d+)";
+            string lvlrecatk = @"recordattack\s?\=\s?";
 
             Regex rgnum = new Regex(lvlnum);
             Regex rgname = new Regex(lvlname);
             Regex rgact = new Regex(lvlact);
+            Regex rgrecatk = new Regex(lvlrecatk);
 
             if (lines.Length > 0)
             {
@@ -70,25 +73,34 @@ namespace RoboRecords.Models
                             levelEntry.raw += lines[i];
                         }
 
-                        Match match = rgnum.Match(levelEntry.raw);
+                        // Get only levels which can be record attacked
+                        Match match = rgrecatk.Match(levelEntry.raw.ToLower());
+                        if (!match.Success)
+                        {
+                            continue;
+                        }
+
+                        match = rgnum.Match(levelEntry.raw);
                         if (match.Success)
                         {
-                            levelEntry.entry += $"MAP{match.Groups[1].Value}";
+                            levelEntry.levelNumber = RoboLevel.MakeLevelNum(match.Groups[1].Value);
                         }
 
                         match = rgname.Match(levelEntry.raw);
                         if (match.Success)
                         {
-                            levelEntry.entry += $", {match.Groups[1].Value} Zone";
+                            levelEntry.levelName = $"{match.Groups[1].Value} Zone";
                         }
 
                         match = rgact.Match(levelEntry.raw);
                         if (match.Success)
                         {
-                            levelEntry.entry += $" Act {match.Groups[1].Value}";
+                            levelEntry.act = Convert.ToInt32(match.Groups[1].Value);
                         }
 
-                        Debug.WriteLine(levelEntry.entry);
+                        levels.Add(new RoboLevel(levelEntry.levelNumber, levelEntry.levelName, levelEntry.act));
+
+                        Debug.WriteLine(levelEntry.levelNumber);
                     }
                 }
             }
@@ -100,6 +112,9 @@ namespace RoboRecords.Models
             public int endline;
             public string raw = "";
             public string entry = "";
+            public int levelNumber = 0;
+            public int act = 0;
+            public string levelName = "";
         }
     }
 }

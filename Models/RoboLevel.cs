@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace RoboRecords.Models
 {
@@ -66,6 +67,41 @@ namespace RoboRecords.Models
                 numberForm = new string(chars);
             }
             return "MAP" + numberForm;
+        }
+
+        public static int MakeLevelNum(string _mapString)
+        {
+            string mapString;
+            int levelNum;
+            int[] digits = new int[] { 0, 0 };
+            Regex rgnum = new Regex(@"M?A?P?([A-Z0-9]{1,2})");
+
+            // Works regardless of the string having leading "MAP" for ease of use
+            // If a non-mapstring was somehow given to this method, return -1
+            Match match = rgnum.Match(_mapString.ToUpper());
+            if (!match.Success)
+            {
+                return -1;
+            }
+            else
+            {
+                mapString = match.Groups[1].Value;
+
+                // MAP00-MAP99
+                if (int.TryParse(mapString[0].ToString(), out digits[0]) && int.TryParse(mapString[1].ToString(), out digits[1]))
+                {
+                    levelNum = digits[0] * 10 + digits[1];
+                    return levelNum;
+                }
+                // MAPA0-MAPZZ
+                else
+                {
+                    digits[0] = 100 + (mapString[0] - 'A') * 36;
+                    digits[1] = int.TryParse(mapString[1].ToString(), out digits[1]) ? digits[1] = digits[1] : ((mapString[1] - 'A') + 10);
+                    levelNum = digits[0] + digits[1];
+                }
+                return levelNum;
+            }
         }
 
         public RoboRecord GetBestRecord(RoboCharacter character)
