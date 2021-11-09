@@ -64,5 +64,16 @@ namespace RoboRecords.DbInteraction
         {
             WadReader.GetMainCFGFromPK3(@"C:\SRB2\SL_CyberDimeRealm-v1.5.1.pk3");
         }
+
+        public static void TryAddCyberdime()
+        {
+            RoboGame cyberGame = new RoboGame("Cyberdime Realm")
+            {
+                UrlName = "cyber",
+                IconPath = @"../assets/images/cydmbg.png",
+                LevelGroups = WadReader.GetMainCFGFromPK3(@"C:\SRB2\SL_CyberDimeRealm-v1.5.1.pk3")
+            };
+            DbInserter.AddGame(cyberGame);
+        }
     }
 }

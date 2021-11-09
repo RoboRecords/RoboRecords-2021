@@ -97,6 +97,7 @@ namespace RoboRecords.DbInteraction
                 .ThenInclude(levelGroups => levelGroups.Levels)
                 .ThenInclude(levels => levels.Records)
                 .ThenInclude(records => records.Uploader)
+                .Where(e => e.UrlName == id)
                 .FirstOrDefault();
             }
 

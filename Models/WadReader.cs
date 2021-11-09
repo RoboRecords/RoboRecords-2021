@@ -9,7 +9,8 @@ namespace RoboRecords.Models
 {
     public class WadReader
     {
-        public static void GetMainCFGFromPK3(string filename)
+        // TODO: Also get level pics from PK3 and convert them using Ors' project
+        public static List<LevelGroup> GetMainCFGFromPK3(string filename)
         {
             var zip = new ZipInputStream(File.OpenRead(filename));
             var filestream = new FileStream(filename, FileMode.Open, FileAccess.Read);
@@ -22,13 +23,14 @@ namespace RoboRecords.Models
                     Debug.WriteLine("Found MAINCFG!");
                     using (StreamReader s = new StreamReader(zipFile.GetInputStream(item)))
                     {
-                        ParseMainCFG(s.ReadToEnd());
+                        return ParseMainCFG(s.ReadToEnd());
                     }
                 }
             }
+            return new List<LevelGroup>();
         }
 
-        static void ParseMainCFG(string maincfg)
+        static List<LevelGroup> ParseMainCFG(string maincfg)
         {
             string[] lines = maincfg.Split('\n');
             var levelEntries = new List<LevelEntry>();
@@ -102,8 +104,37 @@ namespace RoboRecords.Models
 
                         Debug.WriteLine(levelEntry.levelNumber);
                     }
+                    return SortLevelsToGroups(levels);
                 }
             }
+            return new List<LevelGroup>();
+        }
+
+        //TODO: This might be useful elsewhere, so find a better place for it
+        public static List<LevelGroup> SortLevelsToGroups (List<RoboLevel> levels)
+        {
+            List<LevelGroup> groups = new List<LevelGroup>();
+            int currentGroup = 0;
+
+            for (int i = 0; i < levels.Count; i++)
+            {
+                if (i == 0)
+                {
+                    groups.Add(new LevelGroup(levels[i].LevelName));
+                    groups[currentGroup].Levels.Add(levels[i]);
+                }
+                else if (levels[i].LevelName == levels[i-1].LevelName)
+                {
+                    groups[currentGroup].Levels.Add(levels[i]);
+                }
+                else
+                {
+                    currentGroup++;
+                    groups.Add(new LevelGroup(levels[i].LevelName));
+                    groups[currentGroup].Levels.Add(levels[i]);
+                }
+            }
+            return groups;
         }
 
         class LevelEntry
