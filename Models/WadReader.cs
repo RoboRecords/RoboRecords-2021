@@ -10,6 +10,7 @@ namespace RoboRecords.Models
     public class WadReader
     {
         // TODO: Also get level pics from PK3 and convert them using Ors' project
+        // Done, almost. Needs reworking --- Zenya
         public static List<LevelGroup> GetMainCFGFromPK3(string filename)
         {
             var zip = new ZipInputStream(File.OpenRead(filename));
@@ -23,18 +24,46 @@ namespace RoboRecords.Models
                     Debug.WriteLine("Found MAINCFG!");
                     using (StreamReader s = new StreamReader(zipFile.GetInputStream(item)))
                     {
-                        return ParseMainCFG(s.ReadToEnd());
+                        return ParseMainCFG(s.ReadToEnd(), filename);
                     }
                 }
             }
             return new List<LevelGroup>();
         }
 
-        static List<LevelGroup> ParseMainCFG(string maincfg)
+        public static byte[] GetLevelPicFromPK3(string filename, string mapString)
+        {
+            var zip = new ZipInputStream(File.OpenRead(filename));
+            var filestream = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            ZipFile zipFile = new ZipFile(filestream);
+            ZipEntry item;
+            byte[] buffer = new byte[16 * 1024];
+            while ((item = zip.GetNextEntry()) != null)
+            {
+                if (item.Name.ToUpper().Contains($"{mapString}P"))
+                {
+                    Debug.WriteLine($"Found {item.Name}!");
+                    Stream s = zipFile.GetInputStream(item);
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        int read;
+                        while ((read = s.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            ms.Write(buffer, 0, read);
+                        }
+                        return ms.ToArray();
+                    }
+                }
+            }
+            return new byte[0];
+        }
+
+        static List<LevelGroup> ParseMainCFG(string maincfg, string filename)
         {
             string[] lines = maincfg.Split('\n');
             var levelEntries = new List<LevelEntry>();
             var levels = new List<RoboLevel>();
+            var levelPics = new List<LevelPic>();
 
             string lvlnum = @"[Ll][Ee][Vv][Ee][Ll]\s([a-zA-Z0-9]{1,2})";
             string lvlname = @"[Ll][Ee][Vv][Ee][Ll][Nn][Aa][Mm][Ee]\s?\=\s?([A-Za-z ]+)";
@@ -99,11 +128,19 @@ namespace RoboRecords.Models
                         {
                             levelEntry.act = Convert.ToInt32(match.Groups[1].Value);
                         }
+                        RoboLevel level = new RoboLevel(levelEntry.levelNumber, levelEntry.levelName, levelEntry.act);
 
-                        levels.Add(new RoboLevel(levelEntry.levelNumber, levelEntry.levelName, levelEntry.act));
+                        levels.Add(level);
 
-                        Debug.WriteLine(levelEntry.levelNumber);
+                        levelPics.Add(new LevelPic(GetLevelPicFromPK3(filename, level.MapString), $"{level.MapString}P"));
                     }
+
+                    // Don't do this automatically yet, needs fixing first. --- Zenya
+                    //foreach (var levelPic in levelPics)
+                    //{
+                    //    LevelPic.SaveToFile(levelPic.picture, levelPic.filename);
+                    //}
+
                     return SortLevelsToGroups(levels);
                 }
             }

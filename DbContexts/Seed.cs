@@ -74,8 +74,8 @@ namespace RoboRecords
                     new LevelGroup("Red Volcano Zone", new List<RoboLevel>(roboLevels.Skip(15).Take(1))),
                     new LevelGroup("Egg Rock Zone", new List<RoboLevel>(roboLevels.Skip(16).Take(2))),
                     new LevelGroup("Black Core Zone", new List<RoboLevel>(roboLevels.Skip(18).Take(3))),
-                    new LevelGroup("Bonus Levels", new List<RoboLevel>(roboLevels.Skip(21).Take(4))),
-                    new LevelGroup("Challenge Levels", new List<RoboLevel>(roboLevels.Skip(25).Take(3)))
+                    new LevelGroup("Bonus Levels", new List<RoboLevel>(roboLevels.Skip(21).Take(4)), true),
+                    new LevelGroup("Challenge Levels", new List<RoboLevel>(roboLevels.Skip(25).Take(3)), true)
                 };
 
                 // Sample users
