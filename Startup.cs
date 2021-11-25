@@ -72,7 +72,7 @@ namespace RoboRecords
             services.AddDbContext<RoboRecordsDbContext>(ServiceLifetime.Scoped);
             services.AddDbContext<IdentityContext>(ServiceLifetime.Scoped);
 
-            services.AddIdentityCore<RoboUser>().AddEntityFrameworkStores<IdentityContext>();
+            services.AddIdentity<RoboUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
             services.AddScoped<RoboUserManager>();
             
             //TODO: Set up the remaining options like password related stuff
@@ -81,6 +81,12 @@ namespace RoboRecords
                 options.User.AllowedUserNameCharacters =
                     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+#";
             });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromDays(5);
+            });
+            services.AddHttpContextAccessor();
 
             services.AddControllers();
         }

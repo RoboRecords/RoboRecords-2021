@@ -1,5 +1,10 @@
 using System;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RoboRecords.DbInteraction;
+using RoboRecords.Models;
 using RoboRecords.Services;
 
 namespace RoboRecords.Pages
@@ -7,10 +12,26 @@ namespace RoboRecords.Pages
     public class Login : PageModel
     {
         private RoboUserManager _roboUserManager;
-        
-        public Login(RoboUserManager roboUserManager)
+        private SignInManager<RoboUser> _signInManager;
+        private IHttpContextAccessor _httpContextAccessor;
+
+        // Fields to be accessed by the frontend part
+        public bool IsLogged;
+        public string UserName = string.Empty;
+        // ==========================================
+
+        public Login(RoboUserManager roboUserManager, SignInManager<RoboUser> signInManager, IHttpContextAccessor httpContextAccessor)
         {
             _roboUserManager = roboUserManager;
+            _signInManager = signInManager;
+            _httpContextAccessor = httpContextAccessor;
+
+            string? tempName = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            if (tempName != null)
+            {
+                IsLogged = true;
+                UserName = tempName;
+            }
         }
 
         public void OnGet()
@@ -32,8 +53,6 @@ namespace RoboRecords.Pages
                 return;
             }
 
-            Console.WriteLine(string.Join(", ", email, usernamewithdiscrim, password, confirmedPassword));
-
             string[] splittedUsername = usernamewithdiscrim.Split('#');
 
             string username = splittedUsername[0];
@@ -47,10 +66,21 @@ namespace RoboRecords.Pages
         //FIXME: Don't require a page refresh for this action to happen?
         public void OnPostLogin()
         {
-            string email = Request.Form["loginInputEmail"];
+            string usernamewithdiscrim = Request.Form["loginInputUsername"];
             string password = Request.Form["loginInputPassword"];
             
-            Console.WriteLine(string.Join(", ", email, password));
+            string[] splittedUsername = usernamewithdiscrim.Split('#');
+
+            string username = splittedUsername[0];
+            short discriminator = short.Parse(splittedUsername[1]);
+
+            RoboUser userToLogin = DbSelector.GetUserFromUserName(username, discriminator);
+
+            SignInResult result = _signInManager.PasswordSignInAsync(userToLogin, password, true, false).Result;
+            
+            if (result.Succeeded)
+                Console.WriteLine("Success");
+            Response.Redirect("Login");
         }
     }
 }
