@@ -17,24 +17,26 @@ namespace RoboRecords.Models
     public class RoboUser : IdentityUser
     {
         public int DbId;
-        
-        public short Discriminator { get; set; }
+
+        public short NumberDiscriminator { get; set; }
 
         public string UserNameNoDiscrim { get; set; }
 
-        public RoboUser(string userName, short discriminator)
+        public RoboUser(string userName, short numberDiscriminator)
         {
-            Discriminator = discriminator;
+            NumberDiscriminator = numberDiscriminator;
+            //Something = discriminator;
             UserNameNoDiscrim = userName;
-            UserName = userName + '#' + discriminator;
+            UserName = userName + '#' + numberDiscriminator;
         }
         
-        public RoboUser(string email, string userName, short discriminator)
+        public RoboUser(string email, string userName, short numberDiscriminator)
         {
             Email = email;
-            Discriminator = discriminator;
+            NumberDiscriminator = numberDiscriminator;
+            //Something = discriminator;
             UserNameNoDiscrim = userName;
-            UserName = userName + '#' + discriminator;
+            UserName = userName + '#' + numberDiscriminator;
         }
 
         // Needed for the database context

@@ -139,7 +139,7 @@ namespace RoboRecords.DbInteraction
             // Return user with given username and discriminator. Return "invalid user" if not found.
             using (IdentityContext context = new IdentityContext())
             {
-                _roboUser = context.RoboSignedUsers.Where(e => e.UserNameNoDiscrim == uname && e.Discriminator == disc).FirstOrDefault();
+                _roboUser = context.RoboSignedUsers.Where(e => e.UserNameNoDiscrim == uname && e.NumberDiscriminator == disc).FirstOrDefault();
             }
 
             if (_roboUser != null)
