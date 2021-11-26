@@ -53,13 +53,21 @@ namespace RoboRecords.Pages
                 return;
             }
 
-            string[] splittedUsername = usernamewithdiscrim.Split('#');
+            string[] splittedUsername = Validator.TrySplitUsername(usernamewithdiscrim);
 
             string username = splittedUsername[0];
             short discriminator = short.Parse(splittedUsername[1]);
 
+            // TODO: Make a more elegant way to interupt if the discriminator is invalid
+            if (discriminator == 0)
+            {
+                return;
+            }
+
             Console.WriteLine(username);
 
+
+            // TODO: Inform the user of the outcome.
             // Try to create new IdentityUser and if it succeeds, create a RoboUser with the same username.
             if (_roboUserManager.Create(email, username, discriminator, password).Succeeded)
             {
@@ -74,10 +82,17 @@ namespace RoboRecords.Pages
             string usernamewithdiscrim = Request.Form["loginInputUsername"];
             string password = Request.Form["loginInputPassword"];
             
-            string[] splittedUsername = usernamewithdiscrim.Split('#');
+            string[] splittedUsername = Validator.TrySplitUsername(usernamewithdiscrim);
 
             string username = splittedUsername[0];
             short discriminator = short.Parse(splittedUsername[1]);
+
+            // TODO: Make a more elegant way to interupt if the discriminator is invalid
+            // TODO: Actually allow email login
+            if (discriminator == 0)
+            {
+                return;
+            }
 
             // RoboUser userToLogin = DbSelector.GetRoboUserFromUserName(username, discriminator);
 
