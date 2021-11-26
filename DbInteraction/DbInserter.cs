@@ -29,5 +29,15 @@ namespace RoboRecords.DbInteraction
                 context.SaveChangesAsync();
             }
         }
+
+        public static void AddRoboUser(RoboUser user)
+        {
+            // INSERT the submitted RoboGame
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                context.RoboUsers.Add(user);
+                context.SaveChangesAsync();
+            }
+        }
     }
 }

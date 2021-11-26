@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using RoboRecords.DatabaseContexts;
+using Microsoft.AspNetCore.Identity;
 using RoboRecords.Models;
 using System.Linq;
 
@@ -133,19 +134,34 @@ namespace RoboRecords.DbInteraction
             return _roboGames;
         }
 
-        public static RoboUser GetUserFromUserName (string uname, short disc)
+        public static RoboUser GetRoboUserFromUserName (string uname, short disc)
         {
             RoboUser _roboUser;
             // Return user with given username and discriminator. Return "invalid user" if not found.
-            using (IdentityContext context = new IdentityContext())
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
-                _roboUser = context.RoboSignedUsers.Where(e => e.UserNameNoDiscrim == uname && e.NumberDiscriminator == disc).FirstOrDefault();
+                _roboUser = context.RoboUsers.Where(e => e.UserNameNoDiscrim.ToLower() == uname.ToLower() && e.Discriminator == disc).FirstOrDefault();
             }
 
             if (_roboUser != null)
                 return _roboUser;
             else
                 return new RoboUser("Invalid User", -1);
+        }
+
+        public static IdentityUser GetIdentityUserFromUserName(string unameWithDiscriminator)
+        {
+            IdentityUser iUser;
+            // Return user with given username and discriminator. Return "invalid user" if not found.
+            using (IdentityContext context = new IdentityContext())
+            {
+                iUser = context.Users.Where(e => e.NormalizedUserName == unameWithDiscriminator.ToUpper()).FirstOrDefault();
+            }
+
+            if (iUser != null)
+                return iUser;
+            else
+                return new IdentityUser("Invalid User");
         }
 
         public static RoboGame GetGameFromID(string id)

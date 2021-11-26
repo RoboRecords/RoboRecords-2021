@@ -12,7 +12,7 @@ namespace RoboRecords.Pages
     public class Login : PageModel
     {
         private RoboUserManager _roboUserManager;
-        private SignInManager<RoboUser> _signInManager;
+        private SignInManager<IdentityUser> _signInManager;
         private IHttpContextAccessor _httpContextAccessor;
 
         // Fields to be accessed by the frontend part
@@ -20,7 +20,7 @@ namespace RoboRecords.Pages
         public string UserName = string.Empty;
         // ==========================================
 
-        public Login(RoboUserManager roboUserManager, SignInManager<RoboUser> signInManager, IHttpContextAccessor httpContextAccessor)
+        public Login(RoboUserManager roboUserManager, SignInManager<IdentityUser> signInManager, IHttpContextAccessor httpContextAccessor)
         {
             _roboUserManager = roboUserManager;
             _signInManager = signInManager;
@@ -59,8 +59,13 @@ namespace RoboRecords.Pages
             short discriminator = short.Parse(splittedUsername[1]);
 
             Console.WriteLine(username);
-            
-            Console.WriteLine(_roboUserManager.Create(email, username, discriminator, password).Succeeded);
+
+            // Try to create new IdentityUser and if it succeeds, create a RoboUser with the same username.
+            if (_roboUserManager.Create(email, username, discriminator, password).Succeeded)
+            {
+                DbInserter.AddRoboUser(new RoboUser(username, discriminator));
+            }
+            // Console.WriteLine(_roboUserManager.Create(email, username, discriminator, password).Succeeded);
         }
         
         //FIXME: Don't require a page refresh for this action to happen?
@@ -74,7 +79,10 @@ namespace RoboRecords.Pages
             string username = splittedUsername[0];
             short discriminator = short.Parse(splittedUsername[1]);
 
-            RoboUser userToLogin = DbSelector.GetUserFromUserName(username, discriminator);
+            // RoboUser userToLogin = DbSelector.GetRoboUserFromUserName(username, discriminator);
+
+            // IdentityUser has discrim included in username
+            IdentityUser userToLogin = DbSelector.GetIdentityUserFromUserName(usernamewithdiscrim);
 
             SignInResult result = _signInManager.PasswordSignInAsync(userToLogin, password, true, false).Result;
             

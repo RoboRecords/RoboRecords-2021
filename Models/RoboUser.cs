@@ -14,30 +14,32 @@ using Microsoft.AspNetCore.Identity;
 
 namespace RoboRecords.Models
 {
-    public class RoboUser : IdentityUser
+    public class RoboUser
     {
         public int DbId;
 
-        public short NumberDiscriminator { get; set; }
+        public short Discriminator { get; set; }
 
         public string UserNameNoDiscrim { get; set; }
 
         public RoboUser(string userName, short numberDiscriminator)
         {
-            NumberDiscriminator = numberDiscriminator;
-            //Something = discriminator;
+            Discriminator = numberDiscriminator;
+            // Something = discriminator;
             UserNameNoDiscrim = userName;
-            UserName = userName + '#' + numberDiscriminator;
+            // UserName = userName + '#' + numberDiscriminator;
         }
         
+        // We don't need this --- Zenya
+        /*
         public RoboUser(string email, string userName, short numberDiscriminator)
         {
-            Email = email;
-            NumberDiscriminator = numberDiscriminator;
-            //Something = discriminator;
+            // Email = email;
+            Discriminator = numberDiscriminator;
+            // Something = discriminator;
             UserNameNoDiscrim = userName;
-            UserName = userName + '#' + numberDiscriminator;
-        }
+            // UserName = userName + '#' + numberDiscriminator;
+        }*/
 
         // Needed for the database context
         public RoboUser()

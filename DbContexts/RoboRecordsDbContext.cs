@@ -51,7 +51,7 @@ namespace RoboRecords.DatabaseContexts
             modelBuilder.Entity<RoboUser>(entity =>
             {
                 entity.HasKey(e => e.DbId);
-                entity.Property(e => e.NumberDiscriminator).IsRequired();
+                entity.Property(e => e.Discriminator).IsRequired();
                 entity.Property(e => e.UserNameNoDiscrim).IsRequired();
             });
             

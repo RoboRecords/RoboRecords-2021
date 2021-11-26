@@ -160,7 +160,7 @@ namespace RoboRecords.Models
             var records = new List<RoboRecord>();
             foreach (var record in allRecordsWithCharacter)
             {
-                if (records.FindIndex(rec => rec.Uploader.UserNameNoDiscrim == record.Uploader.UserNameNoDiscrim && rec.Uploader.NumberDiscriminator == record.Uploader.NumberDiscriminator) == -1)
+                if (records.FindIndex(rec => rec.Uploader.UserNameNoDiscrim == record.Uploader.UserNameNoDiscrim && rec.Uploader.Discriminator == record.Uploader.Discriminator) == -1)
                 {
                     records.Add(record);
                 }

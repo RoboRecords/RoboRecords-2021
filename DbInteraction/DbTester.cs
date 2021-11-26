@@ -42,7 +42,7 @@ namespace RoboRecords.DbInteraction
         public static void TestRecord()
         {
             RoboLevel level = DbSelector.GetGameLevelFromMapId("sonicroboblast2v22", "17"); // Only exists if above method has been called.
-            RoboRecord record = new RoboRecord(DbSelector.GetUserFromUserName("ZeriTAS", 1), null)
+            RoboRecord record = new RoboRecord(DbSelector.GetRoboUserFromUserName("ZeriTAS", 1), null)
             { Tics = 9100, Character = CharacterManager.GetCharacterById("amy") };
 
             if (level == null)

@@ -9,9 +9,9 @@ namespace RoboRecords.Controllers
     [ApiController]
     public class AuthenticationController : Controller
     {
-        private SignInManager<RoboUser> _signInManager;
+        private SignInManager<IdentityUser> _signInManager;
 
-        public AuthenticationController(SignInManager<RoboUser> signInManager)
+        public AuthenticationController(SignInManager<IdentityUser> signInManager)
         {
             _signInManager = signInManager;
         }

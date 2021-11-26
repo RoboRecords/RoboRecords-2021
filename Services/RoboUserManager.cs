@@ -19,17 +19,23 @@ namespace RoboRecords.Services
 {
     public class RoboUserManager
     {
-        private SignInManager<RoboUser> _signInManager;
-        private UserManager<RoboUser> _userManager;
+        private SignInManager<IdentityUser> _signInManager;
+        private UserManager<IdentityUser> _userManager;
         
-        public RoboUserManager(UserManager<RoboUser> userManager)
+        public RoboUserManager(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
         }
 
         public IdentityResult Create(string email, string userName, short discriminator, string password)
         {
-            return _userManager.CreateAsync(new RoboUser(email, userName, discriminator), password).Result;
+            // return _userManager.CreateAsync(new RoboUser(email, userName, discriminator), password).Result;
+            return _userManager.CreateAsync(new IdentityUser()
+            {
+                UserName = $"{userName}#{discriminator}",
+                Email = email,
+            }
+            , password).Result;
         }
     }
 }

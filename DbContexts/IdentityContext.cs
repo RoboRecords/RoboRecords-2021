@@ -9,8 +9,6 @@ namespace RoboRecords.DatabaseContexts
     {
         private static string _connectionString;
 
-        public DbSet<RoboUser> RoboSignedUsers { get; set; }
-
         public IdentityContext()
         {
         }
