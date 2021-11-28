@@ -12,7 +12,7 @@ namespace RoboRecords.Pages
     public class Login : PageModel
     {
         private RoboUserManager _roboUserManager;
-        private SignInManager<IdentityUser> _signInManager;
+        private SignInManager<IdentityRoboUser> _signInManager;
         private IHttpContextAccessor _httpContextAccessor;
 
         // Fields to be accessed by the frontend part
@@ -20,7 +20,7 @@ namespace RoboRecords.Pages
         public string UserName = string.Empty;
         // ==========================================
 
-        public Login(RoboUserManager roboUserManager, SignInManager<IdentityUser> signInManager, IHttpContextAccessor httpContextAccessor)
+        public Login(RoboUserManager roboUserManager, SignInManager<IdentityRoboUser> signInManager, IHttpContextAccessor httpContextAccessor)
         {
             _roboUserManager = roboUserManager;
             _signInManager = signInManager;
@@ -97,7 +97,7 @@ namespace RoboRecords.Pages
             // RoboUser userToLogin = DbSelector.GetRoboUserFromUserName(username, discriminator);
 
             // IdentityUser has discrim included in username
-            IdentityUser userToLogin = DbSelector.GetIdentityUserFromUserName(usernamewithdiscrim);
+            IdentityRoboUser userToLogin = DbSelector.GetIdentityUserFromUserName(usernamewithdiscrim);
 
             SignInResult result = _signInManager.PasswordSignInAsync(userToLogin, password, true, false).Result;
             

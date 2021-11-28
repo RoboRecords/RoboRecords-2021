@@ -5,7 +5,7 @@ using RoboRecords.Models;
 
 namespace RoboRecords.DatabaseContexts
 {
-    public class IdentityContext : IdentityDbContext<IdentityUser>
+    public class IdentityContext : IdentityDbContext<IdentityRoboUser>
     {
         private static string _connectionString;
 
@@ -33,10 +33,11 @@ namespace RoboRecords.DatabaseContexts
 
             // Required limits on columns to avoid "key too long" error when creating database.
             // We'll never hit these anyway, the default limit is 767 characters, ridiculous. --- Zenya
-            builder.Entity<IdentityUser>(entity => entity.Property(m => m.Id).HasMaxLength(256));
-            builder.Entity<IdentityUser>(entity => entity.Property(m => m.NormalizedEmail).HasMaxLength(256));
-            builder.Entity<IdentityUser>(entity => entity.Property(m => m.Email).HasMaxLength(256));
-            builder.Entity<IdentityUser>(entity => entity.Property(m => m.NormalizedUserName).HasMaxLength(256));
+            builder.Entity<IdentityRoboUser>(entity => entity.Property(m => m.Id).HasMaxLength(256));
+            builder.Entity<IdentityRoboUser>(entity => entity.Property(m => m.NormalizedEmail).HasMaxLength(256));
+            builder.Entity<IdentityRoboUser>(entity => entity.Property(m => m.Email).HasMaxLength(256));
+            builder.Entity<IdentityRoboUser>(entity => entity.Property(m => m.NormalizedUserName).HasMaxLength(256));
+            builder.Entity<IdentityRoboUser>(entity => entity.Property(m => m.ApiKey));
 
             builder.Entity<IdentityRole>(entity => entity.Property(m => m.Id).HasMaxLength(256));
             builder.Entity<IdentityRole>(entity => entity.Property(m => m.NormalizedName).HasMaxLength(256));

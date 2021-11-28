@@ -72,7 +72,7 @@ namespace RoboRecords
             services.AddDbContext<RoboRecordsDbContext>(ServiceLifetime.Scoped);
             services.AddDbContext<IdentityContext>(ServiceLifetime.Scoped);
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+            services.AddIdentity<IdentityRoboUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
             services.AddScoped<RoboUserManager>();
             
             //TODO: Set up the remaining options like password related stuff

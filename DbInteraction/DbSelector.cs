@@ -149,9 +149,9 @@ namespace RoboRecords.DbInteraction
                 return new RoboUser("Invalid User", -1);
         }
 
-        public static IdentityUser GetIdentityUserFromUserName(string unameWithDiscriminator)
+        public static IdentityRoboUser GetIdentityUserFromUserName(string unameWithDiscriminator)
         {
-            IdentityUser iUser;
+            IdentityRoboUser iUser;
             // Return user with given username and discriminator. Return "invalid user" if not found.
             using (IdentityContext context = new IdentityContext())
             {
@@ -161,7 +161,7 @@ namespace RoboRecords.DbInteraction
             if (iUser != null)
                 return iUser;
             else
-                return new IdentityUser("Invalid User");
+                return new IdentityRoboUser("Invalid User");
         }
 
         public static RoboGame GetGameFromID(string id)
