@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RoboRecords.DatabaseContexts;
+using RoboRecords.Filters;
 using RoboRecords.Models;
 using RoboRecords.Services;
 
@@ -68,6 +69,10 @@ namespace RoboRecords
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(RequireApiKeyFilterFactory));
+            });
 
             services.AddDbContext<RoboRecordsDbContext>(ServiceLifetime.Scoped);
             services.AddDbContext<IdentityContext>(ServiceLifetime.Scoped);

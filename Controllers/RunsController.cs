@@ -2,6 +2,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using RoboRecords.Filters;
 using RoboRecords.Models;
 
 namespace RoboRecords.Controllers
@@ -14,6 +15,7 @@ namespace RoboRecords.Controllers
         //   - Get the user from the request somehow
         //   - Save the replay
         //   - Give more information about what failed if it failed
+        [RequireApiKeyFilterFactory]
         [HttpPost]
         [Route("submit")]
         public IActionResult Submit([FromQuery(Name = "File")] IFormFile file)
@@ -21,16 +23,12 @@ namespace RoboRecords.Controllers
             if (file is null)
                 return NoContent();
 
-            byte[] fileBytes;
+            byte[] fileBytes = new byte[file.Length];
             
             using (Stream fileStream = file.OpenReadStream())
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                fileStream.CopyTo(memoryStream);
-                fileBytes = memoryStream.ToArray();
-            }
+                fileStream.Read(fileBytes, 0, (int)file.Length);
 
-            RoboRecord record = new RoboRecord(new RoboUser("anon", 1234), fileBytes);
+            RoboRecord record = new RoboRecord((RoboUser)RouteData.Values["apiKeyRoboUser"], fileBytes);
             if (record.FileBytes == null)
                 return UnprocessableEntity();
             
