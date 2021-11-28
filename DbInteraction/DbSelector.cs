@@ -8,6 +8,7 @@ using RoboRecords.DatabaseContexts;
 using Microsoft.AspNetCore.Identity;
 using RoboRecords.Models;
 using System.Linq;
+using RoboRecords.Services;
 
 namespace RoboRecords.DbInteraction
 {
@@ -177,6 +178,32 @@ namespace RoboRecords.DbInteraction
         public static IdentityRoboUser GetIdentityUserFromUserName(string uname, short disc)
         {
             return GetIdentityUserFromUserName($"{uname}#{disc}");
+        }
+
+        public static RoboUser GetRoboUserFromApiKey(string apiKey)
+        {
+            IdentityRoboUser identityRoboUser;
+            
+            using (IdentityContext context = new IdentityContext())
+                identityRoboUser = context.Users.FirstOrDefault(e => e.ApiKey == apiKey);
+
+            if (identityRoboUser == null)
+                return new RoboUser("Invalid User", -1);
+
+            return GetRoboUserFromUserName(identityRoboUser.UserName);
+        }
+        
+        public static IdentityRoboUser GetIdentityUserFromApiKey(string apiKey)
+        {
+            IdentityRoboUser identityRoboUser;
+            
+            using (IdentityContext context = new IdentityContext())
+                identityRoboUser = context.Users.FirstOrDefault(e => e.ApiKey == apiKey);
+
+            if (identityRoboUser == null)
+                return new IdentityRoboUser("Invalid User");
+
+            return identityRoboUser;
         }
 
         public static RoboGame GetGameFromID(string id)

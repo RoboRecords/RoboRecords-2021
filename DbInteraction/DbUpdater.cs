@@ -21,5 +21,14 @@ namespace RoboRecords.DbInteraction
                 context.SaveChangesAsync();
             }
         }
+
+        public static void UpdateIdentityUser(IdentityRoboUser user)
+        {
+            using (IdentityContext context = new IdentityContext())
+            {
+                context.Users.Update(user);
+                context.SaveChangesAsync();
+            }
+        }
     }
 }

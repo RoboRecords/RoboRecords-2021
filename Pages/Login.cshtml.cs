@@ -13,16 +13,27 @@ namespace RoboRecords.Pages
     {
         private RoboUserManager _roboUserManager;
         private SignInManager<IdentityRoboUser> _signInManager;
-        private IHttpContextAccessor _httpContextAccessor;
+        private ApiKeyManager _apiKeyManager;
 
-        public Login(RoboUserManager roboUserManager, SignInManager<IdentityRoboUser> signInManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public Login(RoboUserManager roboUserManager, SignInManager<IdentityRoboUser> signInManager, ApiKeyManager apiKeyManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _roboUserManager = roboUserManager;
             _signInManager = signInManager;
+            _apiKeyManager = apiKeyManager;
         }
 
         public void OnGet()
         {
+            
+        }
+
+        //TODO: Give the API key to the user
+        public void OnPostApiKey()
+        {
+            if(!IsLoggedIn)
+                return;
+
+            Console.WriteLine(_apiKeyManager.GenerateApiKeyForUser(CurrentIdentityUser));
             
         }
 

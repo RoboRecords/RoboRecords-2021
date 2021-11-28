@@ -20,6 +20,10 @@
         @if (Model.IsLoggedIn)
         {
             <h1>Welcome, @Model.CurrentUser.UserNameNoDiscrim !</h1>
+            @using (Html.BeginForm(FormMethod.Post))
+            {
+                <button asp-page-handler="ApiKey">Generate new Api Key</button>
+            }
         }
         else
         {
