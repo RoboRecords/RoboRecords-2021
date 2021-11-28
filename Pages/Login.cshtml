@@ -17,9 +17,9 @@
 }
 <div class="container">
     <div>
-        @if (Model.IsLogged)
+        @if (Model.IsLoggedIn)
         {
-            <h1>Welcome, @Model.UserName !</h1>
+            <h1>Welcome, @Model.CurrentUser.UserNameNoDiscrim !</h1>
         }
         else
         {

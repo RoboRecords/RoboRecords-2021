@@ -149,6 +149,16 @@ namespace RoboRecords.DbInteraction
                 return new RoboUser("Invalid User", -1);
         }
 
+        public static RoboUser GetRoboUserFromUserName(string unameWithDiscriminator)
+        {
+            string[] splittedUsername = Validator.TrySplitUsername(unameWithDiscriminator);
+
+            string username = splittedUsername[0];
+            short discriminator = short.Parse(splittedUsername[1]);
+
+            return GetRoboUserFromUserName(username, discriminator);
+        }
+
         public static IdentityRoboUser GetIdentityUserFromUserName(string unameWithDiscriminator)
         {
             IdentityRoboUser iUser;
@@ -162,6 +172,11 @@ namespace RoboRecords.DbInteraction
                 return iUser;
             else
                 return new IdentityRoboUser("Invalid User");
+        }
+
+        public static IdentityRoboUser GetIdentityUserFromUserName(string uname, short disc)
+        {
+            return GetIdentityUserFromUserName($"{uname}#{disc}");
         }
 
         public static RoboGame GetGameFromID(string id)

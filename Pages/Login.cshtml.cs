@@ -9,29 +9,16 @@ using RoboRecords.Services;
 
 namespace RoboRecords.Pages
 {
-    public class Login : PageModel
+    public class Login : RoboPageModel
     {
         private RoboUserManager _roboUserManager;
         private SignInManager<IdentityRoboUser> _signInManager;
         private IHttpContextAccessor _httpContextAccessor;
 
-        // Fields to be accessed by the frontend part
-        public bool IsLogged;
-        public string UserName = string.Empty;
-        // ==========================================
-
-        public Login(RoboUserManager roboUserManager, SignInManager<IdentityRoboUser> signInManager, IHttpContextAccessor httpContextAccessor)
+        public Login(RoboUserManager roboUserManager, SignInManager<IdentityRoboUser> signInManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _roboUserManager = roboUserManager;
             _signInManager = signInManager;
-            _httpContextAccessor = httpContextAccessor;
-
-            string? tempName = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
-            if (tempName != null)
-            {
-                IsLogged = true;
-                UserName = tempName;
-            }
         }
 
         public void OnGet()
