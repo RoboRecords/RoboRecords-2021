@@ -1,10 +1,9 @@
-﻿@page
+@page
 @model RoboRecords.Pages.Login
-
 <!--
  Login.cshtml: FrontEnd for the login website's page
  Copyright (C) 2021, Lemin <Leminn> and Refrag <R3FR4G>
- 
+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
@@ -19,7 +18,10 @@
     <div>
         @if (Model.IsLoggedIn)
         {
-            <h1>Welcome, @Model.CurrentUser.UserNameNoDiscrim !</h1>
+            <h1>Welcome, @Model.CurrentUser.UserNameNoDiscrim!</h1>
+            @if (Model.isModerator)
+            {
+                <h2>You are a moderator!</h2>}
             @using (Html.BeginForm(FormMethod.Post))
             {
                 <button asp-page-handler="ApiKey">Generate new Api Key</button>
@@ -30,7 +32,7 @@
             <h1>You're not signed in yet</h1>
         }
     </div>
-    
+
     @using (Html.BeginForm(FormMethod.Post))
     {
 
@@ -80,14 +82,16 @@
 
 <style type="text/css">
     body {
-      background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/login.png');
-            background-size: 100%;
-            background-repeat: no-repeat;
+        background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/login.png');
+        background-size: 100%;
+        background-repeat: no-repeat;
     }
+
     #registerBox {
-         border:15px solid #803700;
+        border: 15px solid #803700;
     }
+
     #loginBox {
-      border: 15px solid #000099;
+        border: 15px solid #000099;
     }
-    </style>
+</style>

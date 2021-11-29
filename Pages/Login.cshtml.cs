@@ -24,7 +24,11 @@ namespace RoboRecords.Pages
 
         public void OnGet()
         {
-            
+            // Improper example of checking if current user is a moderator. To test, manually change Roles column of your IdentityRoboUser entry to 3 and log in.
+            if (IsLoggedIn)
+            {
+                isModerator = Validator.UserHasRequiredRoles(DbSelector.GetIdentityUserFromUserName($"{CurrentUser.UserNameNoDiscrim}#{CurrentUser.Discriminator}"), UserRoles.Moderator);
+            }
         }
 
         //TODO: Give the API key to the user
@@ -66,6 +70,7 @@ namespace RoboRecords.Pages
 
 
             // TODO: Inform the user of the outcome.
+            // TODO: Move this to RoboUserManager
             // Try to create new IdentityUser and if it succeeds, create a RoboUser with the same username.
             if (_roboUserManager.Create(email, username, discriminator, password).Succeeded)
             {
@@ -100,7 +105,11 @@ namespace RoboRecords.Pages
             SignInResult result = _signInManager.PasswordSignInAsync(userToLogin, password, true, false).Result;
             
             if (result.Succeeded)
+            {
                 Console.WriteLine("Success");
+                isModerator = Validator.UserHasRequiredRoles(userToLogin, UserRoles.Moderator);
+            }
+                
             Response.Redirect("Login");
         }
     }

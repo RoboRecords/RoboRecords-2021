@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RoboRecords.Models;
+using System.Diagnostics;
+using RoboRecords.Services;
 
 namespace RoboRecords.DbInteraction
 {
@@ -90,5 +92,12 @@ namespace RoboRecords.DbInteraction
 
             DbInserter.AddLevelToGame(level, Game);
         }
+
+        // Doesn't work, needs instance. Figure it out or I'll never be a moderator :[  --- Zenya
+        public static void TryAddZenyaTheModerator()
+        {
+            //RoboUserManager.Create("zenya@zenya.zenya", "zenya", 2468, "secure-password1234", UserRoles.User | UserRoles.Moderator);
+        }
     }
+
 }

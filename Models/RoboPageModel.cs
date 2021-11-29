@@ -16,6 +16,8 @@ namespace RoboRecords.Models
         
         public bool IsLoggedIn => CurrentUser.UserNameNoDiscrim != "Invalid User";
 
+        public bool isModerator = false;
+
         public RoboUser CurrentUser => DbSelector.GetRoboUserFromUserName(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name));
         
         public IdentityRoboUser CurrentIdentityUser => DbSelector.GetIdentityUserFromUserName(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name));

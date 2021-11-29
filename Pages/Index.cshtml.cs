@@ -26,6 +26,7 @@ namespace RoboRecords.Pages
             //DbInteraction.DbTester.TryReadPK3(); // Reads the Cyberdime PK3 without adding it to the database.
             //DbInteraction.DbTester.TryAddCyberdime(); // Reads Cyberdime PK3 and adds Cyberdime Realm RoboGame to database.
             //DbInteraction.DbTester.TryAddRedVolcano2(); // Add Red Volcano Act 2 with automatic Level Group sorting so it appears next to Act 1.
+            //DbInteraction.DbTester.TryAddZenyaTheModerator(); // Doesn't work currently
         }
     }
 }

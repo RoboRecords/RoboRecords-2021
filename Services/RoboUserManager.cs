@@ -34,6 +34,20 @@ namespace RoboRecords.Services
             {
                 UserName = $"{userName}#{discriminator}",
                 Email = email,
+                Roles = (int)UserRoles.User
+            }
+            , password).Result;
+        }
+
+        // Test overload for creating a user with specific roles
+        public IdentityResult Create(string email, string userName, short discriminator, string password, UserRoles roles)
+        {
+            // return _userManager.CreateAsync(new RoboUser(email, userName, discriminator), password).Result;
+            return _userManager.CreateAsync(new IdentityRoboUser()
+            {
+                UserName = $"{userName}#{discriminator}",
+                Email = email,
+                Roles = (int)roles
             }
             , password).Result;
         }

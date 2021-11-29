@@ -38,6 +38,7 @@ namespace RoboRecords.DatabaseContexts
             builder.Entity<IdentityRoboUser>(entity => entity.Property(m => m.Email).HasMaxLength(256));
             builder.Entity<IdentityRoboUser>(entity => entity.Property(m => m.NormalizedUserName).HasMaxLength(256));
             builder.Entity<IdentityRoboUser>(entity => entity.Property(m => m.ApiKey));
+            builder.Entity<IdentityRoboUser>(entity => entity.Property(m => m.Roles));
 
             builder.Entity<IdentityRole>(entity => entity.Property(m => m.Id).HasMaxLength(256));
             builder.Entity<IdentityRole>(entity => entity.Property(m => m.NormalizedName).HasMaxLength(256));
