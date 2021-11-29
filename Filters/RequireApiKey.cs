@@ -39,7 +39,7 @@ namespace RoboRecords.Filters
         }
     }
 
-    public class RequireApiKeyFilterFactory : Attribute, IFilterFactory
+    public class RequireApiKey : Attribute, IFilterFactory
     {
         public bool IsReusable => false;
         

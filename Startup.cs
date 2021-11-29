@@ -69,10 +69,6 @@ namespace RoboRecords
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(typeof(RequireApiKeyFilterFactory));
-            });
 
             services.AddDbContext<RoboRecordsDbContext>(ServiceLifetime.Scoped);
             services.AddDbContext<IdentityContext>(ServiceLifetime.Scoped);

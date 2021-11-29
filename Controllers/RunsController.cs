@@ -15,7 +15,7 @@ namespace RoboRecords.Controllers
         //   - Get the user from the request somehow
         //   - Save the replay
         //   - Give more information about what failed if it failed
-        [RequireApiKeyFilterFactory]
+        [RequireApiKey]
         [HttpPost]
         [Route("submit")]
         public IActionResult Submit([FromQuery(Name = "File")] IFormFile file)
