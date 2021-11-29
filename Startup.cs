@@ -82,6 +82,7 @@ namespace RoboRecords
             services.AddSingleton<ApiKeyManager>();
             
             //TODO: Set up the remaining options like password related stuff
+            //FIXME: Having '#' as allowed character could break discrim splitting without extra handling. - Zenya
             services.Configure<IdentityOptions>(options =>
             {
                 options.User.AllowedUserNameCharacters =

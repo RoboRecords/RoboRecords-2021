@@ -75,5 +75,20 @@ namespace RoboRecords.DbInteraction
             };
             DbInserter.AddGame(cyberGame);
         }
+
+        // Try adding Red Volcano Act 2 with automatic sorting
+        public static void TryAddRedVolcano2()
+        {
+            RoboGame Game = DbSelector.GetGameWithLevelsFromID("sonicroboblast2v22");
+            RoboLevel level = DbSelector.GetGameLevelFromMapId("sonicroboblast2v22", "17");
+
+            if (Game == null || level.LevelName != "Invalid Level")
+                return;
+
+            level = new RoboLevel(17, "Red Volcano Zone", 2)
+                        { IconUrl = "../assets/images/mappics/" + RoboLevel.MakeMapString(16) + "P.png" };
+
+            DbInserter.AddLevelToGame(level, Game);
+        }
     }
 }

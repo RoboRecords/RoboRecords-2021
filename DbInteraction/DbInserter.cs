@@ -4,6 +4,7 @@ using System.Diagnostics;
 using RoboRecords.DatabaseContexts;
 using RoboRecords.Models;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace RoboRecords.DbInteraction
 {
@@ -36,6 +37,17 @@ namespace RoboRecords.DbInteraction
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 context.RoboUsers.Add(user);
+                context.SaveChangesAsync();
+            }
+        }
+
+        public static void AddLevelToGame(RoboLevel level, RoboGame game)
+        {
+            // INSERT the given RoboLevel into the given RoboGame
+            game.LevelGroups =  WadReader.SortLevelsToGroups(new List<RoboLevel>() {level}, game.LevelGroups.ToList());
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                context.RoboGames.Update(game);
                 context.SaveChangesAsync();
             }
         }
