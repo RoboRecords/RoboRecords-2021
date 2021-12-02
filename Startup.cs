@@ -34,6 +34,9 @@ namespace RoboRecords
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            EnvVars.ParseEnvironmentVariables(configuration);
+
             RoboRecordsDbContext.SetConnectionString(Configuration["TempSqlConnectionString"]);
             IdentityContext.SetConnectionString(Configuration["TempUserConnectionString"]);
             InitDatabase();
