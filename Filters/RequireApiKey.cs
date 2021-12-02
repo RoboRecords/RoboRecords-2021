@@ -12,10 +12,13 @@ namespace RoboRecords.Filters
         private const string ApiKeyHeaderName = "X-API-Key";
 
         private ApiKeyManager _apiKeyManager;
+        
+        private UserRoles _requiredRoles;
 
-        public RequireApiKeyFilter(ApiKeyManager apiKeyManager)
+        public RequireApiKeyFilter(ApiKeyManager apiKeyManager, UserRoles requiredRoles)
         {
             _apiKeyManager = apiKeyManager;
+            _requiredRoles = requiredRoles;
         }
         
         public void OnActionExecuting(ActionExecutingContext context)
@@ -35,6 +38,9 @@ namespace RoboRecords.Filters
 
             context.RouteData.Values["apiKeyRoboUser"] = user;
             context.RouteData.Values["apiKeyIdentityUser"] = identityUser;
+            
+            if(_requiredRoles != UserRoles.None && !Validator.UserHasRequiredRoles(identityUser, _requiredRoles))
+                context.Result = new UnauthorizedObjectResult("You don't have the required roles to execute this action");
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -46,11 +52,18 @@ namespace RoboRecords.Filters
     public class RequireApiKey : Attribute, IFilterFactory
     {
         public bool IsReusable => false;
+
+        private UserRoles _requiredRoles;
+
+        public RequireApiKey(UserRoles requiredRoles = UserRoles.User)
+        {
+            _requiredRoles = requiredRoles;
+        }
         
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)
         {
             ApiKeyManager apiKeyManager = (ApiKeyManager)serviceProvider.GetService(typeof(ApiKeyManager));
-            return new RequireApiKeyFilter(apiKeyManager);
+            return new RequireApiKeyFilter(apiKeyManager, _requiredRoles);
         }
     }
 }
