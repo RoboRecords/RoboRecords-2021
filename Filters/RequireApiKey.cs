@@ -27,10 +27,14 @@ namespace RoboRecords.Filters
                 return;
             }
 
-            if (!_apiKeyManager.TryAuthenticateFromApiKey(apiKeyToTest, out RoboUser user))
+            if (!_apiKeyManager.TryAuthenticateFromApiKey(apiKeyToTest, out RoboUser user, out IdentityRoboUser identityUser))
+            {
                 context.Result = new UnauthorizedObjectResult("The provided API key was not valid");
+                return;
+            }
 
             context.RouteData.Values["apiKeyRoboUser"] = user;
+            context.RouteData.Values["apiKeyIdentityUser"] = identityUser;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)

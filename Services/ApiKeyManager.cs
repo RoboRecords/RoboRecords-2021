@@ -18,11 +18,11 @@ namespace RoboRecords.Services
         
         private ApiKeyCache _apiKeyCache = new ApiKeyCache();
         
-        public bool TryAuthenticateFromApiKey(string apiKey, out RoboUser roboUser)
+        public bool TryAuthenticateFromApiKey(string apiKey, out RoboUser roboUser, out IdentityRoboUser identityUser)
         {
             string hashedKey = HashApiKey(apiKey);
 
-            roboUser = GetRoboUser(hashedKey);
+            (roboUser, identityUser) = GetRoboUser(hashedKey);
 
             return roboUser.UserNameNoDiscrim != "Invalid User";
         }
@@ -49,7 +49,7 @@ namespace RoboRecords.Services
             if (!string.IsNullOrEmpty(oldApiKey) && _apiKeyCache.ContainsKey(oldApiKey))
                 _apiKeyCache.UpdateKey(oldApiKey, newApiKey);
             else
-                _apiKeyCache.AddKey(newApiKey, DbSelector.GetRoboUserFromApiKey(newApiKey));
+                _apiKeyCache.AddKey(newApiKey, DbSelector.GetRoboUserFromApiKey(newApiKey), user);
 
             return apiKey;
         }
@@ -70,17 +70,20 @@ namespace RoboRecords.Services
             return hash;
         }
 
-        private RoboUser GetRoboUser(string apiKey)
+        private (RoboUser user, IdentityRoboUser identityUser) GetRoboUser(string apiKey)
         {
             if (_apiKeyCache.ContainsKey(apiKey))
                 return _apiKeyCache.GetRoboUser(apiKey);
 
             RoboUser user = DbSelector.GetRoboUserFromApiKey(apiKey);
+            IdentityRoboUser identityUser = DbSelector.GetIdentityUserFromUserName(user.UserNameNoDiscrim, user.Discriminator);
             
             if (user.UserNameNoDiscrim != "Invalid User")
-                _apiKeyCache.AddKey(apiKey, user);
+            {
+                _apiKeyCache.AddKey(apiKey, user, identityUser);
+            }
             
-            return user;
+            return (user, identityUser);
         }
     }
 
@@ -92,29 +95,29 @@ namespace RoboRecords.Services
         
         public bool ContainsKey(string apiKey) => _cache.Contains(apiKey);
 
-        public RoboUser GetRoboUser(string apiKey)
+        public (RoboUser user, IdentityRoboUser identityUser) GetRoboUser(string apiKey)
         {
-            RoboUser user = (RoboUser)_cache[apiKey];
+            (RoboUser user, IdentityRoboUser identityUser) = ((RoboUser, IdentityRoboUser))_cache[apiKey];
             
             _cache.Remove(apiKey);
-            _cache.Add(apiKey, user);
-            return user;
+            _cache.Add(apiKey, (user, identityUser));
+            return (user, identityUser);
         }
 
-        public void AddKey(string apiKey, RoboUser user)
+        public void AddKey(string apiKey, RoboUser user, IdentityRoboUser identityUser)
         {
             if (_cache.Keys.Count == ApiKeyCacheCapacity)
                 _cache.RemoveAt(0);
 
-            _cache.Add(apiKey, user);
+            _cache.Add(apiKey, (user, identityUser));
         }
 
         public void UpdateKey(string oldApiKey, string newApiKey)
         {
-            RoboUser user = (RoboUser)_cache[oldApiKey];
+            (RoboUser user, IdentityRoboUser identityUser) = ((RoboUser, IdentityRoboUser))_cache[oldApiKey];
             
             _cache.Remove(oldApiKey);
-            _cache.Add(newApiKey, user);
+            _cache.Add(newApiKey, (user, identityUser));
         }
 
         public override string ToString()
