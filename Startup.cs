@@ -103,6 +103,7 @@ namespace RoboRecords
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                EnvVars.isDevelopment = true;
             }
             else
             {

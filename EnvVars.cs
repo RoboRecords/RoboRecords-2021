@@ -4,13 +4,15 @@ using Microsoft.Extensions.Configuration;
 
 namespace RoboRecords
 {
-    public struct EnvVars
+    public static class EnvVars
     {
         private const string EnvPrefix = "RoboRecords_";
 
         private const string EnvDataPath = EnvPrefix + "DataPath";
 
         public static string DataPath;
+
+        public static bool isDevelopment = false;
 
         public static void ParseEnvironmentVariables(IConfiguration configuration)
         {
