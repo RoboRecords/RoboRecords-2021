@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using RoboRecords.Models;
+using RoboRecords.DbInteraction;
 
 namespace RoboRecords.Services
 {
@@ -49,6 +50,18 @@ namespace RoboRecords.Services
                 return true;
 
             return false; // User doesn't have the required roles
+        }
+
+        public static void GrantRolesToUser(IdentityRoboUser user, UserRoles roles)
+        {
+            user.Roles = user.Roles | (int)roles;
+            DbUpdater.UpdateIdentityUser(user);
+        }
+
+        public static void RevokeRolesFromUser(IdentityRoboUser user, UserRoles roles)
+        {
+            user.Roles = user.Roles & (int.MaxValue ^ (int)roles);
+            DbUpdater.UpdateIdentityUser(user);
         }
     }
 }
