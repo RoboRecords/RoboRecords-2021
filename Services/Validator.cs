@@ -45,7 +45,7 @@ namespace RoboRecords.Services
             if (user.Roles == 0)
                 return false; // User is banned
 
-            else if ((user.Roles & (int)roles) != 0) // User has the required roles
+            else if ((user.Roles & (int)roles) == (int)roles) // User has the required roles
                 return true;
 
             return false; // User doesn't have the required roles
