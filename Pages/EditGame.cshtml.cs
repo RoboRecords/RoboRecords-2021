@@ -16,7 +16,7 @@ namespace RoboRecords.Pages
         public void OnGet()
         {
             var roboGames = DbSelector.GetGamesWithLevels();
-            // Game = roboGames[1]; // TODO: CHANGE THIS HARDCODED CRAP TO SUPPORT THE CURRENT SELECTED GAME --- DONE, Zenya
+            // Game = roboGames[1]; // DONE: CHANGE THIS HARDCODED CRAP TO SUPPORT THE CURRENT SELECTED GAME --- Zenya
 
             var id = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("id");
 

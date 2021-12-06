@@ -48,7 +48,7 @@ namespace RoboRecords.Pages
                 .ToListAsync().Result;*/
 
             // Returns all games, including the levels and records.
-            // TODO: Return only the current level so sorting is done by SQL server. Less data transfer required. - DONE, Zenya
+            // DONE: Return only the current level so sorting is done by SQL server. Less data transfer required. --- Zenya
             // _roboGames = DbSelector.GetAllGameData();
 
             var gameId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("game");

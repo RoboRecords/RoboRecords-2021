@@ -25,7 +25,7 @@ namespace RoboRecords.Pages
             //_roboGames.Add(new RoboGame("Sonic Robo Blast 3 LUL"){IconPath = "../assets/images/dreamhill1.png"});
 
             // Returns all games, including the levels and records.
-            // TODO: Return only the current game so sorting is done by SQL server. Less data transfer required. --- DONE, Zenya
+            // DONE: Return only the current game so sorting is done by SQL server. Less data transfer required. --- Zenya
 
             // _roboGames = DbSelector.GetAllGameData();
 

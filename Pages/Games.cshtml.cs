@@ -19,7 +19,7 @@ namespace RoboRecords.Pages
             RoboGames.Add(new RoboGame("Sonic Robo Blast 3 LUL"){IconPath = "../assets/images/dreamhill1.png"});*/
 
             // Returns all games, including the levels and records.
-            // TODO: Return only the games without joined data. We don't need it here.
+            // DONE: Return only the games without joined data. We don't need it here. --- Zenya
             RoboGames = DbSelector.GetGames();
         }
     }

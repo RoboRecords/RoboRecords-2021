@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -21,7 +20,7 @@ namespace RoboRecords.Models
             {
                 if (item.Name.ToLower().Contains("maincfg"))
                 {
-                    Debug.WriteLine("Found MAINCFG!");
+                    Console.WriteLine("Found MAINCFG!");
                     using (StreamReader s = new StreamReader(zipFile.GetInputStream(item)))
                     {
                         return ParseMainCFG(s.ReadToEnd(), filename);
@@ -42,7 +41,7 @@ namespace RoboRecords.Models
             {
                 if (item.Name.ToUpper().Contains($"{mapString}P"))
                 {
-                    Debug.WriteLine($"Found {item.Name}!");
+                    Console.WriteLine($"Found {item.Name}!");
                     Stream s = zipFile.GetInputStream(item);
                     using (MemoryStream ms = new MemoryStream())
                     {
