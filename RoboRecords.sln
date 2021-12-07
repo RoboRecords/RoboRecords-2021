@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboRecords", "RoboRecords.csproj", "{39500A6F-663E-42B2-BB7C-1D81F2E5096D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoboRecords", "RoboRecords\RoboRecords.csproj", "{39500A6F-663E-42B2-BB7C-1D81F2E5096D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{8B1C7661-7214-4B79-8F2D-DD7CA80D4626}"
 EndProject

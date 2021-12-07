@@ -20,10 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RoboRecords.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="MAP01-amy-0.16.68.lmp" />
       <AdditionalFiles Include="MAP01-amy-0.16.68.lmp">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -37,6 +33,10 @@
       <AdditionalFiles Include="MAP50-time-best.lmp">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </AdditionalFiles>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RoboRecords\RoboRecords.csproj" />
     </ItemGroup>
 
 </Project>

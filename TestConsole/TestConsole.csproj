@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RoboRecords.csproj" />
+    <ProjectReference Include="..\RoboRecords\RoboRecords.csproj" />
   </ItemGroup>
 
 </Project>

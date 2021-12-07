@@ -19,7 +19,7 @@ namespace RoboRecords.Pages
 
         public void OnGet()
         {
-            
+            FileManager.Create("testing.txt");
         }
     }
 }
