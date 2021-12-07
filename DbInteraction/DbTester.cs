@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace RoboRecords.DbInteraction
 {
     public class DbTester
     {
+        static string cyberdimeFile = @"C:\SRB2\SL_CyberDimeRealm-v1.5.1.pk3";
         // Try adding Red Volcano Act 2 to Red Volcano Zone in SRB2 2.2
         public static void TestUpdate()
         {
@@ -64,18 +66,26 @@ namespace RoboRecords.DbInteraction
 
         public static void TryReadPK3()
         {
-            WadReader.GetMainCFGFromPK3(@"C:\SRB2\SL_CyberDimeRealm-v1.5.1.pk3");
+            if (File.Exists(cyberdimeFile))
+                WadReader.GetMainCFGFromPK3(cyberdimeFile);
+            else
+                Console.WriteLine("Cyberdime PK3 not found at specified location");
         }
 
         public static void TryAddCyberdime()
         {
-            RoboGame cyberGame = new RoboGame("Cyberdime Realm")
+            if (File.Exists(cyberdimeFile))
             {
-                UrlName = "cyber",
-                IconPath = @"../assets/images/cydmbg.png",
-                LevelGroups = WadReader.GetMainCFGFromPK3(@"C:\SRB2\SL_CyberDimeRealm-v1.5.1.pk3")
-            };
-            DbInserter.AddGame(cyberGame);
+                RoboGame cyberGame = new RoboGame("Cyberdime Realm")
+                {
+                    UrlName = "cyber",
+                    IconPath = @"../assets/images/cydmbg.png",
+                    LevelGroups = WadReader.GetMainCFGFromPK3(cyberdimeFile)
+                };
+                DbInserter.AddGame(cyberGame);
+            }
+            else
+                Console.WriteLine("Cyberdime PK3 not found at specified location");
         }
 
         // Try adding Red Volcano Act 2 with automatic sorting
