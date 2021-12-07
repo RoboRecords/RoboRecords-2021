@@ -35,9 +35,9 @@ namespace UnitTests
         {
             var roboRecord = new RoboRecord(null, null);
             
-            roboRecord.SetVersion(2,9);
+            roboRecord.SetVersion(202,9);
             Assert.Equal("2.2.9", roboRecord.VersionString);
-            roboRecord.MajorVersion = 3;
+            roboRecord.MajorVersion = 203;
             Assert.Equal("2.3.9", roboRecord.VersionString);
             roboRecord.SubVersion = 0;
             Assert.Equal("2.3.0", roboRecord.VersionString);
@@ -54,7 +54,7 @@ namespace UnitTests
             
             Assert.Equal(mapNumber, roboRecord.LevelNumber);
             Assert.Equal(tics, roboRecord.Tics);
-            Assert.Equal(character, roboRecord.Character.NameId);
+            Assert.Equal(character, roboRecord.Character?.NameId);
             Assert.Equal(mapName, roboRecord.GetFileName());
         }
     }
