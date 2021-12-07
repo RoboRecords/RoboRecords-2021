@@ -40,10 +40,10 @@ namespace RoboRecords.DbInteraction
             DbUpdater.UpdateGame(Game);
         }
 
-        // Try adding a record to Red Volcano Zone Act 2 of 4:20.00 by ZeriTAS
+        // Try adding a record to Red Volcano Zone Act 1 of 4:20.00 by ZeriTAS
         public static void TestRecord()
         {
-            RoboLevel level = DbSelector.GetGameLevelFromMapId("sonicroboblast2v22", "17"); // Only exists if above method has been called.
+            RoboLevel level = DbSelector.GetGameLevelFromMapId("sonicroboblast2v22", "16");
             RoboRecord record = new RoboRecord(DbSelector.GetRoboUserFromUserName("ZeriTAS", 1), null)
             { Tics = 9100, Character = CharacterManager.GetCharacterById("amy") };
 
@@ -96,6 +96,7 @@ namespace RoboRecords.DbInteraction
         // Doesn't work, needs instance. Figure it out or I'll never be a moderator :[  --- Zenya
         public static void TryAddZenyaTheModerator()
         {
+            Console.WriteLine("Test failed successfully.");
             //RoboUserManager.Create("zenya@zenya.zenya", "zenya", 2468, "secure-password1234", UserRoles.User | UserRoles.Moderator);
         }
     }

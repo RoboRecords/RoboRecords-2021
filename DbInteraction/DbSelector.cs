@@ -50,7 +50,7 @@ namespace RoboRecords.DbInteraction
         }
 
         // Get the game matching the url and include level data.
-        internal static RoboGame GetGameWithLevelsFromID(string id)
+        public static RoboGame GetGameWithLevelsFromID(string id)
         {
             RoboGame _roboGame;
 
@@ -83,7 +83,7 @@ namespace RoboRecords.DbInteraction
         }
 
         // Get the game matching the url and include level and record data.
-        internal static RoboGame GetGameWithRecordsFromID(string id)
+        public static RoboGame GetGameWithRecordsFromID(string id)
         {
             RoboGame _roboGame;
 

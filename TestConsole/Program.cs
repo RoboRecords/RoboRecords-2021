@@ -22,7 +22,32 @@ namespace TestConsole
             testItem.parameter = $"{testItem.name} menu action called.";
             menu.menuItems.Add(testItem);
 
-            methods.DrawMenu(menu);
+            testItem = new MenuItem("TestUpdate", MenuAction.TestUpdate);
+            testItem.parameter = $"{testItem.name} menu action called.";
+            menu.menuItems.Add(testItem);
+
+            testItem = new MenuItem("TestRecord", MenuAction.TestRecord);
+            testItem.parameter = $"{testItem.name} menu action called.";
+            menu.menuItems.Add(testItem);
+
+            testItem = new MenuItem("TryReadPK3", MenuAction.TryReadPK3);
+            testItem.parameter = $"{testItem.name} menu action called.";
+            menu.menuItems.Add(testItem);
+
+            testItem = new MenuItem("TryAddCyberdime", MenuAction.TryAddCyberdime);
+            testItem.parameter = $"{testItem.name} menu action called.";
+            menu.menuItems.Add(testItem);
+
+            testItem = new MenuItem("TryAddRedVolcano2", MenuAction.TryAddRedVolcano2);
+            testItem.parameter = $"{testItem.name} menu action called.";
+            menu.menuItems.Add(testItem);
+
+            testItem = new MenuItem("Exit", MenuAction.Quit);
+            testItem.parameter = $"";
+            menu.menuItems.Add(testItem);
+
+            while (true)
+                methods.DrawMenu(menu);
         }
 
 
