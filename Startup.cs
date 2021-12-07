@@ -35,8 +35,6 @@ namespace RoboRecords
         {
             Configuration = configuration;
 
-            EnvVars.ParseEnvironmentVariables(configuration);
-
             RoboRecordsDbContext.SetConnectionString(Configuration["TempSqlConnectionString"]);
             IdentityContext.SetConnectionString(Configuration["TempUserConnectionString"]);
             InitDatabase();
@@ -103,7 +101,7 @@ namespace RoboRecords
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                EnvVars.isDevelopment = true;
+                EnvVars.IsDevelopment = true;
             }
             else
             {
@@ -111,6 +109,9 @@ namespace RoboRecords
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
+            EnvVars.ParseEnvironmentVariables(Configuration);
+            FileManager.Initialize();
             
             app.UseHttpsRedirection();
             app.UseStaticFiles();

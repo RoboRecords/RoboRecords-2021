@@ -9,17 +9,32 @@ namespace RoboRecords
         private const string EnvPrefix = "RoboRecords_";
 
         private const string EnvDataPath = EnvPrefix + "DataPath";
-
+        private const string EnvSftpKeyPath = EnvPrefix + "SftpKeyPath";
+        private const string EnvSftpHost = EnvPrefix + "SftpHostAddress";
+        private const string EnvSftpUser = EnvPrefix + "SftpUserName";
+        
         public static string DataPath;
+        public static string SftpKeyPath;
+        public static string SftpHost;
+        public static string SftpUser;
 
-        public static bool isDevelopment = false;
+        public static bool IsDevelopment = false;
 
         public static void ParseEnvironmentVariables(IConfiguration configuration)
         {
-            DataPath = ParseEnvironmentVariable(EnvDataPath, true, true, configuration);
+            if (IsDevelopment)
+            {
+                SftpKeyPath = ParseEnvironmentVariable(EnvSftpKeyPath, true, false, true, configuration);
+                SftpHost = ParseEnvironmentVariable(EnvSftpHost, false, false, true, configuration);
+                SftpUser = ParseEnvironmentVariable(EnvSftpUser, false, false, true, configuration, "root");
+                
+                return;
+            }
+                    
+            DataPath = ParseEnvironmentVariable(EnvDataPath, false, true, true, configuration);
         }
 
-        private static string ParseEnvironmentVariable(string varName, bool isPath, bool exitIfEmpty, IConfiguration configuration, string defaultValue = "")
+        private static string ParseEnvironmentVariable(string varName, bool isFilePath, bool isDirPath, bool exitIfEmpty, IConfiguration configuration, string defaultValue = "")
         {
             string value = configuration[varName];
 
@@ -31,7 +46,7 @@ namespace RoboRecords
             if (isEmpty)
                 value = defaultValue;
 
-            if (isPath)
+            if (isDirPath)
             {
                 try
                 {
@@ -42,6 +57,9 @@ namespace RoboRecords
                 }
                 catch { LogAndExit(varName, true); }
             }
+
+            if (isFilePath)
+                value = Path.GetFullPath(value);
 
             return value;
         }
