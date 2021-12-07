@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -28,18 +28,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="TestConsole\**" />
     <Compile Remove="UnitTests\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="TestConsole\**" />
     <EmbeddedResource Remove="UnitTests\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="TestConsole\**" />
     <None Remove="UnitTests\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="TestConsole\**" />
     <Content Remove="UnitTests\**" />
     <Content Update="wwwroot\assets\Font\SRB2.ttf">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
