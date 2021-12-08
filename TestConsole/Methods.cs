@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TestConsole.Models;
+using RoboRecords;
 using RoboRecords.Models;
 using RoboRecords.DbInteraction;
 
@@ -21,13 +22,14 @@ namespace TestConsole
         TryAddCyberdime,
         TryAddRedVolcano2,
         TryAddZenyaTheModerator,
+        TryTestFileManager,
     }
     class Methods
     {
 
         public void DrawMenu(Menu menu)
         {
-            Console.Clear();
+            // Console.Clear();
 
             Console.WriteLine(menu.name + "\n");
             for (int i = 0; i < menu.menuItems.Count; i++)
@@ -106,6 +108,10 @@ namespace TestConsole
                     break;
                 case MenuAction.TryAddZenyaTheModerator:
                     DoTryAddZenyaTheModerator();
+                    Console.ReadKey();
+                    break;
+                case MenuAction.TryTestFileManager:
+                    DoTestFileManager();
                     Console.ReadKey();
                     break;
                 case MenuAction.Quit:
@@ -342,6 +348,15 @@ namespace TestConsole
             DbTester.TryAddZenyaTheModerator();
             Console.WriteLine("\nPress any key to return to the menu.");
             Console.ReadKey();
+        }
+
+        public void DoTestFileManager()
+        {
+            Console.WriteLine("Enter filename:");
+            string filename = Console.ReadLine();
+            Console.WriteLine($"\nTrying to create {filename} at {EnvVars.SftpHost}/RoboRecords\n");
+            FileManager.Initialize();
+            FileManager.Create(filename);
         }
 
         public void SelectRoboGames()

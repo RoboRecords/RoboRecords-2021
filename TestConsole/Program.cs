@@ -1,3 +1,4 @@
+using RoboRecords;
 using RoboRecords.DatabaseContexts;
 using System;
 using TestConsole.Models;
@@ -13,6 +14,7 @@ namespace TestConsole
         public static IConfigurationRoot Configuration { get; set; }
         static void Main(string[] args)
         {
+            EnvVars.IsDevelopment = true;
             Configure();
 
             Methods methods = new Methods();
@@ -42,6 +44,10 @@ namespace TestConsole
             testItem.parameter = $"{testItem.name} menu action called.";
             menu.menuItems.Add(testItem);
 
+            testItem = new MenuItem("TryTestFileManager", MenuAction.TryTestFileManager);
+            testItem.parameter = $"{testItem.name} menu action called.";
+            menu.menuItems.Add(testItem);
+
             testItem = new MenuItem("Exit", MenuAction.Quit);
             testItem.parameter = $"";
             menu.menuItems.Add(testItem);
@@ -58,6 +64,8 @@ namespace TestConsole
                 .AddUserSecrets<Program>();
 
             Configuration = builder.Build();
+
+            EnvVars.ParseEnvironmentVariables(Configuration);
 
             RoboRecordsDbContext.SetConnectionString(Configuration["TempSqlConnectionString"]);
             IdentityContext.SetConnectionString(Configuration["TempUserConnectionString"]);
