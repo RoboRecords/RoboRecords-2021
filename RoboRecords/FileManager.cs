@@ -41,9 +41,12 @@ namespace RoboRecords
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Action failed, retrying {0} more time in a second ({1})", retryCount, e.Message);
+                    if(retryCount != 1)
+                        Console.WriteLine("Action failed, retrying {0} more time in a second ({1})", retryCount - 1, e.Message);
+                    else
+                        Console.WriteLine("Action failed ({0})", e.Message);
                     retryCount--;
-                    Task.Delay(1000);
+                    Task.Delay(1000).Wait();
                 }
             }
 
@@ -51,15 +54,13 @@ namespace RoboRecords
         }
         
         // The first of many others to be implemented :p
-        public static void Create(string relativePath)
+        public static bool Create(string relativePath)
         {
             if (EnvVars.IsDevelopment)
-            {
-                SftpTryAction(client => client.Create(Path.Combine(SftpRootDirectory, relativePath)));
-                return;
-            }
+                return SftpTryAction(client => client.Create($"{SftpRootDirectory}/{relativePath}"));
 
             File.Create(Path.Combine(EnvVars.DataPath, relativePath));
+            return true;
         }
     }
 }
