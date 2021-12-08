@@ -43,7 +43,7 @@ namespace RoboRecords.Pages
             // Not gonna start changing stuff here, as it might break the Submit page.
             // Same method as in Map page can be used to get just the level.
             // DbInserter.AddRecord just
-            var roboGames = DbSelector.GetGamesWithLevels();
+            DbSelector.TryGetGamesWithLevels(out var roboGames);
 
             var gameId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("game");
             if (gameId != null)

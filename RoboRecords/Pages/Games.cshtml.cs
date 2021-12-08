@@ -20,7 +20,7 @@ namespace RoboRecords.Pages
 
             // Returns all games, including the levels and records.
             // DONE: Return only the games without joined data. We don't need it here. --- Zenya
-            RoboGames = DbSelector.GetGames();
+            DbSelector.TryGetGames(out RoboGames);
         }
     }
 }

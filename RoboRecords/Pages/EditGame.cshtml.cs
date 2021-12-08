@@ -15,19 +15,19 @@ namespace RoboRecords.Pages
         
         public void OnGet()
         {
-            var roboGames = DbSelector.GetGamesWithLevels();
+            DbSelector.TryGetGamesWithLevels(out var roboGames);
             // Game = roboGames[1]; // DONE: CHANGE THIS HARDCODED CRAP TO SUPPORT THE CURRENT SELECTED GAME --- Zenya
 
             var id = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("id");
 
             if (id != null)
             {
-                Game = DbSelector.GetGameWithLevelsFromID(id);
+                DbSelector.TryGetGameWithLevelsFromID(id, out Game);
             }
             else
             {
                 // SRB2 2.2 default for testing. Should be changed to throw an error.
-                Game = DbSelector.GetGameWithLevelsFromID("sonicroboblast2v22");
+                DbSelector.TryGetGameWithLevelsFromID("sonicroboblast2v22", out Game);
             }
         }
     }

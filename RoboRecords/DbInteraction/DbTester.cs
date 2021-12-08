@@ -15,9 +15,9 @@ namespace RoboRecords.DbInteraction
         // Try adding Red Volcano Act 2 to Red Volcano Zone in SRB2 2.2
         public static void TestUpdate()
         {
-            RoboGame Game = DbSelector.GetGameWithLevelsFromID("sonicroboblast2v22");
+            bool found = DbSelector.TryGetGameWithLevelsFromID("sonicroboblast2v22", out RoboGame Game);
 
-            if (Game == null)
+            if (!found)
                 return;
 
             foreach (LevelGroup group in Game.LevelGroups)
@@ -45,11 +45,12 @@ namespace RoboRecords.DbInteraction
         // Try adding a record to Red Volcano Zone Act 1 of 4:20.00 by ZeriTAS
         public static void TestRecord()
         {
-            RoboLevel level = DbSelector.GetGameLevelFromMapId("sonicroboblast2v22", "16");
-            RoboRecord record = new RoboRecord(DbSelector.GetRoboUserFromUserName("ZeriTAS", 1), null)
+            bool found = DbSelector.TryGetGameLevelFromMapId("sonicroboblast2v22", "16", out RoboLevel level);
+            DbSelector.TryGetRoboUserFromUserName("ZeriTAS", 1, out RoboUser roboUser);
+            RoboRecord record = new RoboRecord(roboUser, null)
             { Tics = 9100, Character = CharacterManager.GetCharacterById("amy") };
 
-            if (level == null)
+            if (!found)
                 return;
 
             // Dirty "check if exists" without knowing the ID
@@ -91,10 +92,10 @@ namespace RoboRecords.DbInteraction
         // Try adding Red Volcano Act 2 with automatic sorting
         public static void TryAddRedVolcano2()
         {
-            RoboGame Game = DbSelector.GetGameWithLevelsFromID("sonicroboblast2v22");
-            RoboLevel level = DbSelector.GetGameLevelFromMapId("sonicroboblast2v22", "17");
+            bool foundGame = DbSelector.TryGetGameWithLevelsFromID("sonicroboblast2v22", out RoboGame Game);
+            bool foundLevel = DbSelector.TryGetGameLevelFromMapId("sonicroboblast2v22", "17", out RoboLevel level);
 
-            if (Game == null || level.LevelName != "Invalid Level")
+            if (!foundGame || foundLevel)
                 return;
 
             level = new RoboLevel(17, "Red Volcano Zone", 2)

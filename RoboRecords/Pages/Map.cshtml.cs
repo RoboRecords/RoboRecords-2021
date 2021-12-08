@@ -54,8 +54,8 @@ namespace RoboRecords.Pages
             var gameId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("game");
             var mapId = HttpUtility.ParseQueryString(Request.QueryString.ToString()).Get("map");
 
-            CurrentGame = DbSelector.GetGameFromID(gameId);
-            CurrentLevel = DbSelector.GetGameLevelFromMapId(gameId, mapId);
+            DbSelector.TryGetGameFromID(gameId, out CurrentGame);
+            DbSelector.TryGetGameLevelFromMapId(gameId, mapId, out CurrentLevel);
 
             /*if (gameId != null)
             {

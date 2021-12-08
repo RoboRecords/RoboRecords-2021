@@ -33,12 +33,12 @@ namespace RoboRecords.Pages
 
             if (id != null)
             {
-                CurrentGame = DbSelector.GetGameWithRecordsFromID(id);
+                DbSelector.TryGetGameWithRecordsFromID(id, out CurrentGame);
             }
             else
             {
                 // SRB2 2.2 default for testing. Should be changed to throw an error if not found.
-                CurrentGame = DbSelector.GetGameWithRecordsFromID("sonicroboblast2v22");
+                DbSelector.TryGetGameWithRecordsFromID("sonicroboblast2v22", out CurrentGame);
             }
         }
     }

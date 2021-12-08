@@ -12,14 +12,38 @@ namespace RoboRecords.Models
         public RoboPageModel(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
+
+            // Trigger the getter to set _foundUserLastResult
+            _ = CurrentUser;
+            _ = CurrentIdentityUser;
         }
         
-        public bool IsLoggedIn => CurrentUser.UserNameNoDiscrim != "Invalid User";
+        public bool IsLoggedIn => _foundUserLastResult;
 
         public bool isModerator = false;
 
-        public RoboUser CurrentUser => DbSelector.GetRoboUserFromUserName(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name));
+        public RoboUser CurrentUser
+        {
+            get
+            {
+                RoboUser roboUser;
+                _foundUserLastResult = DbSelector.TryGetRoboUserFromUserName(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name), out roboUser);
+                return roboUser;
+            }
+        }
         
-        public IdentityRoboUser CurrentIdentityUser => DbSelector.GetIdentityUserFromUserName(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name));
+        private bool _foundUserLastResult;
+        
+        public IdentityRoboUser CurrentIdentityUser
+        {
+            get
+            {
+                IdentityRoboUser identityRoboUser;
+                _foundIdentityUserLastResult = DbSelector.TryGetIdentityUserFromUserName(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name), out identityRoboUser);
+                return identityRoboUser;
+            }
+        }
+        
+        private bool _foundIdentityUserLastResult;
     }
 }

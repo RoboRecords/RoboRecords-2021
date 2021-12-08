@@ -27,7 +27,7 @@ namespace RoboRecords.Pages
             // Improper example of checking if current user is a moderator. To test, manually change Roles column of your IdentityRoboUser entry to 3 and log in.
             if (IsLoggedIn)
             {
-                isModerator = Validator.UserHasRequiredRoles(DbSelector.GetIdentityUserFromUserName($"{CurrentUser.UserNameNoDiscrim}#{CurrentUser.Discriminator}"), UserRoles.Moderator);
+                isModerator = Validator.UserHasRequiredRoles(CurrentIdentityUser, UserRoles.Moderator);
             }
         }
 
@@ -100,7 +100,7 @@ namespace RoboRecords.Pages
             // RoboUser userToLogin = DbSelector.GetRoboUserFromUserName(username, discriminator);
 
             // IdentityUser has discrim included in username
-            IdentityRoboUser userToLogin = DbSelector.GetIdentityUserFromUserName(usernamewithdiscrim);
+            DbSelector.TryGetIdentityUserFromUserName(usernamewithdiscrim, out IdentityRoboUser userToLogin);
 
             SignInResult result = _signInManager.PasswordSignInAsync(userToLogin, password, true, false).Result;
             

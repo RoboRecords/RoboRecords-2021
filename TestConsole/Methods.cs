@@ -128,9 +128,9 @@ namespace TestConsole
         public void DoTestUpdate()
         {
             DbTester.TestUpdate();
-            RoboLevel testLevel = DbSelector.GetGameLevelFromMapId("sonicroboblast2v22", "17");
+            bool foundLevel = DbSelector.TryGetGameLevelFromMapId("sonicroboblast2v22", "17", out RoboLevel testLevel);
 
-            if (testLevel != null)
+            if (foundLevel)
             {
                 Console.Clear();
                 Console.WriteLine("TestUpdate succeeded.\nResult entry:");
@@ -172,7 +172,7 @@ namespace TestConsole
         public void DoTestRecord()
         {
             DbTester.TestRecord();
-            RoboLevel testLevel = DbSelector.GetGameLevelFromMapId("sonicroboblast2v22", "16");
+            DbSelector.TryGetGameLevelFromMapId("sonicroboblast2v22", "16", out RoboLevel testLevel);
             RoboRecord testRecord = testLevel.Records.Where(
                 e => e.Uploader.UserNameNoDiscrim == "ZeriTAS" &&
                 e.Tics == 9100 &&
@@ -239,9 +239,9 @@ namespace TestConsole
             Console.Clear();
             DbTester.TryAddCyberdime();
 
-            RoboGame testGame = DbSelector.GetGameWithRecordsFromID("cyber");
+            bool foundGame = DbSelector.TryGetGameWithRecordsFromID("cyber", out RoboGame testGame);
 
-            if (testGame != null)
+            if (foundGame)
             {
                 Console.WriteLine("TryAdCyberdime succeeded.\nResult:\n");
                 Console.WriteLine(testGame.Name + "\n");
@@ -302,9 +302,9 @@ namespace TestConsole
         public void DoTryAddRedVolcano2()
         {
             DbTester.TryAddRedVolcano2();
-            RoboLevel testLevel = DbSelector.GetGameLevelFromMapId("sonicroboblast2v22", "17");
+            bool foundLevel = DbSelector.TryGetGameLevelFromMapId("sonicroboblast2v22", "17", out RoboLevel testLevel);
 
-            if (testLevel != null)
+            if (foundLevel)
             {
                 Console.Clear();
                 Console.WriteLine("TestUpdate succeeded.\nResult entry:");
@@ -361,7 +361,7 @@ namespace TestConsole
 
         public void SelectRoboGames()
         {
-            List<RoboGame> games = DbSelector.GetGames();
+            DbSelector.TryGetGames(out List<RoboGame> games);
 
             Console.Clear();
             Console.WriteLine("Query Result:\n");

@@ -49,7 +49,10 @@ namespace RoboRecords.Services
             if (!string.IsNullOrEmpty(oldApiKey) && _apiKeyCache.ContainsKey(oldApiKey))
                 _apiKeyCache.UpdateKey(oldApiKey, newApiKey);
             else
-                _apiKeyCache.AddKey(newApiKey, DbSelector.GetRoboUserFromApiKey(newApiKey), user);
+            {
+                DbSelector.TryGetRoboUserFromApiKey(newApiKey, out RoboUser roboUser);
+                _apiKeyCache.AddKey(newApiKey, roboUser, user);
+            }
 
             return apiKey;
         }
@@ -75,10 +78,10 @@ namespace RoboRecords.Services
             if (_apiKeyCache.ContainsKey(apiKey))
                 return _apiKeyCache.GetRoboUser(apiKey);
 
-            RoboUser user = DbSelector.GetRoboUserFromApiKey(apiKey);
-            IdentityRoboUser identityUser = DbSelector.GetIdentityUserFromUserName(user.UserNameNoDiscrim, user.Discriminator);
+            bool foundUser = DbSelector.TryGetRoboUserFromApiKey(apiKey, out RoboUser user);
+            DbSelector.TryGetIdentityUserFromUserName(user.UserNameNoDiscrim, user.Discriminator, out IdentityRoboUser identityUser);
             
-            if (user.UserNameNoDiscrim != "Invalid User")
+            if (foundUser)
             {
                 _apiKeyCache.AddKey(apiKey, user, identityUser);
             }
