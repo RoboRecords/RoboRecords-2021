@@ -356,7 +356,7 @@ namespace TestConsole
             string filename = Console.ReadLine();
             Console.WriteLine($"\nTrying to create {filename} at {EnvVars.SftpHost}/RoboRecords\n");
             FileManager.Initialize();
-            FileManager.Create(filename);
+            FileManager.CreateFile(filename);
         }
 
         public void SelectRoboGames()
