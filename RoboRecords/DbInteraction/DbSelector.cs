@@ -157,6 +157,10 @@ namespace RoboRecords.DbInteraction
 
         public static bool TryGetIdentityUserFromUserName(string unameWithDiscriminator, out IdentityRoboUser iUser)
         {
+            iUser = null;
+            if (string.IsNullOrEmpty(unameWithDiscriminator))
+                return false;
+            
             // Return user with given username and discriminator. Return "invalid user" if not found.
             using (IdentityContext context = new IdentityContext())
             {
