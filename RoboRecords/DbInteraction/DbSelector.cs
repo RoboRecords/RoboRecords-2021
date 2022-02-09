@@ -52,6 +52,10 @@ namespace RoboRecords.DbInteraction
         // Get the game matching the url and include level data.
         public static bool TryGetGameWithLevelsFromID(string id, out RoboGame roboGame)
         {
+            roboGame = null;
+            if (string.IsNullOrEmpty(id))
+                return false;
+            
             // SELECT * FROM RoboGames, JOIN levels
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
@@ -83,6 +87,10 @@ namespace RoboRecords.DbInteraction
         // Get the game matching the url and include level and record data.
         public static bool TryGetGameWithRecordsFromID(string id, out RoboGame roboGame)
         {
+            roboGame = null;
+            if (string.IsNullOrEmpty(id))
+                return false;
+            
             // SELECT * FROM RoboGames, JOIN levels
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
@@ -133,6 +141,10 @@ namespace RoboRecords.DbInteraction
 
         public static bool TryGetRoboUserFromUserName(string uname, short disc, out RoboUser roboUser)
         {
+            roboUser = null;
+            if (string.IsNullOrEmpty(uname))
+                return false;
+            
             // Return user with given username and discriminator. Return "invalid user" if not found.
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
@@ -147,6 +159,10 @@ namespace RoboRecords.DbInteraction
 
         public static bool TryGetRoboUserFromUserName(string unameWithDiscriminator, out RoboUser roboUser)
         {
+            roboUser = null;
+            if (string.IsNullOrEmpty(unameWithDiscriminator))
+                return false;
+        
             string[] splittedUsername = Validator.TrySplitUsername(unameWithDiscriminator);
 
             string username = splittedUsername[0];
@@ -180,6 +196,10 @@ namespace RoboRecords.DbInteraction
 
         public static bool TryGetRoboUserFromApiKey(string apiKey, out RoboUser roboUser)
         {
+            roboUser = null;
+            if (string.IsNullOrEmpty(apiKey))
+                return false;
+            
             IdentityRoboUser identityRoboUser;
             
             using (IdentityContext context = new IdentityContext())
@@ -196,6 +216,10 @@ namespace RoboRecords.DbInteraction
         
         public static bool TryGetIdentityUserFromApiKey(string apiKey, out IdentityRoboUser identityRoboUser)
         {
+            identityRoboUser = null;
+            if (string.IsNullOrEmpty(apiKey))
+                return false;
+            
             using (IdentityContext context = new IdentityContext())
                 identityRoboUser = context.Users.FirstOrDefault(e => e.ApiKey == apiKey);
 
@@ -207,6 +231,10 @@ namespace RoboRecords.DbInteraction
 
         public static bool TryGetGameFromID(string id, out RoboGame roboGame)
         {
+            roboGame = null;
+            if (string.IsNullOrEmpty(id))
+                return false;
+            
             // SELECT * FROM RoboGames WHERE UrlName = id. Return "invalid game" if not found.
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
@@ -221,6 +249,10 @@ namespace RoboRecords.DbInteraction
 
         public static bool TryGetGameLevelFromMapId(string gameid, string _mapid, out RoboLevel roboLevel)
         {
+            roboLevel = null;
+            if (string.IsNullOrEmpty(gameid) || string.IsNullOrEmpty(_mapid))
+                return false;
+            
             // SELECT * FROM RoboLevels where gameid and mapid --- Took 6 hours to figure this one out; Zenya
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
