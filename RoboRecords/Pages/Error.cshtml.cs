@@ -6,12 +6,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using RoboRecords.Models;
 
 namespace RoboRecords.Pages
 {
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [IgnoreAntiforgeryToken]
-    public class ErrorModel : PageModel
+    public class ErrorModel : RoboPageModel
     {
         public string RequestId { get; set; }
 
@@ -19,7 +21,7 @@ namespace RoboRecords.Pages
 
         private readonly ILogger<ErrorModel> _logger;
 
-        public ErrorModel(ILogger<ErrorModel> logger)
+        public ErrorModel(ILogger<ErrorModel> logger, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _logger = logger;
         }

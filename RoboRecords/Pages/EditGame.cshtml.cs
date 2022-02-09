@@ -1,17 +1,22 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Web;
 using RoboRecords.DbInteraction;
 using RoboRecords.Models;
-using System.Web;
 
 namespace RoboRecords.Pages
 {
-    public class EditGame : PageModel
+    public class EditGame : RoboPageModel
     {
         [BindProperty]
         public GameEditDb GameEdit { get; set; }
         public static RoboGame Game;
+
+        public EditGame(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        {
+        }
         
         public void OnGet()
         {

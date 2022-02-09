@@ -1,18 +1,23 @@
-using System;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using RoboRecords.Models;
+using System;
 using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Web;
-using Microsoft.AspNetCore.Html;
 using RoboRecords.DbInteraction; // Initiative to move all database interactions to one place. --- Zenya
+using RoboRecords.Models;
 
 namespace RoboRecords.Pages
 {
-    public class GamePage : PageModel
+    public class GamePage : RoboPageModel
     {
         // private List<RoboGame> _roboGames;
         public static RoboGame CurrentGame;
+
+        public GamePage(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        {
+        }
 
         public void OnGet()
         {

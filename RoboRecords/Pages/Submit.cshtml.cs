@@ -9,6 +9,11 @@
  * See the 'LICENSE' file for more details.
  */
 
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,23 +22,22 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
-using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using RoboRecords.DatabaseContexts;
 using RoboRecords.DbInteraction;
 using RoboRecords.Models;
 
 namespace RoboRecords.Pages
 {
-    public class Submit : PageModel
+    public class Submit : RoboPageModel
     {
         public static List<RoboRecord> RecordList;
         [BindProperty]
         public ReplayUploadDb FileUpload { get; set; }
         public static RoboGame Game;
+
+        public Submit(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        {
+        }
 
         public void OnGet()
         {

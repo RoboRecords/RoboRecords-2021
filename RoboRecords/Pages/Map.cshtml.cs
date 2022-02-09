@@ -1,29 +1,29 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Web;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 // using RoboRecords.DatabaseContexts;
-using RoboRecords.Models;
 using RoboRecords.DbInteraction; // Initiative to move all database interactions to one place. --- Zenya
+using RoboRecords.Models;
 
 
 namespace RoboRecords.Pages
 {
-    public class Map : PageModel
+    public class Map : RoboPageModel
     {
         public static RoboGame CurrentGame;
         public static RoboLevel CurrentLevel;
         // private List<RoboGame> _roboGames;
 
         // Initiative to move all database interactions to one place. --- Zenya
-        /*
-        private RoboRecordsDbContext _dbContext;
+        
+        //private RoboRecordsDbContext _dbContext;
 
-        public Map(RoboRecordsDbContext dbContext)
+        public Map(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
-            _dbContext = dbContext;
-        }*/
+        }
         
         public void OnGet()
         {

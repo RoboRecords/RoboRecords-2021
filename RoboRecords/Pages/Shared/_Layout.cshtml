@@ -41,6 +41,26 @@
                            </li>
                     </ul>
                 </div>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 mr-auto">
+                        <!-- TODO: Have a menu of some sort triggered when clicking on these next elements -->
+                        <a class="navbar-brand" href="#">
+                            <!-- TODO: Have the user's profile picture instead of this default one -->
+                            <img src="../assets/guest.png" width="30" height="30" alt="">
+                        </a>
+                        <li class="nav-item">
+                            @if (Model.IsLoggedIn)
+                            {
+                                <a class="nav-link text-light">@Model.CurrentUser.UserNameNoDiscrim#@Model.CurrentUser.Discriminator</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link text-light">Guest</a>
+                            }
+                        </li>
+                    </ul>
+                </div>
+                
             </div>
         </nav>
     </header>
