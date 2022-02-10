@@ -122,9 +122,9 @@ namespace RoboRecords.Pages
                 // Check if the user is uploading their best time. If yes, upload it to the DB
                 foreach (var levelRecord in level.Records)
                 {
-                    if (levelRecord.Uploader == CurrentUser && levelRecord.Character == record.Character)
-                    {
 
+                    if (levelRecord.Uploader.DbId == CurrentUser.DbId && levelRecord.Character.NameId == record.Character.NameId)
+                    {
                         if (levelRecord.Tics < record.Tics)
                         {
                             isBest = false;
