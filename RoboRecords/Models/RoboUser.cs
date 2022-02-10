@@ -10,6 +10,7 @@
  */
 
 using System;
+using System.IO;
 using Microsoft.AspNetCore.Identity;
 
 namespace RoboRecords.Models
@@ -21,6 +22,14 @@ namespace RoboRecords.Models
         public short Discriminator { get; set; }
 
         public string UserNameNoDiscrim { get; set; }
+
+        public string AvatarData
+        {
+            get
+            {
+                return GetAvatarData();
+            }
+        }
 
         public RoboUser(string userName, short numberDiscriminator)
         {
@@ -45,6 +54,26 @@ namespace RoboRecords.Models
         public RoboUser()
         {
             
+        }
+
+        private string GetAvatarData()
+        {
+            byte[] avatarData;
+            
+            // FIXME: Don't hardcode this much stuff!
+            string avatarPath = $"UserAssets/{DbId}/avatar.png";
+            string guestPath = Path.Combine("wwwroot", "assets", "guest.png");
+            
+            if (!FileManager.Exists(avatarPath))
+            {
+                avatarData = File.ReadAllBytes(guestPath);
+                return Convert.ToBase64String(avatarData);
+            }
+            
+            if (!FileManager.Read(avatarPath, out avatarData))
+                avatarData = File.ReadAllBytes(guestPath);
+
+            return Convert.ToBase64String(avatarData);
         }
     }
 }

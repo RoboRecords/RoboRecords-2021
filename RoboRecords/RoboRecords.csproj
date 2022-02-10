@@ -36,6 +36,11 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
+      <AdditionalFiles Include="wwwroot\assets\guest.png">
+          <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+          <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </AdditionalFiles>
   </ItemGroup>
 
   <ItemGroup>
