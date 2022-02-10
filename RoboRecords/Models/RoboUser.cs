@@ -23,13 +23,7 @@ namespace RoboRecords.Models
 
         public string UserNameNoDiscrim { get; set; }
 
-        public string AvatarData
-        {
-            get
-            {
-                return GetAvatarData();
-            }
-        }
+        public string AvatarData => GetAvatarData();
 
         public RoboUser(string userName, short numberDiscriminator)
         {
