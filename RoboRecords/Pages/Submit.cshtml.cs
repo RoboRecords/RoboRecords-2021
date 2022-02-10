@@ -106,11 +106,6 @@ namespace RoboRecords.Pages
             if (!IsLoggedIn)
                 return null;
 
-            string path = $"";
-
-            if (!FileManager.Exists(""))
-                FileManager.CreateDirectory("");
-
             foreach (var record in RecordList)
             {
                 // TODO: Make this less horribly inefficient by only reading the file here
