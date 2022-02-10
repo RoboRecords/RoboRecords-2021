@@ -53,11 +53,56 @@ namespace RoboRecords
             return false;
         }
         
+        private static bool SftpTryAction<TResult>(Func<SftpClient, TResult> sftpAction, out TResult result)
+        {
+            result = default;
+            
+            int retryCount = 5;
+            
+            while (retryCount != 0)
+            {
+                if(!_sftpClient.IsConnected)
+                    _sftpClient.Connect();
+
+                try
+                {
+                    result = sftpAction(_sftpClient);
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    if(retryCount != 1)
+                        Console.WriteLine("Action failed, retrying {0} more time in a second ({1})", retryCount - 1, e.Message);
+                    else
+                        Console.WriteLine("Action failed ({0})", e.Message);
+                    retryCount--;
+                    Task.Delay(1000).Wait();
+                }
+            }
+
+            return false;
+        }
+        
         private static bool LocalTryAction(Action localAction)
         {
             try
             {
                 localAction();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Action failed ({0})", e.Message);
+                return false;
+            }
+        }
+        
+        private static bool LocalTryAction<TResult>(Func<TResult> localAction, out TResult result)
+        {
+            result = default;
+            try
+            {
+                result = localAction();
                 return true;
             }
             catch (Exception e)
