@@ -112,6 +112,41 @@ namespace RoboRecords
             }
         }
         
+        public static bool CreateDirectory(string relativePath)
+        {
+            if (EnvVars.IsDevelopment)
+                return SftpTryAction(client => client.CreateDirectory($"{SftpRootDirectory}/{relativePath}"));
+
+            string localPath = Path.Combine(EnvVars.DataPath, relativePath);
+            
+            // Creating an already existing directory can return true so to keep it consistent with SFTP we return false 
+            if (Directory.Exists(localPath))
+                return false;
+            
+            return LocalTryAction(() => Directory.CreateDirectory(localPath));
+        }
+        
+        public static bool Exists(string relativePath)
+        {
+            if (EnvVars.IsDevelopment)
+            {
+                SftpTryAction(client => client.Exists($"{SftpRootDirectory}/{relativePath}"), out bool result);
+                return result;
+            }
+
+            string localPath = Path.Combine(EnvVars.DataPath, relativePath);
+            
+            LocalTryAction(() => File.Exists(localPath), out bool fileResult);
+            if (fileResult)
+                return true;
+            
+            LocalTryAction(() => Directory.Exists(localPath), out bool directoryResult);
+            if (directoryResult)
+                return true;
+            
+            return false;
+        }
+        
         public static bool CreateFile(string relativePath)
         {
             if (EnvVars.IsDevelopment)
