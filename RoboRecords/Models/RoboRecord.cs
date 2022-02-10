@@ -19,7 +19,6 @@ namespace RoboRecords.Models
     {
         public int DbId;
         
-        public int Index;
         public virtual RoboUser Uploader { get; set; }
         public long Tics;
         public long Rings;
@@ -30,8 +29,6 @@ namespace RoboRecords.Models
         private int _majorVersion;
         // 9 in 2.2.9
         private int _subVersion;
-        // "v2.2.9", for example
-        private string _versionString = "Undefined"; // Should NEVER be the case after successful initialization
         public int MajorVersion
         {
             get => _majorVersion;
@@ -43,15 +40,22 @@ namespace RoboRecords.Models
             set => SetVersion(_majorVersion, value);
         }
         // Read-only outside the class. Edit by changing the version numbers
-        public string VersionString => _versionString;
+        public string VersionString
+        {
+            get => GetVersionString();
+        }
         public void SetVersion(int majorVersion, int subVersion)
         {
             _majorVersion = majorVersion;
             _subVersion = subVersion;
             // Major version: 202, Minor version: 9 -> Version string: 2.2.9
-            _versionString = majorVersion / 100 + "." + majorVersion % 100 + "." + subVersion;
         }
 
+        public string GetVersionString()
+        {
+            return _majorVersion / 100 + "." + _majorVersion % 100 + "." + _subVersion;
+        }
+        
         public byte[] FileBytes;
         // Time the time is uploaded
         public DateTime UploadTime;

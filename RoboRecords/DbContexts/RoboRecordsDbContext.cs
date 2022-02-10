@@ -76,14 +76,12 @@ namespace RoboRecords.DatabaseContexts
             modelBuilder.Entity<RoboRecord>(entity =>
             {
                 entity.HasKey(e => e.DbId);
-                entity.Property(e => e.Index).IsRequired();
                 entity.HasOne(e => e.Uploader);
                 entity.Property(e => e.Tics).IsRequired();
                 entity.Property(e => e.Rings).IsRequired();
                 entity.Property(e => e.Score).IsRequired();
                 entity.HasOne(e => e.Character);
 
-                entity.Property(e => e.VersionString).IsRequired();
                 entity.Property(e => e.UploadTime).IsRequired();
 
                 entity.Property(e => e.LevelNumber).IsRequired();
