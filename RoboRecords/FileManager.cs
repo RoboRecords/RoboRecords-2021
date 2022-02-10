@@ -22,6 +22,9 @@ namespace RoboRecords
                 
                 _sftpClient.Connect();
             }
+
+            if (!Exists("UserAssets"))
+                CreateDirectory("UserAssets");
         }
 
         // The wrapper that should be used for any SFTP action as it takes care or retrying and connecting 

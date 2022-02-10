@@ -19,3 +19,42 @@
 <div class="text-center">
     <h1 class="">Users</h1>
 </div>
+<style>
+    body {
+      background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/vanillabg.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+    }
+    
+    
+     screen and (max-width: 800px) {
+      h1 {
+             font-size: 6vw !important;
+         }
+         
+         h3 {
+             font-size: 4vw;
+         }
+    
+     }
+
+   
+    
+</style>
+
+<div class="container">
+    <form enctype="multipart/form-data" method="post">
+            <dl>
+                <dt>
+                    <label asp-for="FileUpload"></label>
+                </dt>
+                <dd>
+                    <!-- TODO: Accept more than just PNG files -->
+                    <input asp-for="FileUpload" type="file" accept="image/png"/>
+                    <span asp-validation-for="FileUpload"></span>
+                </dd>
+            </dl>
+            <input asp-page-handler="Post" type="submit" value="Change profile picture" />
+            
+        </form>
+</div>
