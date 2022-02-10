@@ -78,7 +78,7 @@ namespace RoboRecords.Pages
                     var stream = formFile.OpenReadStream();
                     var bytes = new byte[formFile.Length];
                     stream.Read(bytes, 0, (int)formFile.Length);
-                    var rec = new RoboRecord(new RoboUser("Example", 420), bytes.ToArray());
+                    var rec = new RoboRecord(CurrentUser, bytes.ToArray());
 
                     // If something went wrong while reading the replay, don't upload it.
                     if (rec.FileBytes != null && rec.FileBytes.Length > 0)
@@ -102,11 +102,53 @@ namespace RoboRecords.Pages
         public IActionResult OnPostUploadAsync()
         {
             // TODO: Upload things to the server
-            // Should NEVER happen
-            if (RecordList.Count == 0)
-            {
+
+            if (!IsLoggedIn)
                 return null;
+
+            string path = $"";
+
+            if (!FileManager.Exists(""))
+                FileManager.CreateDirectory("");
+
+            foreach (var record in RecordList)
+            {
+                // TODO: Make this less horribly inefficient by only reading the file here
+                
+                // Check if this is the best time or worth uploading
+                DbSelector.TryGetGameLevelFromMapId(Game.UrlName, record.LevelNumber.ToString(), out RoboLevel level);
+                if (level == null)
+                {
+                    Console.WriteLine("Map not found, WTF!?!?");
+                    continue;
+                }
+
+                bool isBest = true;
+                // Check if the user is uploading their best time. If yes, upload it to the DB
+                foreach (var levelRecord in level.Records)
+                {
+                    if (levelRecord.Uploader == CurrentUser && levelRecord.Character == record.Character)
+                    {
+
+                        if (levelRecord.Tics < record.Tics)
+                        {
+                            isBest = false;
+                        }
+                        else
+                        {
+                            level.Records.Remove(levelRecord);
+                            DbDeleter.DeleteRoboRecord(levelRecord);
+                        }
+                        break;
+                    }
+                }
+
+                if (isBest)
+                {
+                    DbInserter.AddRecordToLevel(record, level);
+                }
             }
+            
             return RedirectToPage();
         }
         
