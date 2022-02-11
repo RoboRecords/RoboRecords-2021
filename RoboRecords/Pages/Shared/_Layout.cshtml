@@ -44,16 +44,23 @@
                 </div>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 mr-auto">
-                        <!-- TODO: Have a menu of some sort triggered when clicking on these next elements -->
                         @if (Model.IsLoggedIn)
                         {
                             RoboUser user = Model.CurrentUser;
-                            
+
                             <a class="navbar-brand" href="#">
                                 <img src="data:image/png;base64,@user.AvatarData" width="30" height="30" alt="">
                             </a>
-                            <li class="nav-item">
-                                <a class="nav-link text-light">@user.UserNameNoDiscrim#@user.Discriminator</a>
+                            <li class="nav-item dropdown" id="indexDropDown">
+                                <!-- FIXME: This shouldn't be the right way to do this? Also put actual nice colors for the style -->
+                                <a class="nav-link text-light dropdown-toggle" href="javascript:toggleDropDown(document.getElementById('navbarScrollingDropdown'))" role="button" data-bs-toggle="dropdown">@user.UserNameNoDiscrim#@user.Discriminator</a>
+                                <ul class="dropdown-menu dropdown-menu-right" style="background-color: #303030" id="navbarScrollingDropdown">
+                                    <li><a class="dropdown-item" style="color: #0366d6" href="/Users/@user.DbId">View Profile</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" style="color: #0366d6" href="/api/v1/authentication/logout">Log out</a></li>
+                                </ul>
                             </li>
                         }
                         else
@@ -65,7 +72,7 @@
                                 <a class="nav-link text-light">Guest</a>
                             </li>
                         }
-                        
+
                     </ul>
                 </div>
                 

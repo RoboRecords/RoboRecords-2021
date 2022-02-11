@@ -14,4 +14,19 @@ function toggle(x){
         element.hide();
     }
 }
+
+function toggleDropDown(x){
+    
+    var attr = x.getAttribute("class");
+    if (attr.includes(" show"))
+    {
+        
+        x.setAttribute("class", attr.split(" show")[0])
+    }
+    else
+    {
+        x.setAttribute("class", attr + " show")
+    }
+}
+
 $(".hide-at-start").hide();
