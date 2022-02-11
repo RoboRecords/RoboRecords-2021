@@ -2,13 +2,16 @@ using System;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RoboRecords.DbInteraction;
 using RoboRecords.Models;
 using RoboRecords.Services;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace RoboRecords.Pages
 {
+    [IgnoreAntiforgeryToken(Order = 2000)] // Note : this is to avoid having to provide the Antiforgery Token when making a ajax request to Register or Login
     public class Login : RoboPageModel
     {
         private RoboUserManager _roboUserManager;
@@ -41,18 +44,25 @@ namespace RoboRecords.Pages
             
         }
 
-        //FIXME: Don't require a page refresh for this action to happen?
-        public void OnPostRegister()
+        public class RegisterData
         {
-            string email = Request.Form["registerInputEmail"];
-            string usernamewithdiscrim = Request.Form["registerInputUsername"];
-            string password = Request.Form["registerInputPassword"];
-            string confirmedPassword = Request.Form["registerInputConfirmPassword"];
+            public string Email { get; set; }
+            public string Username { get; set; }
+            public string Password { get; set; }
+            public string PasswordConfirmation { get; set; }
+        }
+
+        public IActionResult OnPostRegister([FromBody] RegisterData data)
+        {
+            string email = data.Email;
+            string usernamewithdiscrim = data.Username;
+            string password = data.Password;
+            string confirmedPassword = data.PasswordConfirmation;
 
             if (password != confirmedPassword)
             {
                 Console.WriteLine("not the same passwords");
-                return;
+                return BadRequest("Password Confirmation Error");
             }
 
             string[] splittedUsername = Validator.TrySplitUsername(usernamewithdiscrim);
@@ -63,27 +73,31 @@ namespace RoboRecords.Pages
             // TODO: Make a more elegant way to interupt if the discriminator is invalid
             if (discriminator == 0)
             {
-                return;
+                return BadRequest("No Discriminator");
             }
 
             Console.WriteLine(username);
-
-
-            // TODO: Inform the user of the outcome.
+            
             // TODO: Move this to RoboUserManager
             // Try to create new IdentityUser and if it succeeds, create a RoboUser with the same username.
             if (_roboUserManager.Create(email, username, discriminator, password).Succeeded)
             {
                 DbInserter.AddRoboUser(new RoboUser(username, discriminator));
             }
-            // Console.WriteLine(_roboUserManager.Create(email, username, discriminator, password).Succeeded);
+
+            return Content("Success");
         }
         
-        //FIXME: Don't require a page refresh for this action to happen?
-        public void OnPostLogin()
+        public class LoginData
         {
-            string usernamewithdiscrim = Request.Form["loginInputUsername"];
-            string password = Request.Form["loginInputPassword"];
+            public string Email { get; set; }
+            public string Password { get; set; }
+        }
+        
+        public IActionResult OnPostLogin([FromBody] LoginData data)
+        {
+            string usernamewithdiscrim = data.Email;
+            string password = data.Password;
             
             string[] splittedUsername = Validator.TrySplitUsername(usernamewithdiscrim);
 
@@ -94,7 +108,7 @@ namespace RoboRecords.Pages
             // TODO: Actually allow email login
             if (discriminator == 0)
             {
-                return;
+                return BadRequest("No Discriminator");
             }
 
             // RoboUser userToLogin = DbSelector.GetRoboUserFromUserName(username, discriminator);
@@ -108,9 +122,10 @@ namespace RoboRecords.Pages
             {
                 Console.WriteLine("Success");
                 isModerator = Validator.UserHasRequiredRoles(userToLogin, UserRoles.Moderator);
+                return Content("Success");
             }
-                
-            Response.Redirect("Login");
+            
+            return BadRequest("Wrong Email / Password combination");
         }
     }
 }
