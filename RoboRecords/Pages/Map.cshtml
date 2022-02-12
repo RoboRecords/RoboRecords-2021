@@ -72,7 +72,7 @@
                         <img src=@character.IconUrl alt=@character.Name width="32px"> @character.Name
                     </td>
                     <td>
-                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" style="color: white">
+                        <a href=@String.Format("/Users/{0}", record.Uploader.DbId) style="color: white;">
                             @record.Uploader.UserNameNoDiscrim
                         </a>
                     </td>
@@ -124,7 +124,7 @@
                                         <img src=@character.IconUrl alt=@character.Name width="32px">
                                     </td>
                                     <td>
-                                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" style="color: white">
+                                        <a href=@String.Format("/Users/{0}", characterRecord.Uploader.DbId) style="color: white;">
                                             @characterRecord.Uploader.UserNameNoDiscrim
                                         </a>
                                     </td>
