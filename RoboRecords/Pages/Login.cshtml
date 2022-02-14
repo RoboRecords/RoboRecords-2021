@@ -34,16 +34,170 @@
     </div>
     
     <script type="text/javascript">
+    
+    var registerEmailValid = false;
+    var registerUsernameValid = false;
+    var registerPassValid = false;
+    var registerConfirmPassValid = false;
+    
+    var loginUsernameValid = false;
+    var loginPassValid = false;
+    
+    function updateRegisterButton() {
+        var button = get("registerButton")
+        
+        if (registerEmailValid && registerUsernameValid && registerPassValid && registerConfirmPassValid)
+        {
+            button.removeAttribute("disabled")
+        }
+        else 
+        {
+            button.setAttribute("disabled", "")
+        }
+    }
+    
+    function updateLoginButton() {
+        var button = get("loginButton")
+        
+        if (loginUsernameValid && loginPassValid)
+        {
+            button.removeAttribute("disabled")
+        }
+        else 
+        {
+            button.setAttribute("disabled", "")
+        }
+    }
+    
+    function get(elementIdString) {
+        return document.getElementById(elementIdString);
+    }
+    
+    function checkUsername(username) {
+        var valid = false
+                
+        // Discriminator check (only one occurence of '#', only digits after '#', only a 4 digit number after '#'
+        if (username.includes('#'))
+        {
+            var splittedUsername = username.split('#')
+            if (splittedUsername.length - 1 === 1)
+            {
+                var discrim = splittedUsername[1]
+                var matches = discrim.match("^[0-9]{4}$")
+                if (matches != null && matches[0].length === 4 )
+                {
+                    valid = true
+                }
+            }
+        }
+        
+        return valid
+    }
+    
+    function emailOnChange(element, help) {
+        // FIXME: Use a more robust email verification
+        if (element.value.includes('@@'))
+        {
+            registerEmailValid = true
+            element.setAttribute("class", "form-control is-valid")
+        }
+        else
+        {
+            registerEmailValid = false
+            element.setAttribute("class", "form-control is-invalid")
+        }
+        
+        updateRegisterButton()
+    }
+    
+    function registerUsernameOnChange(element, help) {
+        
+        if (checkUsername(element.value))
+        {
+            registerUsernameValid = true
+            help.textContent = ""
+            element.setAttribute("class", "form-control is-valid")
+        }
+        else
+        {
+            registerUsernameValid = false
+            help.textContent = "Username must contain a single '#' followed by a 4 digits number"
+            element.setAttribute("class", "form-control is-invalid")
+        }
+        
+        updateRegisterButton()
+    }
+    
+    function registerPasswordOnChange(element, confirmationElement, help, confirmHelp) {
+        if (element.value.match("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@@$%^&*-]).{8,}$") != null) // https://stackoverflow.com/a/19605207/14915997
+        {
+            registerPassValid = true
+            help.textContent = ""
+            element.setAttribute("class", "form-control is-valid")
+        }
+        else
+        {
+            registerPassValid = false
+            help.textContent = "Password must be at least 8 characters long, containing a uppercase and lowercase letter, a number and a special character"
+            element.setAttribute("class", "form-control is-invalid")
+        }
+        
+        if (element.value === confirmationElement.value)
+        {
+            registerConfirmPassValid = true
+            confirmHelp.textContent = ""
+            confirmationElement.setAttribute("class", "form-control is-valid")
+        }
+        else
+        {
+            registerConfirmPassValid = false
+            confirmHelp.textContent = "Passwords do not match"
+            confirmationElement.setAttribute("class", "form-control is-invalid")
+        }
+        
+        updateRegisterButton()
+    }
+    
+    function loginUsernameOnChange(element, help) {
+        if (checkUsername(element.value))
+        {
+            loginUsernameValid = true
+            element.setAttribute("class", "form-control is-valid")
+        }
+        else
+        {
+            loginUsernameValid = false
+            element.setAttribute("class", "form-control is-invalid")
+        }
+        
+        updateLoginButton()
+    }
+    
+    function loginPasswordOnChange(element) {
+        if (element.value !== "")
+        {
+            loginPassValid = true
+            element.setAttribute("class", "form-control is-valid")
+        }
+        else
+        {
+            loginPassValid = false
+            element.setAttribute("class", "form-control is-invalid")
+        }
+        
+        updateLoginButton()
+    }
+    
     function register() {
         $.ajax({
             type: 'POST',
             url: '?handler=Register',
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ 
-                Email: document.getElementById("exampleInputEmail1").value,
-                Username: document.getElementById("exampleInputUsername1").value,
-                Password: document.getElementById("exampleInputPassword1").value,
-                PasswordConfirmation: document.getElementById("exampleInputConfirmPassword1").value,
+                Email: get("exampleInputEmail1").value,
+                Username: get("exampleInputUsername1").value,
+                Password: get("exampleInputPassword1").value,
+                PasswordConfirmation: get("exampleInputConfirmPassword1").value,
             }),
             success: function (data) {
                 console.log("Success: " + data);
@@ -61,8 +215,8 @@
             url: '?handler=Login',
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ 
-                Email: document.getElementById("exampleInputEmail2").value,
-                Password: document.getElementById("exampleInputPassword2").value,
+                Email: get("exampleInputEmail2").value,
+                Password: get("exampleInputPassword2").value,
             }),
             success: function (data) {
                 console.log("Success: " + data);
@@ -81,40 +235,42 @@
             <span class="title-font" id="attractRegister">Register</span>
             <div class="form-group">
                 <label for="exampleInputEmail1">Email:</label>
-                <input name="registerInputEmail" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                <input oninput="emailOnChange(get('exampleInputEmail1'), get('emailHelp'))" onchange="emailOnChange(get('exampleInputEmail1'), get('emailHelp'))" name="registerInputEmail" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                 <small id="emailHelp" class="form-text text-muted">You use this email to log into the site.</small>
             </div>
             <div class="form-group">
                 <label for="exampleInputUsername1">Username:</label>
-                <input name="registerInputUsername" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp" placeholder="Enter username">
-                <small id="emailHelp" class="form-text text-muted">This is what you will be known as on the RoboRecords.</small>
+                <input oninput="registerUsernameOnChange(get('exampleInputUsername1'), get('usernameHelp'))" onchange="registerUsernameOnChange(get('exampleInputUsername1'), get('usernameHelp'))" name="registerInputUsername" class="form-control" id="exampleInputUsername1" aria-describedby="emailHelp" placeholder="Enter username">
+                <small id="usernameHelp" class="form-text text-muted">This is what you will be known as on the RoboRecords.</small>
             </div>
 
             <div class="form-group">
                 <label for="exampleInputPassword1">Password:</label>
-                <input name="registerInputPassword" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-
+                <input oninput="registerPasswordOnChange(get('exampleInputPassword1'), get('exampleInputConfirmPassword1'), get('passwordHelp'), get('confirmPasswordHelp'))" onchange="registerPasswordOnChange(get('exampleInputPassword1'), get('exampleInputConfirmPassword1'), get('passwordHelp'), get('confirmPasswordHelp'))" name="registerInputPassword" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                <small id="passwordHelp" class="form-text text-muted"></small>
             </div>
             <div class="form-group">
                 <label for="exampleInputConfirmPassword1">Confirm Password:</label>
-                <input name="registerInputConfirmPassword" type="password" class="form-control" id="exampleInputConfirmPassword1" placeholder="Confirmation Password" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+                <input oninput="registerPasswordOnChange(get('exampleInputPassword1'), get('exampleInputConfirmPassword1'), get('passwordHelp'), get('confirmPasswordHelp'))" onchange="registerPasswordOnChange(get('exampleInputPassword1'), get('exampleInputConfirmPassword1'), get('passwordHelp'), get('confirmPasswordHelp'))" name="registerInputConfirmPassword" type="password" class="form-control" id="exampleInputConfirmPassword1" placeholder="Confirmation Password" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+                <small id="confirmPasswordHelp" class="form-text text-muted"></small>
             </div>
             <hr size="2" width="100%" color="red">
-            <button onclick="register()" asp class="btn col-sm-4 col-sm-offset-4 btn-orange btn-lg">Register</button>
+            <button onclick="register()" id="registerButton" asp class="btn col-sm-4 col-sm-offset-4 btn-orange btn-lg" disabled>Register</button>
         </div>
         <div id="loginBox" class="col-md-6">
             <label class="title-font" id="attractLogin">Login</label>
 
             <div class="form-group">
                 <label for="exampleInputEmail2">Email/Username:</label>
-                <input name="loginInputUsername" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Email/Username">
+                <input oninput="loginUsernameOnChange(get('exampleInputEmail2'), get('usernameHelp2'))" onchange="loginUsernameOnChange(get('exampleInputEmail2'), get('usernameHelp2'))" name="loginInputUsername" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Email/Username">
+                <small id="usernameHelp2" class="form-text text-muted"></small>
             </div>
 
             <div class="form-group">
                 <label for="exampleInputPassword2">Password:</label>
-                <input name="loginInputPassword" type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                <input oninput="loginPasswordOnChange(get('exampleInputPassword2'))" onchange="loginPasswordOnChange(get('exampleInputPassword2'))" name="loginInputPassword" type="password" class="form-control" id="exampleInputPassword2" placeholder="Password">
             </div>
-            <button onclick="login()" class="btn col-sm-4 col-sm-offset-4 btn-blue btn-lg">Login</button>
+            <button onclick="login()" class="btn col-sm-4 col-sm-offset-4 btn-blue btn-lg" id="loginButton" disabled>Login</button>
         </div>
     </div>
 </div>
