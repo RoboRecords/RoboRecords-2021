@@ -39,6 +39,50 @@
     <input type="button" onclick="location.href='@String.Format("/Submit?game={0}", Map.CurrentGame.UrlName)';" value="Submit a replay" /><br><br>
     
 </div>
+
+<script type="text/javascript">
+function downloadReplay(record)
+{    
+    console.log(record)
+    
+    $.ajax({
+        type: 'POST',
+        url: '?handler=Replay',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({ 
+            DbId: record
+        }),
+        success: function (data, textStatus, request) {
+            // File download, a lot of help and copy-pasted code from https://www.stefanjudis.com/snippets/how-trigger-file-downloads-with-javascript/
+            let disposition = request.getResponseHeader("content-disposition");
+            let filename_start = disposition.indexOf("filename=") + "filename=".length;
+            let string_from_filename = disposition.substr(filename_start, disposition.length);
+            let filename_end = string_from_filename.indexOf(";");
+            let filename = string_from_filename.substr(0, filename_end);
+            
+            makeFile = function (text) {
+                let f = new Blob([text], {type: 'text/plain'});
+                return window.URL.createObjectURL(f);
+            }
+            let link = document.createElement('a');
+            link.setAttribute('download', filename);
+            link.style.display = "none";
+            link.href = makeFile(data);
+            link.innerHTML = "Download " + filename;
+            document.body.appendChild(link);
+            link.click();
+            
+            setTimeout(() => {
+                URL.revokeObjectURL(link.href);
+                link.parentNode.removeChild(link);
+            }, 0);
+        },
+        error: function (error) {
+        }
+    })
+}
+</script>
+
 <div style="position: center">
     <table style="margin: auto">
         <tr class="title-font" style="text-align: center">
@@ -88,7 +132,7 @@
                         @record.UploadTime.ToString("d")
                     </td>
                     <td>
-                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                        <a onclick="downloadReplay(@record.DbId)" href="#">
                             <img class="icon-link" src="../assets/images/icons/download.png" alt="DL" width="32px">
                         </a>
                     </td>

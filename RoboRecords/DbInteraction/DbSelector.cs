@@ -14,6 +14,18 @@ namespace RoboRecords.DbInteraction
 {
     public class DbSelector
     {
+        public static bool TryGetRoboRecordFromDbId(int dbId, out RoboRecord record)
+        {
+            record = null;
+            
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                record = context.RoboRecords.FirstOrDefault(x => x.DbId == dbId);
+            }
+
+            return record != null;
+        }
+        
         public static bool TryGetAllGameData(out List<RoboGame> roboGames)
         {
             roboGames = new List<RoboGame>();

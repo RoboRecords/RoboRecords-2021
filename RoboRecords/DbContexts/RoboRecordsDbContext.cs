@@ -85,6 +85,8 @@ namespace RoboRecords.DatabaseContexts
                 entity.Property(e => e.UploadTime).IsRequired();
 
                 entity.Property(e => e.LevelNumber).IsRequired();
+
+                entity.Property(e => e.FileBytes).IsRequired();
             });
         }
     }

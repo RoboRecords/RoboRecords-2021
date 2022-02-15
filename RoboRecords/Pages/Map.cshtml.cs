@@ -3,7 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
+using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Mvc;
+using Renci.SshNet.Messages.Authentication;
 // using RoboRecords.DatabaseContexts;
 using RoboRecords.DbInteraction; // Initiative to move all database interactions to one place. --- Zenya
 using RoboRecords.Models;
@@ -11,19 +15,65 @@ using RoboRecords.Models;
 
 namespace RoboRecords.Pages
 {
+    [IgnoreAntiforgeryToken(Order = 2000)]
     public class Map : RoboPageModel
     {
         public static RoboGame CurrentGame;
         public static RoboLevel CurrentLevel;
-        // private List<RoboGame> _roboGames;
+
+        public RoboRecord RecordToDownload { get; set; }
+
+        public static byte[] RecordToDownloadBytes;
+
+            // private List<RoboGame> _roboGames;
 
         // Initiative to move all database interactions to one place. --- Zenya
         
         //private RoboRecordsDbContext _dbContext;
-
+        
         public Map(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
         }
+
+        public class DownloadReplayData
+        {
+            public int DbId { get; set; }
+            
+            public string Hello { get; set; }
+        }
+
+        public IActionResult OnPostReplay([FromBody] DownloadReplayData data)
+        {
+            if (DbSelector.TryGetRoboRecordFromDbId(data.DbId, out RoboRecord record))
+            {
+                var cd = new System.Net.Mime.ContentDisposition
+                {
+                    FileName = record.GetFileName(),
+                    Inline = true,
+                };
+                
+                RecordToDownload = record;
+                byte[] bytes = record.FileBytes;
+                
+                Response.Headers.Add("Content-Disposition", cd.ToString());
+                return File(bytes, "application/octet-stream", record.GetFileName());
+            }
+
+            return BadRequest("Bad request");
+        }
+        
+        /*
+        public IActionResult OnGetReplay([FromBody] DownloadReplayData data)
+        {
+            if (DbSelector.TryGetRoboRecordFromDbId(data.DbId, out RoboRecord record))
+            {
+                FileManager.Read($"/Replays/{data.DbId}.lmp", out RecordToDownloadBytes);
+                return Content("success ig lol");
+            }
+
+            return BadRequest("idk");
+        }
+        */
         
         public void OnGet()
         {
