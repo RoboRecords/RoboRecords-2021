@@ -34,6 +34,7 @@ namespace RoboRecords.Pages
         [BindProperty]
         public ReplayUploadDb FileUpload { get; set; }
         public static RoboGame Game;
+        public static bool UserLoggedIn;
 
         public Submit(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
@@ -59,6 +60,8 @@ namespace RoboRecords.Pages
                 // SRB2 2.2 default for testing. Should be changed to throw an error.
                 Game = roboGames.Find(game => game.UrlName == "sonicroboblast2v22");
             }
+
+            UserLoggedIn = IsLoggedIn;
         }
 
         public IActionResult OnPostAsync(ReplayUploadDb fileUpload)

@@ -16,104 +16,119 @@
     <title>Submit</title>
 </head>
 <body>
-<div>
-    Please submit a replay.<br>
-    Game: @Submit.Game.Name
-</div>
-<div class="container">
-    <form enctype="multipart/form-data" method="post">
-        <dl>
-            <dt>
-                <label asp-for="FileUpload.FormFiles"></label>
-            </dt>
-            <dd>
-                <input asp-for="FileUpload.FormFiles" type="file" multiple />
-                <span asp-validation-for="FileUpload"></span>
-            </dd>
-        </dl>
-        <input asp-page-handler="Post" type="submit" value="Submit" />
-        
-    </form>
-    Submissions:
-    @if (Submit.RecordList.Count > 0)
-    {
-        <div>
-        <table>
-            <tr class="title-font" style="text-align: center">
-                <th style="font-weight: unset">
+@if (Submit.UserLoggedIn)
+{
+    <div>
+        Please submit a replay.<br>
+        Game: @Submit.Game.Name
+    </div>
+}
+else
+{
+    <div>
+        Please log in to submit a replay.<br>
+        <input type="button" onclick="location.href='/Login'" value="Log in"/>
+    </div>
+}
 
-                </th>
-                <th style="font-weight: unset">
-                    Level
-                </th>
-                <th style="font-weight: unset">
-                    Time
-                </th>
-                <th style="font-weight: unset">
-                    Version
-                </th>
-                <th style="font-weight: unset">
-                    
-                </th>
-            </tr>
+@if (Submit.UserLoggedIn)
+{
+    <div class="container">
+        <form enctype="multipart/form-data" method="post">
+            <dl>
+                <dt>
+                    <label asp-for="FileUpload.FormFiles"></label>
+                </dt>
+                <dd>
+                    <input asp-for="FileUpload.FormFiles" type="file" multiple/>
+                    <span asp-validation-for="FileUpload"></span>
+                </dd>
+            </dl>
+            <input asp-page-handler="Post" type="submit" value="Submit"/>
 
-            @for (var recordCount = 0; recordCount < Submit.RecordList.Count; recordCount++)
-            {
-                var record = Submit.RecordList[recordCount];
-                RoboGame roboGame = Submit.Game;
-                var level = roboGame.GetLevelByNumber(record.LevelNumber);
-                if (level != null)
-                {
-                    var levelString = level.LevelName + " " + level.Act;
+        </form>
+        Submissions:
+        @if (Submit.RecordList.Count > 0)
+        {
+            <div>
+                <table>
                     <tr class="title-font" style="text-align: center">
                         <th style="font-weight: unset">
-                            @if (record.Character != null)
-                            {
-                                <img src=@record.Character.IconUrl alt=@record.Character.Name width="32px">
-                            }
+
                         </th>
                         <th style="font-weight: unset">
-                            @levelString
+                            Level
                         </th>
                         <th style="font-weight: unset">
-                            <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span>
+                            Time
                         </th>
                         <th style="font-weight: unset">
-                            @record.VersionString
+                            Version
                         </th>
                         <th style="font-weight: unset">
-                            <form asp-page-handler="delete" method="post">
-                                <button>X</button>
-                                <input type="hidden" name="rec" value="@recordCount" />
-                            </form>
+
                         </th>
                     </tr>
-                }
-            }
-            <tr>
-                <td colspan="5" style="alignment: right">
-                    <form enctype="multipart/form-data" method="post">
-                        <input asp-page-handler="Cancel" type="submit" value="Cancel" />
-                        <input asp-page-handler="Upload" type="submit" value="Upload to leaderboards" />
-                    </form>
-                </td>
-            </tr>
 
-        </table>
+                    @for (var recordCount = 0; recordCount < Submit.RecordList.Count; recordCount++)
+                    {
+                        var record = Submit.RecordList[recordCount];
+                        RoboGame roboGame = Submit.Game;
+                        var level = roboGame.GetLevelByNumber(record.LevelNumber);
+                        if (level != null)
+                        {
+                            var levelString = level.LevelName + " " + level.Act;
+                            <tr class="title-font" style="text-align: center">
+                                <th style="font-weight: unset">
+                                    @if (record.Character != null)
+                                    {
+                                        <img src=@record.Character.IconUrl alt=@record.Character.Name width="32px">
+                                    }
+                                </th>
+                                <th style="font-weight: unset">
+                                    @levelString
+                                </th>
+                                <th style="font-weight: unset">
+                                    <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span>
+                                </th>
+                                <th style="font-weight: unset">
+                                    @record.VersionString
+                                </th>
+                                <th style="font-weight: unset">
+                                    <form asp-page-handler="delete" method="post">
+                                        <button>X</button>
+                                        <input type="hidden" name="rec" value="@recordCount"/>
+                                    </form>
+                                </th>
+                            </tr>
+                        }
+                    }
+                    <tr>
+                        <td colspan="5" style="alignment: right">
+                            <form enctype="multipart/form-data" method="post">
+                                <input asp-page-handler="Cancel" type="submit" value="Cancel"/>
+                                <input asp-page-handler="Upload" type="submit" value="Upload to leaderboards"/>
+                            </form>
+                        </td>
+                    </tr>
 
-        </div>
+                </table>
 
-    }
-    else
-    {
-        <p>
-            No submission yet. Please submit a replay.
-        </p>
-    }
+            </div>
+
+        }
+        else
+        {
+            <p>
+                No submission yet. Please submit a replay.
+            </p>
+        }
+    </div>
+}
 
 
 
-</div>
+
 </body>
 <style>
     body {
