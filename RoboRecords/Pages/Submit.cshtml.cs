@@ -131,8 +131,8 @@ namespace RoboRecords.Pages
                         }
                         else
                         {
-                            level.Records.Remove(levelRecord);
-                            DbDeleter.DeleteRoboRecord(levelRecord);
+                            //level.Records.Remove(levelRecord);
+                            //DbDeleter.DeleteRoboRecord(levelRecord);
                         }
                         break;
                     }
@@ -140,6 +140,7 @@ namespace RoboRecords.Pages
 
                 if (isBest)
                 {
+                    
                     DbInserter.AddRecordToLevel(record, level);
                 }
             }

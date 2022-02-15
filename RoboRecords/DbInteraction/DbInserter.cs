@@ -15,7 +15,9 @@ namespace RoboRecords.DbInteraction
             // UPDATE the submitted RoboGame with the submitted RoboLevel
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
+                context.Entry(level).State = EntityState.Modified;
                 level.Records.Add(record);
+                //context.Entry(record).State = EntityState.Detached;
                 context.RoboLevels.Update(level);
                 context.SaveChangesAsync();
             }
