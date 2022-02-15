@@ -17,7 +17,8 @@
 </head>
 <body>
 <div>
-    Please submit a replay.
+    Please submit a replay.<br>
+    Game: @Submit.Game.Name
 </div>
 <div class="container">
     <form enctype="multipart/form-data" method="post">
@@ -116,9 +117,10 @@
 </body>
 <style>
     body {
-      background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/vanillabg.png');
-            background-size: cover;
-            background-repeat: no-repeat;
+      background: linear-gradient( rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 75) ), url(@Submit.Game.IconPath) center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
     }
     
     

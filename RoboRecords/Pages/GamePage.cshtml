@@ -22,7 +22,8 @@
 <html lang="en">
 <div class="text-center">
     <h1 class="title-font">@GamePage.CurrentGame.Name</h1>
-    <h2 class="lead">Some nice info text</h2>
+    <h2 class="lead">Click a level to see all of its records!</h2>
+    <input type="button" onclick="location.href='@String.Format("/Submit?game={0}", GamePage.CurrentGame.UrlName)';" value="Submit a replay" />
 </div>
 <body class="">
 
