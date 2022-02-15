@@ -14,6 +14,41 @@
 @{
     ViewData["Title"] = "Login";
 }
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalTitleText" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #d13532">
+                <h5 class="modal-title" id="errorModalTitleText" ></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="errorModalBodyText" class="modal-body" style="background-color: #303030"></div>
+            <div class="modal-footer" style="background-color: #303030">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="registerSuccessModal" tabindex="-1" role="dialog" aria-labelledby="registerSuccessModalTitleText" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #0bd13b">
+        <h5 class="modal-title" id="registerSuccessModalTitleText"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="registerSuccessModalBodyText" class="modal-body" style="background-color: #303030"></div>
+      <div class="modal-footer" style="background-color: #303030">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
     <div>
         @if (Model.IsLoggedIn)
@@ -94,9 +129,14 @@
         return valid
     }
     
+    const validateEmail = (email) => { // https://stackoverflow.com/a/46181/14915997
+      return email.match(
+        /^(([^<>()[\]\\.,;:\s@@\"]+(\.[^<>()[\]\\.,;:\s@@\"]+)*)|(\".+\"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+    };
+    
     function emailOnChange(element, help) {
-        // FIXME: Use a more robust email verification
-        if (element.value.includes('@@'))
+        if (validateEmail(element.value))
         {
             registerEmailValid = true
             element.setAttribute("class", "form-control is-valid")
@@ -200,12 +240,23 @@
                 PasswordConfirmation: get("exampleInputConfirmPassword1").value,
             }),
             success: function (data) {
-                console.log("Success: " + data);
-                location.reload();
+                get("registerSuccessModalTitleText").textContent = "Registration successful!"
+                get("registerSuccessModalBodyText").innerHTML = "You successfully registered to the website.<br><br>You now need to confirm your account by clicking the link sent to your email address"
+                $('#registerSuccessModal').modal()
             },
             error: function (error) {
-                // TODO: Inform the user of the outcome.
-                console.log("Error: " + error);
+                try 
+                {
+                    get("errorModalTitleText").textContent = "Register error"
+                    get("errorModalBodyText").innerHTML = "An error occured during the registration:<br><br>" + error.responseJSON[0].description
+                }
+                catch (exception)
+                {
+                    get("errorModalTitleText").textContent = "Internal server error"
+                    get("errorModalBodyText").innerHTML = "An internal error occured during the registration"
+                }
+                    
+                $('#errorModal').modal()
             }
         })
     }
@@ -219,12 +270,21 @@
                 Password: get("exampleInputPassword2").value,
             }),
             success: function (data) {
-                console.log("Success: " + data);
                 location.reload();
             },
             error: function (error) {
-                // TODO: Inform the user of the outcome.
-                console.log("Error: " + error);
+                try 
+                {
+                    get("errorModalTitleText").textContent = "Login error"
+                    get("errorModalBodyText").innerHTML = "An error occured during the login:<br><br>" + error.responseText
+                }
+                catch (exception)
+                {
+                    get("errorModalTitleText").textContent = "Internal server error"
+                    get("errorModalBodyText").innerHTML = "An internal error occured during the registration"
+                }
+                
+                $('#errorModal').modal()
             }
         })
     }

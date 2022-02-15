@@ -61,7 +61,6 @@ namespace RoboRecords.Pages
 
             if (password != confirmedPassword)
             {
-                Console.WriteLine("not the same passwords");
                 return BadRequest("Password Confirmation Error");
             }
 
@@ -80,12 +79,14 @@ namespace RoboRecords.Pages
             
             // TODO: Move this to RoboUserManager
             // Try to create new IdentityUser and if it succeeds, create a RoboUser with the same username.
-            if (_roboUserManager.Create(email, username, discriminator, password).Succeeded)
+            IdentityResult userCreationResult = _roboUserManager.Create(email, username, discriminator, password);
+            if (userCreationResult.Succeeded)
             {
                 DbInserter.AddRoboUser(new RoboUser(username, discriminator));
+                return Content("Success");
             }
 
-            return Content("Success");
+            return BadRequest(userCreationResult.Errors);
         }
         
         public class LoginData
@@ -116,6 +117,9 @@ namespace RoboRecords.Pages
             // IdentityUser has discrim included in username
             DbSelector.TryGetIdentityUserFromUserName(usernamewithdiscrim, out IdentityRoboUser userToLogin);
 
+            if (userToLogin == null)
+                return BadRequest("No user with this username / discriminator combination was found");
+
             SignInResult result = _signInManager.PasswordSignInAsync(userToLogin, password, true, false).Result;
             
             if (result.Succeeded)
@@ -125,7 +129,7 @@ namespace RoboRecords.Pages
                 return Content("Success");
             }
             
-            return BadRequest("Wrong Email / Password combination");
+            return BadRequest("The password for this user is invalid");
         }
     }
 }
