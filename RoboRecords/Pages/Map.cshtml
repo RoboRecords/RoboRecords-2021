@@ -111,11 +111,14 @@ function downloadReplay(record)
 }
 </script>
 
+
 <div style="position: center">
+@if (!Map.CurrentLevel.Nights)
+{
     <table style="margin: auto">
         <tr class="title-font" style="text-align: center">
             <th style="font-weight: unset">
-                
+
             </th>
             <th style="font-weight: unset">
                 Player
@@ -130,7 +133,7 @@ function downloadReplay(record)
                 Date
             </th>
             <th>
-                
+
             </th>
         </tr>
         @foreach (var character in CharacterManager.StandardCharacters)
@@ -139,8 +142,8 @@ function downloadReplay(record)
             if (record != null)
             {
                 var listName = "list_" + character.NameId;
-                
-                
+
+
                 <tr>
                     <td class="row-link" onclick="toggle('@listName')">
                         <img src=@character.IconUrl alt=@character.Name width="32px"> @character.Name
@@ -165,7 +168,7 @@ function downloadReplay(record)
                         </a>
                     </td>
                 </tr>
-                
+
                 <tr style="margin: 0; height: 0"></tr>
                 <tr class="hide-at-start" style="text-align: center;" id=@listName>
                     <td colspan="6">
@@ -232,7 +235,137 @@ function downloadReplay(record)
             </td>
         </tr>
     </table>
+}
+else
+{
+    <h2 class="title-font" style="text-align: center;">Time records</h2>
+    <table style="margin: auto">
+        <tr class="title-font" style="text-align: center">
+            <th style="font-weight: unset">
+
+            </th>
+            <th style="font-weight: unset">
+                Player
+            </th>
+            <th style="font-weight: unset">
+                Time
+            </th>
+            <th style="font-weight: unset">
+                Version
+            </th>
+            <th style="font-weight: unset">
+                Date
+            </th>
+            <th>
+
+            </th>
+        </tr>
+        @foreach (var record in Map.CurrentLevel.GetAllBestTimes())
+        {
+            if (record != null)
+            {
+                var listName = "list_" + record.Character.NameId;
+
+
+                <tr>
+                    <td>
+                        <img src=@record.Character.IconUrl alt=@record.Character.Name width="32px">
+                    </td>
+                    <td>
+                        <a href=@String.Format("/Users/{0}", record.Uploader.DbId) style="color: white;">
+                            @record.Uploader.UserNameNoDiscrim
+                        </a>
+                    </td>
+                    <td style="text-align: right">
+                        <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span>
+                    </td>
+                    <td>
+                        @record.VersionString
+                    </td>
+                    <td>
+                        @record.UploadTime.ToString("d")
+                    </td>
+                    <td>
+                        <a onclick="downloadReplay(@record.DbId)" href="#">
+                            <img class="icon-link" src="../assets/images/icons/download.png" alt="DL" width="32px">
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        <tr>
+            <td colspan="6">
+                    
+            </td>
+        </tr>
+    </table>
+        
+    <h2 class="title-font" style="text-align: center;">Score records</h2>
+        
+    <table style="margin: auto">
+        <tr class="title-font" style="text-align: center">
+            <th style="font-weight: unset">
+
+            </th>
+            <th style="font-weight: unset">
+                Player
+            </th>
+            <th style="font-weight: unset">
+                Score
+            </th>
+            <th style="font-weight: unset">
+                Version
+            </th>
+            <th style="font-weight: unset">
+                Date
+            </th>
+            <th>
+
+            </th>
+        </tr>
+        @foreach (var record in Map.CurrentLevel.GetAllBestScores())
+        {
+            if (record != null)
+            {
+                var listName = "list_" + record.Character.NameId;
+
+
+                <tr>
+                    <td>
+                        <img src=@record.Character.IconUrl alt=@record.Character.Name width="32px">
+                    </td>
+                    <td>
+                        <a href=@String.Format("/Users/{0}", record.Uploader.DbId) style="color: white;">
+                            @record.Uploader.UserNameNoDiscrim
+                        </a>
+                    </td>
+                    <td style="text-align: right">
+                        @record.Score
+                    </td>
+                    <td>
+                        @record.VersionString
+                    </td>
+                    <td>
+                        @record.UploadTime.ToString("d")
+                    </td>
+                    <td>
+                        <a onclick="downloadReplay(@record.DbId)" href="#">
+                            <img class="icon-link" src="../assets/images/icons/download.png" alt="DL" width="32px">
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        <tr>
+            <td colspan="6">
+                    
+            </td>
+        </tr>
+    </table>
+}
 </div>
+<br/>
+<br/>
 
 </body>
 

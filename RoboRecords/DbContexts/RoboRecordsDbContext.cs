@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using RoboRecords.Models;
 
@@ -63,6 +64,7 @@ namespace RoboRecords.DatabaseContexts
                 entity.HasMany(e => e.Records);
                 entity.Property(e => e.LevelName).IsRequired();
                 entity.Property(e => e.Act).IsRequired();
+                entity.Property(e => e.Nights).IsRequired();
             });
 
             modelBuilder.Entity<RoboCharacter>(entity =>

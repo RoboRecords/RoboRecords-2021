@@ -43,6 +43,8 @@ namespace RoboRecords.Models
         // Read-only, changed by changing the map number
         public string MapString => _mapString;
 
+        public bool Nights;
+        
         private const int MaxLevelNumber = 1035;
         public static string MakeMapString(int levelNumber)
         {
@@ -145,6 +147,11 @@ namespace RoboRecords.Models
             return (int)a.Tics - (int)b.Tics;
         }
 
+        int SortByScore(RoboRecord a, RoboRecord b)
+        {
+            return (int)b.Score - (int)a.Score;
+        }
+        
         public List<RoboRecord> GetCharacterRecords(RoboCharacter character)
         {
             // Add all the records done with a character to a list
@@ -169,11 +176,52 @@ namespace RoboRecords.Models
             return records;
         }
 
-        public RoboLevel(int levelNumber, string levelName, int act)
+        public List<RoboRecord> GetAllBestTimes()
+        {
+            // Add all the records to a list
+            List<RoboRecord> allRecords = Records.ToList();
+            // Sort the list of all records for the next part
+            allRecords.Sort(SortByTime);
+
+            // Add only the first, meaning best times by each player to the record list.
+            var records = new List<RoboRecord>();
+            foreach (var record in allRecords)
+            {
+                if (records.FindIndex(rec => rec.Uploader.UserNameNoDiscrim == record.Uploader.UserNameNoDiscrim && rec.Uploader.Discriminator == record.Uploader.Discriminator) == -1)
+                {
+                    records.Add(record);
+                }
+            }
+
+            return records;
+        }
+
+        public List<RoboRecord> GetAllBestScores()
+        {
+            // Add all the records to a list
+            List<RoboRecord> allRecords = Records.ToList();
+            // Sort the list of all records for the next part
+            allRecords.Sort(SortByScore);
+
+            // Add only the first, meaning best times by each player to the record list.
+            var records = new List<RoboRecord>();
+            foreach (var record in allRecords)
+            {
+                if (records.FindIndex(rec => rec.Uploader.UserNameNoDiscrim == record.Uploader.UserNameNoDiscrim && rec.Uploader.Discriminator == record.Uploader.Discriminator) == -1)
+                {
+                    records.Add(record);
+                }
+            }
+
+            return records;
+        }
+        
+        public RoboLevel(int levelNumber, string levelName, int act, bool nights = false)
         {
             LevelNumber = levelNumber;
             LevelName = levelName;
             Act = act;
+            Nights = nights;
             Records = new List<RoboRecord>();
 
             // REPLACE WITH SOME DATA BASE STUFF LATER!!!
