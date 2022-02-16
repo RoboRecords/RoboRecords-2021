@@ -38,13 +38,12 @@ namespace RoboRecords.Pages
         public class DownloadReplayData
         {
             public int DbId { get; set; }
-            
-            public string Hello { get; set; }
         }
-
-        public IActionResult OnPostReplay([FromBody] DownloadReplayData data)
+        
+        public IActionResult OnGetReplay([FromBody] DownloadReplayData data)
         {
-            if (DbSelector.TryGetRoboRecordFromDbId(data.DbId, out RoboRecord record))
+            Console.WriteLine("GET called");
+            if (DbSelector.TryGetRoboRecordFromDbId(80, out RoboRecord record))
             {
                 var cd = new System.Net.Mime.ContentDisposition
                 {
@@ -55,25 +54,14 @@ namespace RoboRecords.Pages
                 RecordToDownload = record;
                 byte[] bytes = record.FileBytes;
                 
+                Console.WriteLine("GET success");
                 Response.Headers.Add("Content-Disposition", cd.ToString());
                 return File(bytes, "application/octet-stream", record.GetFileName());
             }
 
+            Console.WriteLine("GET net success");
             return BadRequest("Bad request");
         }
-        
-        /*
-        public IActionResult OnGetReplay([FromBody] DownloadReplayData data)
-        {
-            if (DbSelector.TryGetRoboRecordFromDbId(data.DbId, out RoboRecord record))
-            {
-                FileManager.Read($"/Replays/{data.DbId}.lmp", out RecordToDownloadBytes);
-                return Content("success ig lol");
-            }
-
-            return BadRequest("idk");
-        }
-        */
         
         public void OnGet()
         {

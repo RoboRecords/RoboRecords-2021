@@ -45,20 +45,22 @@ function downloadReplay(record)
 {    
     console.log(record)
     
-    $.ajax({
-        type: 'POST',
-        url: '?handler=Replay',
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify({ 
-            DbId: record
-        }),
-        success: function (data, textStatus, request) {
+    let oReq = new XMLHttpRequest();
+    oReq.open("GET", '?handler=Replay', true);
+    oReq.responseType = "arraybuffer";
+    
+    let filename = "replay.lmp";
+    
+    oReq.onload = function (oEvent) {
+        let data = oReq.response; // Note: not oReq.responseText
+        if (data) {
+            let byteArray = new Uint8Array(data);
             // File download, a lot of help and copy-pasted code from https://www.stefanjudis.com/snippets/how-trigger-file-downloads-with-javascript/
-            let disposition = request.getResponseHeader("content-disposition");
-            let filename_start = disposition.indexOf("filename=") + "filename=".length;
-            let string_from_filename = disposition.substr(filename_start, disposition.length);
-            let filename_end = string_from_filename.indexOf(";");
-            let filename = string_from_filename.substr(0, filename_end);
+            //let disposition = request.getResponseHeader("content-disposition");
+            //let filename_start = disposition.indexOf("filename=") + "filename=".length;
+            //let string_from_filename = disposition.substr(filename_start, disposition.length);
+            //let filename_end = string_from_filename.indexOf(";");
+            //let filename = string_from_filename.substr(0, filename_end);
             
             makeFile = function (text) {
                 let f = new Blob([text], {type: 'text/plain'});
@@ -67,7 +69,7 @@ function downloadReplay(record)
             let link = document.createElement('a');
             link.setAttribute('download', filename);
             link.style.display = "none";
-            link.href = makeFile(data);
+            link.href = makeFile(byteArray);
             link.innerHTML = "Download " + filename;
             document.body.appendChild(link);
             link.click();
@@ -76,10 +78,36 @@ function downloadReplay(record)
                 URL.revokeObjectURL(link.href);
                 link.parentNode.removeChild(link);
             }, 0);
-        },
-        error: function (error) {
         }
-    })
+    };
+    
+    oReq.onreadystatechange = function() {
+        if(this.readyState === this.HEADERS_RECEIVED) {
+            // File download, a lot of help and copy-pasted code from https://www.stefanjudis.com/snippets/how-trigger-file-downloads-with-javascript/
+            let disposition = oReq.getResponseHeader("content-disposition");
+            let filename_start = disposition.indexOf("filename=") + "filename=".length;
+            let string_from_filename = disposition.substr(filename_start, disposition.length);
+            let filename_end = string_from_filename.indexOf(";");
+            filename = string_from_filename.substr(0, filename_end);
+        }
+    }
+    
+    
+    oReq.send(null);
+    
+    // $.ajax({
+    //     type: 'POST',
+    //     url: '?handler=Replay',
+    //     contentType: "blob",
+    //     data: JSON.stringify({ 
+    //         DbId: record
+    //     }),
+    //     success: function (data, textStatus, request) {
+    //
+    //     },
+    //     error: function (error) {
+    //     }
+    // })
 }
 </script>
 
