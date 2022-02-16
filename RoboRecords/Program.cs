@@ -32,6 +32,7 @@ namespace RoboRecords
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    Logger.Log("init");
                 });
     }
 }
