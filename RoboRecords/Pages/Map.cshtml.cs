@@ -40,10 +40,9 @@ namespace RoboRecords.Pages
             public int DbId { get; set; }
         }
         
-        public IActionResult OnGetReplay([FromBody] DownloadReplayData data)
+        public IActionResult OnPostReplay([FromBody] DownloadReplayData data)
         {
-            Console.WriteLine("GET called");
-            if (DbSelector.TryGetRoboRecordFromDbId(80, out RoboRecord record))
+            if (DbSelector.TryGetRoboRecordFromDbId(data.DbId, out RoboRecord record))
             {
                 var cd = new System.Net.Mime.ContentDisposition
                 {

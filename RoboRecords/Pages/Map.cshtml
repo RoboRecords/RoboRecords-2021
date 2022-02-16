@@ -46,7 +46,7 @@ function downloadReplay(record)
     console.log(record)
     
     let oReq = new XMLHttpRequest();
-    oReq.open("GET", '?handler=Replay', true);
+    oReq.open("POST", '?handler=Replay', true);
     oReq.responseType = "arraybuffer";
     
     let filename = "replay.lmp";
@@ -92,8 +92,8 @@ function downloadReplay(record)
         }
     }
     
-    
-    oReq.send(null);
+    oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    oReq.send(JSON.stringify({DbId: record}));
     
     // $.ajax({
     //     type: 'POST',
