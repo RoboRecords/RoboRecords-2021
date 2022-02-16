@@ -11,6 +11,8 @@ namespace RoboRecords
         {
             if (!Exists("UserAssets"))
                 CreateDirectory("UserAssets");
+            if (!Exists("Replays"))
+                CreateDirectory("Replays");
         }
 
         private static bool LocalTryAction(Action localAction)

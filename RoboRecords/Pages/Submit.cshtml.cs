@@ -143,8 +143,8 @@ namespace RoboRecords.Pages
 
                 if (isBest)
                 {
-                    
                     DbInserter.AddRecordToLevel(record, level);
+                    FileManager.Write(Path.Combine("Replays", $"{record.DbId}.lmp"), record.FileBytes);
                 }
             }
             
