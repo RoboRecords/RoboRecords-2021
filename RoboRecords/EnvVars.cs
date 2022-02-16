@@ -25,16 +25,6 @@ namespace RoboRecords
         public static void ParseEnvironmentVariables(IConfiguration configuration)
         {
             LogPath = ParseEnvironmentVariable(EnvLogPath, false, true, false, configuration, "Logs");
-        
-            if (IsDevelopment)
-            {
-                SftpKeyPath = ParseEnvironmentVariable(EnvSftpKeyPath, true, false, true, configuration);
-                SftpHost = ParseEnvironmentVariable(EnvSftpHost, false, false, true, configuration);
-                SftpUser = ParseEnvironmentVariable(EnvSftpUser, false, false, true, configuration, "root");
-                
-                return;
-            }
-                    
             DataPath = ParseEnvironmentVariable(EnvDataPath, false, true, true, configuration);
         }
 
