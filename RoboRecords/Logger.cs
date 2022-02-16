@@ -37,16 +37,7 @@ namespace RoboRecords
 
         static void WriteToLogFile(string message, LogLevel _logLevel, bool toConsole)
         {
-            // FIXME: Get this from configuration so it's not hardcoded
-            string logPath;
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                logPath = @"C:\temp\roborecords\";
-            else
-                logPath = @"~/roborecords/";
-
-            if (!Directory.Exists(logPath))
-                Directory.CreateDirectory(logPath);
+            string logPath = EnvVars.LogPath;
 
             string logLevel;
 
@@ -72,7 +63,7 @@ namespace RoboRecords
 
             string log = $"{now.ToString("yyyy-MM-dd HH:mm:ss")} | {logLevel} | {message}";
 
-            using (StreamWriter sw = new StreamWriter(logPath + $"roborecordslog-{now.ToString("yyyy-MM-dd")}.log", true))
+            using (StreamWriter sw = new StreamWriter(Path.Combine(logPath, $"roborecordslog-{now.ToString("yyyy-MM-dd")}.log"), true))
             {
                 sw.WriteLineAsync(log);
             }

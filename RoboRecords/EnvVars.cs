@@ -9,11 +9,13 @@ namespace RoboRecords
         private const string EnvPrefix = "RoboRecords_";
 
         private const string EnvDataPath = EnvPrefix + "DataPath";
+        private const string EnvLogPath = EnvPrefix + "LogPath";
         private const string EnvSftpKeyPath = EnvPrefix + "SftpKeyPath";
         private const string EnvSftpHost = EnvPrefix + "SftpHostAddress";
         private const string EnvSftpUser = EnvPrefix + "SftpUserName";
         
         public static string DataPath;
+        public static string LogPath;
         public static string SftpKeyPath;
         public static string SftpHost;
         public static string SftpUser;
@@ -22,6 +24,8 @@ namespace RoboRecords
 
         public static void ParseEnvironmentVariables(IConfiguration configuration)
         {
+            LogPath = ParseEnvironmentVariable(EnvLogPath, false, true, false, configuration, "Logs");
+        
             if (IsDevelopment)
             {
                 SftpKeyPath = ParseEnvironmentVariable(EnvSftpKeyPath, true, false, true, configuration);

@@ -134,6 +134,9 @@ namespace RoboRecords
                 endpoints.MapRazorPages();
                 endpoints.MapDefaultControllerRoute();
             });
+            
+            // NOTE: We are logging the initialization here because it needs to be after the EnvVars initialization
+            Logger.Log("init");
         }
     }
 }
