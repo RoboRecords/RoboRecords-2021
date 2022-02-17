@@ -22,15 +22,16 @@ namespace RoboRecords.Pages
 
         public void OnGet()
         {
-            // Test of record selection with accompanying data. Check console or log on run.
-            DbSelector.TryGetRoboRecordWithDataFromDbId(3, out RoboRecord record);
+            // Test of record selection. Check console or log on run.
+            DbSelector.TryGetRoboRecordFromDbId(12, out RoboRecord record);
 
-            string levelInfo = $"{record.Level.LevelGroup.RoboGame.Name} - {record.Level} - "
-                + $"{RoboRecord.GetTimeFromTics(record.Tics)} as {record.Character.Name} "
-                + $"by {record.Uploader.UserNameNoDiscrim}. "
-                + $"It is {((record.Level.Nights != true) ? "not" : "" )} a NiGHTS record.";
+            Logger.Log(record.ToString(), true);
+            Logger.Log(record.ToStringDetailed(), true);
 
-            Logger.Log(levelInfo, true);
+            DbSelector.TryGetRoboRecordWithDataFromDbId(12, out RoboRecord recordData);
+
+            Logger.Log(recordData.ToString(), true);
+            Logger.Log(recordData.ToStringDetailed(), true);
         }
     }
 }
