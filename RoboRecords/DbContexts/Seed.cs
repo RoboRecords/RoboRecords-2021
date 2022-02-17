@@ -110,6 +110,7 @@ namespace RoboRecords
                 // Add the records to their levels.
                 for (int i = 0; i < roboRecords.Count; i++)
                 {
+                    roboRecords[i].SetVersion(202, 9);
                     if (i == 6)
                     {
                         roboRecords[i].LevelNumber = roboLevels[1].LevelNumber;
