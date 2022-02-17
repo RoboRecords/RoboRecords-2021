@@ -15,5 +15,15 @@ namespace RoboRecords.Models
         public IdentityRoboUser()
         {
         }
+
+        public static bool operator ==(IdentityRoboUser user1, IdentityRoboUser user2)
+        {
+            if (user1 is null && user2 is not null || user1 is not null && user2 is null)
+                return false;
+            
+            return user1 is null || user1.NormalizedUserName == user2.NormalizedUserName;
+        }
+
+        public static bool operator !=(IdentityRoboUser user1, IdentityRoboUser user2) => !(user1 == user2);
     }
 }

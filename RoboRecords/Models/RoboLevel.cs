@@ -263,5 +263,15 @@ namespace RoboRecords.Models
             else
                 return $"{LevelName}";
         }
+        
+        public static bool operator ==(RoboLevel level1, RoboLevel level2)
+        {
+            if (level1 is null && level2 is not null || level1 is not null && level2 is null)
+                return false;
+            
+            return level1 is null || (level1.LevelNumber == level2.LevelNumber && level1.LevelGroup.RoboGame == level2.LevelGroup.RoboGame);
+        }
+
+        public static bool operator !=(RoboLevel level1, RoboLevel level2) => !(level1 == level2);
     }
 }

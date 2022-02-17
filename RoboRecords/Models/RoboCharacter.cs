@@ -37,5 +37,15 @@ namespace RoboRecords.Models
         {
             
         }
+        
+        public static bool operator ==(RoboCharacter character1, RoboCharacter character2)
+        {
+            if (character1 is null && character2 is not null || character1 is not null && character2 is null)
+                return false;
+            
+            return character1 is null || character1.NameId == character2.NameId;
+        }
+
+        public static bool operator !=(RoboCharacter character1, RoboCharacter character2) => !(character1 == character2);
     }
 }

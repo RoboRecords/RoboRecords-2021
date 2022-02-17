@@ -269,5 +269,15 @@ namespace RoboRecords.Models
 
             return recordInfo;
         }
+        
+        public static bool operator ==(RoboRecord record1, RoboRecord record2)
+        {
+            if (record1 is null && record2 is not null || record1 is not null && record2 is null)
+                return false;
+            
+            return record1 is null || (record1.UploadTime == record2.UploadTime && record1.Tics == record2.Tics && record1.Score == record2.Score && record1.Rings == record2.Rings && record1.Uploader == record2.Uploader && record1.Character == record2.Character && record1.Level == record2.Level);
+        }
+
+        public static bool operator !=(RoboRecord record1, RoboRecord record2) => !(record1 == record2);
     }
 }

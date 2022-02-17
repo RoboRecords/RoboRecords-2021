@@ -37,5 +37,15 @@ namespace RoboRecords.Models
 
             return levelstrings;
         }
+        
+        public static bool operator ==(LevelGroup levelGroup1, LevelGroup levelGroup2)
+        {
+            if (levelGroup1 is null && levelGroup2 is not null || levelGroup1 is not null && levelGroup2 is null)
+                return false;
+            
+            return levelGroup1 is null || (levelGroup1.Name == levelGroup2.Name && levelGroup1.RoboGame == levelGroup2.RoboGame);
+        }
+
+        public static bool operator !=(LevelGroup levelGroup1, LevelGroup levelGroup2) => !(levelGroup1 == levelGroup2);
     }
 }

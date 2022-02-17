@@ -69,5 +69,15 @@ namespace RoboRecords.Models
 
             return Convert.ToBase64String(avatarData);
         }
+        
+        public static bool operator ==(RoboUser user1, RoboUser user2)
+        {
+            if (user1 is null && user2 is not null || user1 is not null && user2 is null)
+                return false;
+            
+            return user1 is null || (user1.Discriminator == user2.Discriminator && user1.UserNameNoDiscrim == user2.UserNameNoDiscrim);
+        }
+
+        public static bool operator !=(RoboUser user1, RoboUser user2) => !(user1 == user2);
     }
 }

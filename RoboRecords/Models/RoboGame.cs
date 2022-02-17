@@ -65,5 +65,15 @@ namespace RoboRecords.Models
                 }
             return roboString;
         }
+        
+        public static bool operator ==(RoboGame game1, RoboGame game2)
+        {
+            if (game1 is null && game2 is not null || game1 is not null && game2 is null)
+                return false;
+            
+            return game1 is null || game1.Name == game2.Name;
+        }
+
+        public static bool operator !=(RoboGame user1, RoboGame user2) => !(user1 == user2);
     }
 }
