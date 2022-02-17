@@ -74,16 +74,7 @@ namespace RoboRecords
 
             if (toConsole)
             {
-                // Hax
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    Debug.WriteLine($"{logLevel} | {message}");
-                else
-                    Console.WriteLine($"{logLevel} | {message}");
-
-                // If that doesn't work, just do this instead:
-                // Debug.WriteLine($"{logLevel} | {message}");
-                // Console.WriteLine($"{logLevel} | {message}");
-                // Catch-all solution, everyone is happy, except the CPU.
+                Console.WriteLine($"{logLevel} | {message}");
             }
 
         }
