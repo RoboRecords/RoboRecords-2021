@@ -112,10 +112,12 @@ namespace RoboRecords
                 {
                     if (i == 6)
                     {
+                        roboRecords[i].LevelNumber = roboLevels[1].LevelNumber;
                         roboLevels[1].Records.Add(roboRecords[i]); // Add the 7th record to GFZ2. #Fang Gang
                     }
                     else
                     {
+                        roboRecords[i].LevelNumber = roboLevels[0].LevelNumber;
                         roboLevels[0].Records.Add(roboRecords[i]); // Add every other record to GFZ1.
                     }
                 }

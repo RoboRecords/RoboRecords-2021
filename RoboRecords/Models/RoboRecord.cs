@@ -62,7 +62,7 @@ namespace RoboRecords.Models
         public DateTime UploadTime;
         
         // Level the record is played on
-        // public int LevelNumber; // No longer needed. Use RoboLevel relation instead.
+        public int LevelNumber;
         //public RoboLevel Level;
         
         private const uint MaxSize = uint.MaxValue;
