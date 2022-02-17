@@ -14,6 +14,30 @@ namespace RoboRecords.DbInteraction
 {
     public class DbSelector
     {
+        public static bool TryGetCharacterFromDbId(int dbId, out RoboCharacter character)
+        {
+            character = null;
+            
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                character = context.RoboCharacters.FirstOrDefault(x => x.DbId == dbId);
+            }
+
+            return character != null;
+        }
+        
+        public static bool TryGetCharacterFromNameId(string nameId, out RoboCharacter character)
+        {
+            character = null;
+            
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                character = context.RoboCharacters.FirstOrDefault(x => x.NameId == nameId);
+            }
+
+            return character != null;
+        }
+        
         public static bool TryGetRoboRecordFromDbId(int dbId, out RoboRecord record)
         {
             record = null;
