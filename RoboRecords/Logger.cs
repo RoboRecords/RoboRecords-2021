@@ -17,12 +17,12 @@ namespace RoboRecords
 
         public static void Log(string message)
         {
-            WriteToLogFile(message, LogLevel.Info, false);
+            WriteToLogFile(message, LogLevel.Info, true);
         }
 
         public static void Log(string message, LogLevel logLevel)
         {
-            WriteToLogFile(message, logLevel, false);
+            WriteToLogFile(message, logLevel, true);
         }
 
         public static void Log(string message, bool toConsole)
@@ -32,7 +32,7 @@ namespace RoboRecords
 
         public static void Log(string message, LogLevel logLevel, bool toConsole)
         {
-            WriteToLogFile(message, logLevel, false);
+            WriteToLogFile(message, logLevel, toConsole);
         }
 
         static void WriteToLogFile(string message, LogLevel _logLevel, bool toConsole)
@@ -73,7 +73,19 @@ namespace RoboRecords
             }
 
             if (toConsole)
-                Debug.WriteLine($"{ logLevel} | { message}");
+            {
+                // Hax
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    Debug.WriteLine($"{logLevel} | {message}");
+                else
+                    Console.WriteLine($"{logLevel} | {message}");
+
+                // If that doesn't work, just do this instead:
+                // Debug.WriteLine($"{logLevel} | {message}");
+                // Console.WriteLine($"{logLevel} | {message}");
+                // Catch-all solution, everyone is happy, except the CPU.
+            }
+
         }
     }
 }
