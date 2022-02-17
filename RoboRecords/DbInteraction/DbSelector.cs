@@ -23,7 +23,7 @@ namespace RoboRecords.DbInteraction
                 character = context.RoboCharacters.FirstOrDefault(x => x.DbId == dbId);
             }
 
-            return character != null;
+            return character is not null;
         }
         
         public static bool TryGetCharacterFromNameId(string nameId, out RoboCharacter character)
@@ -35,7 +35,7 @@ namespace RoboRecords.DbInteraction
                 character = context.RoboCharacters.FirstOrDefault(x => x.NameId == nameId);
             }
 
-            return character != null;
+            return character is not null;
         }
         
         public static bool TryGetRoboRecordFromDbId(int dbId, out RoboRecord record)
@@ -47,7 +47,7 @@ namespace RoboRecords.DbInteraction
                 record = context.RoboRecords.FirstOrDefault(x => x.DbId == dbId);
             }
 
-            return record != null;
+            return record is not null;
         }
 
         public static bool TryGetRoboRecordWithDataFromDbId(int dbId, out RoboRecord record)
@@ -65,7 +65,7 @@ namespace RoboRecords.DbInteraction
                     .FirstOrDefault(x => x.DbId == dbId);
             }
 
-            return record != null;
+            return record is not null;
         }
 
         public static bool TryGetAllGameData(out List<RoboGame> roboGames)
@@ -122,7 +122,7 @@ namespace RoboRecords.DbInteraction
 
 
             // Sort the levels by level number, as they may not be in order in the database
-            if (roboGame != null)
+            if (roboGame is not null)
             {
                 if (roboGame.LevelGroups.Count > 0)
                     foreach (var levelGroup in roboGame.LevelGroups)
@@ -163,7 +163,7 @@ namespace RoboRecords.DbInteraction
 
 
             // Sort the levels by level number, as they may not be in order in the database
-            if (roboGame != null)
+            if (roboGame is not null)
             {
                 if (roboGame.LevelGroups.Count > 0)
                     foreach (var levelGroup in roboGame.LevelGroups)
@@ -205,7 +205,7 @@ namespace RoboRecords.DbInteraction
                 roboUser = context.RoboUsers.Where(e => e.UserNameNoDiscrim.ToLower() == uname.ToLower() && e.Discriminator == disc).FirstOrDefault();
             }
 
-            if (roboUser != null)
+            if (roboUser is not null)
                 return true;
             else
                 return false;
@@ -237,7 +237,7 @@ namespace RoboRecords.DbInteraction
                 iUser = context.Users.Where(e => e.NormalizedUserName == unameWithDiscriminator.ToUpper()).FirstOrDefault();
             }
 
-            if (iUser != null)
+            if (iUser is not null)
                 return true;
             else
                 return false;
@@ -259,7 +259,7 @@ namespace RoboRecords.DbInteraction
             using (IdentityContext context = new IdentityContext())
                 identityRoboUser = context.Users.FirstOrDefault(e => e.ApiKey == apiKey);
 
-            if (identityRoboUser == null)
+            if (identityRoboUser is null)
             {
                 roboUser = null;
                 return false;
@@ -277,7 +277,7 @@ namespace RoboRecords.DbInteraction
             using (IdentityContext context = new IdentityContext())
                 identityRoboUser = context.Users.FirstOrDefault(e => e.ApiKey == apiKey);
 
-            if (identityRoboUser == null)
+            if (identityRoboUser is null)
                 return false;
 
             return true;
@@ -295,7 +295,7 @@ namespace RoboRecords.DbInteraction
                 roboGame = context.RoboGames.Where(e => e.UrlName == id).FirstOrDefault();
             }
 
-            if (roboGame != null)
+            if (roboGame is not null)
                 return true;
             else
                 return false;
@@ -328,7 +328,7 @@ namespace RoboRecords.DbInteraction
                     .FirstOrDefault())
                     .FirstOrDefault();
 
-                if (roboLevel != null)
+                if (roboLevel is not null)
                     return true;
                 else
                     return false;

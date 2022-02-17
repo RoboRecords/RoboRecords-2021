@@ -178,7 +178,7 @@ namespace TestConsole
                 e.Tics == 9100 &&
                 e.Character.NameId == "amy").FirstOrDefault();
 
-            if (testRecord != null)
+            if (testRecord is not null)
             {
                 Console.Clear();
                 Console.WriteLine("TestRecord succeeded.\nResult entry:");

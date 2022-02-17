@@ -139,7 +139,7 @@ function downloadReplay(record)
         @foreach (var character in CharacterManager.StandardCharacters)
         {
             var record = Map.CurrentLevel.GetBestRecord(character);
-            if (record != null)
+            if (record is not null)
             {
                 var listName = "list_" + character.NameId;
 
@@ -262,7 +262,7 @@ else
         </tr>
         @foreach (var record in Map.CurrentLevel.GetAllBestTimes())
         {
-            if (record != null)
+            if (record is not null)
             {
                 var listName = "list_" + record.Character.NameId;
 
@@ -325,7 +325,7 @@ else
         </tr>
         @foreach (var record in Map.CurrentLevel.GetAllBestScores())
         {
-            if (record != null)
+            if (record is not null)
             {
                 var listName = "list_" + record.Character.NameId;
 

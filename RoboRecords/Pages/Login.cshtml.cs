@@ -117,7 +117,7 @@ namespace RoboRecords.Pages
             // IdentityUser has discrim included in username
             DbSelector.TryGetIdentityUserFromUserName(usernamewithdiscrim, out IdentityRoboUser userToLogin);
 
-            if (userToLogin == null)
+            if (userToLogin is null)
                 return BadRequest("No user with this username / discriminator combination was found");
 
             SignInResult result = _signInManager.PasswordSignInAsync(userToLogin, password, true, false).Result;

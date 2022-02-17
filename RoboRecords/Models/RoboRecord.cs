@@ -212,12 +212,12 @@ namespace RoboRecords.Models
         {
             string recordInfo = "RoboRecord: ";
             bool nights = false;
-            if (Level != null)
+            if (Level is not null)
             {
                 nights = Level.Nights;
-                if (Level.LevelGroup != null)
+                if (Level.LevelGroup is not null)
                 {
-                    if (Level.LevelGroup.RoboGame != null)
+                    if (Level.LevelGroup.RoboGame is not null)
                     {
                         recordInfo += Level.LevelGroup.RoboGame.Name + " - ";
                     }
@@ -225,11 +225,11 @@ namespace RoboRecords.Models
                 recordInfo += Level + " - ";
             }
             recordInfo += GetTimeFromTics(Tics);
-            if (Character != null)
+            if (Character is not null)
             {
                 recordInfo += " as " + Character.Name;
             }
-            if (Uploader != null)
+            if (Uploader is not null)
             {
                 recordInfo += " by " + Uploader.UserNameNoDiscrim;
             }
@@ -243,24 +243,24 @@ namespace RoboRecords.Models
         {
             string recordInfo = "RoboRecord Detailed Info: \n";
             bool nights = false;
-            if (Level != null)
+            if (Level is not null)
             {
                 nights = Level.Nights;
             }
 
-            recordInfo += $" RoboGame: {((Level != null && Level.LevelGroup != null && Level.LevelGroup.RoboGame != null) ? Level.LevelGroup.RoboGame.Name : "null")}\n";
+            recordInfo += $" RoboGame: {((Level is not null && Level.LevelGroup != null && Level.LevelGroup.RoboGame != null) ? Level.LevelGroup.RoboGame.Name : "null")}\n";
             recordInfo += $" Version String: {GetVersionString()}\n";
             recordInfo += $" Time: {GetTimeFromTics(Tics)}\n";
-            recordInfo += $" Level: {((Level != null) ? Level : "null")}\n";
+            recordInfo += $" Level: {((Level is not null) ? Level : "null")}\n";
             recordInfo += $" NiGHTS: {((nights) ? "True" : "False")}\n";
-            recordInfo += $" Character: {((Character != null) ? Character.Name : "null")}\n";
-            recordInfo += $" Uploader: {((Uploader != null) ? Uploader.UserNameNoDiscrim : "null")}\n";
+            recordInfo += $" Character: {((Character is not null) ? Character.Name : "null")}\n";
+            recordInfo += $" Uploader: {((Uploader is not null) ? Uploader.UserNameNoDiscrim : "null")}\n";
             recordInfo += $" Upload Time: {UploadTime.ToString("yyyy-MM-dd HH:mm:ss")}";
             //recordInfo += $" File Name: {((FileBytes != null && FileBytes.Length > 0) ? GetFileName() : "null")}\n";
             //recordInfo += $" File Size: {((FileBytes != null && FileBytes.Length > 0) ? $"{(FileBytes.Length / 1024).ToString("0.0")}kb" : "null")}";
 
-            if (Level == null || Level.LevelGroup == null || Level.LevelGroup.RoboGame == null
-                || Character == null || Uploader == null
+            if (Level is null || Level.LevelGroup is null || Level.LevelGroup.RoboGame is null
+                || Character is null || Uploader is null
                 )// || FileBytes == null || FileBytes.Length == 0)
             {
                 recordInfo += $"\n Record contained null values. If you were not expecting this, complain to Zenya.";

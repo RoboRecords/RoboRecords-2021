@@ -60,7 +60,7 @@ namespace RoboRecords.DbInteraction
         {
             RoboUser user = record.Uploader;
             
-            if (level == null)
+            if (level is null)
             {
                 Logger.Log("Map not found, WTF!?!?", Logger.LogLevel.Error, true);
                 return;

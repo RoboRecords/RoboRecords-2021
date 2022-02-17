@@ -133,7 +133,7 @@ namespace RoboRecords.Models
                 return null;
             }
             return Records.Aggregate((currentMin, record) =>
-                (currentMin == null || record.Tics < currentMin.Tics ? record : currentMin));
+                (currentMin is null || record.Tics < currentMin.Tics ? record : currentMin));
         }
         
         public RoboRecord GetBestScoreRecord()
@@ -143,7 +143,7 @@ namespace RoboRecords.Models
                 return null;
             }
             return Records.Aggregate((currentMin, record) =>
-                (currentMin == null || record.Score > currentMin.Score ? record : currentMin));
+                (currentMin is null || record.Score > currentMin.Score ? record : currentMin));
         }
         
         public List<RoboRecord> GetBestRecords(bool allowNonStandard = false)
@@ -155,7 +155,7 @@ namespace RoboRecords.Models
                     CharacterManager.StandardCharacters.FindIndex(c => c.NameId == record.Character.NameId) != -1)
                 {
                     var bestRecord = GetBestRecord(record.Character);
-                    if (bestRecord != null)
+                    if (bestRecord is not null)
                     {
                         records.Add(bestRecord);
                     }

@@ -56,7 +56,7 @@
                                 @foreach (var character in CharacterManager.StandardCharacters)
                                 {
                                     var record = level.GetBestRecord(character);
-                                    if (record != null)
+                                    if (record is not null)
                                     {
                                         <img src=@character.IconUrl alt=@character.Name width="24px">
                                         <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span><span> @record.Uploader.UserNameNoDiscrim</span><br>
@@ -67,12 +67,12 @@
                             {
                                 var timeRecord = level.GetBestTimeRecord();
                                 var scoreRecord = level.GetBestScoreRecord();
-                                if (timeRecord != null)
+                                if (timeRecord is not null)
                                 {
                                     <img src=@timeRecord.Character.IconUrl alt=@timeRecord.Character.Name width="24px">
                                     <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(timeRecord.Tics) </span><span> @timeRecord.Uploader.UserNameNoDiscrim</span><br>
                                 }
-                                if (scoreRecord != null)
+                                if (scoreRecord is not null)
                                 {
                                     <img src=@scoreRecord.Character.IconUrl alt=@scoreRecord.Character.Name width="24px">
                                     <span class="number-display" style="font-size: x-large"> @scoreRecord.Score </span><span> @scoreRecord.Uploader.UserNameNoDiscrim</span><br>

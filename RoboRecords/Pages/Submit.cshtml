@@ -51,7 +51,7 @@ else
         @if (Submit.RecordList.Count > 0)
         {
             RoboGame roboGame = Submit.Game;
-            bool hasNights = Submit.RecordList.Find(record => roboGame.GetLevelByNumber(record.LevelNumber) != null && roboGame.GetLevelByNumber(record.LevelNumber).Nights) != null;
+            bool hasNights = Submit.RecordList.Find(record => roboGame.GetLevelByNumber(record.LevelNumber) is not null && roboGame.GetLevelByNumber(record.LevelNumber).Nights) is not null;
             <div>
                 <table>
                     <tr class="title-font" style="text-align: center">
@@ -82,12 +82,12 @@ else
                     {
                         var record = Submit.RecordList[recordCount];
                         var level = roboGame.GetLevelByNumber(record.LevelNumber);
-                        if (level != null)
+                        if (level is not null)
                         {
                             var levelString = level.LevelName + (level.Act > 0 ?  " " + level.Act : "");
                             <tr class="title-font" style="text-align: center">
                                 <th style="font-weight: unset">
-                                    @if (record.Character != null)
+                                    @if (record.Character is not null)
                                     {
                                         <img src=@record.Character.IconUrl alt=@record.Character.Name width="32px">
                                     }
