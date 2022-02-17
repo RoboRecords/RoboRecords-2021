@@ -37,6 +37,10 @@ namespace RoboRecords
 
         static void WriteToLogFile(string message, LogLevel _logLevel, bool toConsole)
         {
+            // Don't log Debug messages if not in debug env
+            if (_logLevel == LogLevel.Debug && !EnvVars.IsDevelopment)
+                return;
+
             string logPath = EnvVars.LogPath;
 
             string logLevel;
@@ -69,7 +73,7 @@ namespace RoboRecords
             }
 
             if (toConsole)
-                Debug.WriteLine(log);
+                Debug.WriteLine($"{ logLevel} | { message}");
         }
     }
 }

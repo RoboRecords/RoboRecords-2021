@@ -70,7 +70,7 @@ namespace RoboRecords.DbInteraction
             if (File.Exists(cyberdimeFile))
                 WadReader.GetMainCFGFromPK3(cyberdimeFile);
             else
-                Console.WriteLine("Cyberdime PK3 not found at specified location");
+                Logger.Log("Cyberdime PK3 not found at specified location", Logger.LogLevel.Debug, true);
         }
 
         public static void TryAddCyberdime()
@@ -86,7 +86,7 @@ namespace RoboRecords.DbInteraction
                 DbInserter.AddGame(cyberGame);
             }
             else
-                Console.WriteLine("Cyberdime PK3 not found at specified location");
+                Logger.Log("Cyberdime PK3 not found at specified location", Logger.LogLevel.Debug, true);
         }
 
         // Try adding Red Volcano Act 2 with automatic sorting
@@ -107,7 +107,7 @@ namespace RoboRecords.DbInteraction
         // Doesn't work, needs instance. Figure it out or I'll never be a moderator :[  --- Zenya
         public static void TryAddZenyaTheModerator()
         {
-            Console.WriteLine("Test failed successfully.");
+            Logger.Log("Test failed successfully.", Logger.LogLevel.Debug, true);
             //RoboUserManager.Create("zenya@zenya.zenya", "zenya", 2468, "secure-password1234", UserRoles.User | UserRoles.Moderator);
         }
     }

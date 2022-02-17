@@ -24,7 +24,7 @@ namespace RoboRecords
             }
             catch (Exception e)
             {
-                Console.WriteLine("Action failed ({0})", e.Message);
+                Logger.Log($"Action failed ({e.Message})", Logger.LogLevel.Error, true);
                 return false;
             }
         }
@@ -39,7 +39,7 @@ namespace RoboRecords
             }
             catch (Exception e)
             {
-                Console.WriteLine("Action failed ({0})", e.Message);
+                Logger.Log($"Action failed ({e.Message})", Logger.LogLevel.Error, true);
                 return false;
             }
         }

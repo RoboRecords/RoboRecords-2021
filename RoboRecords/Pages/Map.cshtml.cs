@@ -53,12 +53,12 @@ namespace RoboRecords.Pages
                 RecordToDownload = record;
                 FileManager.Read(System.IO.Path.Combine("Replays", $"{record.DbId}.lmp"), out byte[] bytes);
                 
-                Console.WriteLine("GET success");
+                Logger.Log("GET success", true);
                 Response.Headers.Add("Content-Disposition", cd.ToString());
                 return File(bytes, "application/octet-stream", record.GetFileName());
             }
 
-            Console.WriteLine("GET net success");
+            Logger.Log("GET net success", true);
             return BadRequest("Bad request");
         }
         

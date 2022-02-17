@@ -174,29 +174,29 @@ namespace RoboRecords.Models
             catch
             {
                 readStatus = ReadStatus.ErrorReading;
-                Console.WriteLine("Error: Couldn't read bytes.");
+                Logger.Log("Error: Couldn't read bytes.", Logger.LogLevel.Error, true);
             }
             // Read the file and get tics and shit
             switch (readStatus)
             {
                 case ReadStatus.Success:
                     FileBytes = fileBytes;
-                    Console.WriteLine("File read successfully!");
+                    Logger.Log("File read successfully!", true);
                     break;
                 case ReadStatus.ErrorInvalid:
-                    Console.WriteLine("Error: Invalid demo file.");
+                    Logger.Log("Error: Invalid demo file.", Logger.LogLevel.Error, true);
                     break;
                 case ReadStatus.ErrorUnfinished:
-                    Console.WriteLine("Error: Unfinished demo.");
+                    Logger.Log("Error: Unfinished demo.", Logger.LogLevel.Error, true);
                     break;
                 case ReadStatus.ErrorNotSrb2:
-                    Console.WriteLine("Error, not an SRB2 demo!");
+                    Logger.Log("Error, not an SRB2 demo!", Logger.LogLevel.Error, true);
                     break;
                 case ReadStatus.ErrorReading:
-                    Console.WriteLine("Error, couldn't read the demo!");
+                    Logger.Log("Error, couldn't read the demo!", Logger.LogLevel.Error, true);
                     break;
                 default:
-                    Console.WriteLine("Error: Unknown error.");
+                    Logger.Log("Error: Unknown error.", Logger.LogLevel.Error, true);
                     break;
             }
         }

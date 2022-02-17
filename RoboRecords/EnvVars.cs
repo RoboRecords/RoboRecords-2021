@@ -61,9 +61,9 @@ namespace RoboRecords
         private static void LogAndExit(string varName, bool isPathError)
         {
             if(!isPathError)
-                Console.WriteLine($"Environment variable {varName} is required but empty");
+                Logger.Log($"Environment variable {varName} is required but empty", Logger.LogLevel.Error, true);
             else
-                Console.WriteLine($"Environment variable {varName} has an invalid path");
+                Logger.Log($"Environment variable {varName} has an invalid path", Logger.LogLevel.Error, true);
             Environment.Exit(1);
         }
     }

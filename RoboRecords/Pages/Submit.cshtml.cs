@@ -117,7 +117,7 @@ namespace RoboRecords.Pages
                 DbSelector.TryGetGameLevelFromMapId(Game.UrlName, record.LevelNumber.ToString(), out RoboLevel level);
                 if (level == null)
                 {
-                    Console.WriteLine("Map not found, WTF!?!?");
+                    Logger.Log("Map not found, WTF!?!?", Logger.LogLevel.Error, true);
                     continue;
                 }
 

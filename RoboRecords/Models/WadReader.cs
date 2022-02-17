@@ -20,7 +20,7 @@ namespace RoboRecords.Models
             {
                 if (item.Name.ToLower().Contains("maincfg"))
                 {
-                    Console.WriteLine("Found MAINCFG!");
+                    Logger.Log("Found MAINCFG!", Logger.LogLevel.Debug, true);
                     using (StreamReader s = new StreamReader(zipFile.GetInputStream(item)))
                     {
                         return ParseMainCFG(s.ReadToEnd(), filename);
@@ -41,7 +41,7 @@ namespace RoboRecords.Models
             {
                 if (item.Name.ToUpper().Contains($"{mapString}P"))
                 {
-                    Console.WriteLine($"Found {item.Name}!");
+                    Logger.Log($"Found {item.Name}!", Logger.LogLevel.Debug, true);
                     Stream s = zipFile.GetInputStream(item);
                     using (MemoryStream ms = new MemoryStream())
                     {

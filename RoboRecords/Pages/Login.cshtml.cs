@@ -40,7 +40,7 @@ namespace RoboRecords.Pages
             if(!IsLoggedIn)
                 return;
 
-            Console.WriteLine(_apiKeyManager.GenerateApiKeyForUser(CurrentIdentityUser));
+            Logger.Log(_apiKeyManager.GenerateApiKeyForUser(CurrentIdentityUser), Logger.LogLevel.Debug, true);
             
         }
 
@@ -75,7 +75,7 @@ namespace RoboRecords.Pages
                 return BadRequest("No Discriminator");
             }
 
-            Console.WriteLine(username);
+            Logger.Log(username, Logger.LogLevel.Debug, true);
             
             // TODO: Move this to RoboUserManager
             // Try to create new IdentityUser and if it succeeds, create a RoboUser with the same username.
@@ -124,7 +124,7 @@ namespace RoboRecords.Pages
             
             if (result.Succeeded)
             {
-                Console.WriteLine("Success");
+                Logger.Log("Success", true);
                 isModerator = Validator.UserHasRequiredRoles(userToLogin, UserRoles.Moderator);
                 return Content("Success");
             }
