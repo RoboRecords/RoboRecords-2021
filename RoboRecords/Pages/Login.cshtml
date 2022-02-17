@@ -70,23 +70,37 @@
     
     <script type="text/javascript">
     
+    window.onload = function() {
+        get("exampleInputEmail1").addEventListener("keydown", function (e) { handleEnterKey("exampleInputEmail1", e) })
+        get("exampleInputUsername1").addEventListener("keydown", function (e) { handleEnterKey("exampleInputUsername1", e) })
+        get("exampleInputPassword1").addEventListener("keydown", function (e) { handleEnterKey("exampleInputPassword1", e) })
+        get("exampleInputConfirmPassword1").addEventListener("keydown", function (e) { handleEnterKey("exampleInputConfirmPassword1", e) })
+        
+        get("exampleInputEmail2").addEventListener("keydown", function (e) { handleEnterKey("exampleInputEmail2", e) })
+        get("exampleInputPassword2").addEventListener("keydown", function (e) { handleEnterKey("exampleInputPassword2", e) })
+    };
+    
     var registerEmailValid = false;
     var registerUsernameValid = false;
     var registerPassValid = false;
     var registerConfirmPassValid = false;
+    var registerButtonValid = false;
     
     var loginUsernameValid = false;
     var loginPassValid = false;
+    var loginButtonValid = false;
     
     function updateRegisterButton() {
         var button = get("registerButton")
         
         if (registerEmailValid && registerUsernameValid && registerPassValid && registerConfirmPassValid)
         {
+            registerButtonValid = true
             button.removeAttribute("disabled")
         }
         else 
         {
+            registerButtonValid = false
             button.setAttribute("disabled", "")
         }
     }
@@ -96,11 +110,35 @@
         
         if (loginUsernameValid && loginPassValid)
         {
+            loginButtonValid = true
             button.removeAttribute("disabled")
         }
         else 
         {
+            loginButtonValid = false
             button.setAttribute("disabled", "")
+        }
+    }
+    
+    function handleEnterKey(elementIdString, e) {        
+        if (e.key !== "Enter") {
+            return
+        }
+        
+        switch (elementIdString)
+        {
+            case "exampleInputEmail1":
+            case "exampleInputUsername1":
+            case "exampleInputPassword1":
+            case "exampleInputConfirmPassword1":
+                if (registerButtonValid)
+                    register()
+                break;
+            case "exampleInputEmail2":
+            case "exampleInputPassword2":
+                if (loginButtonValid)
+                    login()
+                break;
         }
     }
     
