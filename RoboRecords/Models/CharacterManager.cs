@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RoboRecords.DbInteraction;
 
 namespace RoboRecords.Models
 {
@@ -23,12 +24,18 @@ namespace RoboRecords.Models
         static void Init()
         {
             _standardCharacter = new List<RoboCharacter>();
-            _standardCharacter.Add(new RoboCharacter("Sonic"));
-            _standardCharacter.Add(new RoboCharacter("Tails"));
-            _standardCharacter.Add(new RoboCharacter("Knuckles"));
-            _standardCharacter.Add(new RoboCharacter("Amy"));
-            _standardCharacter.Add(new RoboCharacter("Fang"));
-            _standardCharacter.Add(new RoboCharacter("Metal Sonic"));
+            if (DbSelector.TryGetCharacterFromNameId("sonic", out RoboCharacter sonic))
+                _standardCharacter.Add(sonic);
+            if (DbSelector.TryGetCharacterFromNameId("tails", out RoboCharacter tails))
+                _standardCharacter.Add(tails);
+            if (DbSelector.TryGetCharacterFromNameId("knuckles", out RoboCharacter knuckles))
+                _standardCharacter.Add(knuckles);
+            if (DbSelector.TryGetCharacterFromNameId("amy", out RoboCharacter amy))
+                _standardCharacter.Add(amy);
+            if (DbSelector.TryGetCharacterFromNameId("fang", out RoboCharacter fang))
+                _standardCharacter.Add(fang);
+            if (DbSelector.TryGetCharacterFromNameId("metalsonic", out RoboCharacter metalsonic))
+                _standardCharacter.Add(metalsonic);
             _inited = true;
         }
 
