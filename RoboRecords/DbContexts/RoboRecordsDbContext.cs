@@ -38,14 +38,14 @@ namespace RoboRecords.DatabaseContexts
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.UrlName).IsRequired();
                 entity.Property(e => e.IconPath).IsRequired();
-                entity.HasMany(e => e.LevelGroups);
+                entity.HasMany(e => e.LevelGroups).WithOne(e => e.RoboGame);
             });
 
             modelBuilder.Entity<LevelGroup>(entity =>
             {
                 entity.HasKey(e => e.DbId);
                 entity.Property(e => e.Name).IsRequired();
-                entity.HasMany(e => e.Levels);
+                entity.HasMany(e => e.Levels).WithOne(e => e.LevelGroup);
                 entity.Property(e => e.WriteLevelNames).IsRequired();
             });
             
@@ -61,7 +61,7 @@ namespace RoboRecords.DatabaseContexts
                 entity.HasKey(e => e.DbId);
                 entity.Property(e => e.IconUrl).IsRequired();
                 entity.Property(e => e.LevelNumber).IsRequired();
-                entity.HasMany(e => e.Records);
+                entity.HasMany(e => e.Records).WithOne(e => e.Level);
                 entity.Property(e => e.LevelName).IsRequired();
                 entity.Property(e => e.Act).IsRequired();
                 entity.Property(e => e.Nights).IsRequired();

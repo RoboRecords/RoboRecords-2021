@@ -24,6 +24,7 @@ namespace RoboRecords.Models
         public long Rings;
         public long Score;
         public virtual RoboCharacter Character { get; set; }
+        public virtual RoboLevel Level { get; set; }
 
         // 202 -> 2.2
         private int _majorVersion;
@@ -61,7 +62,7 @@ namespace RoboRecords.Models
         public DateTime UploadTime;
         
         // Level the record is played on
-        public int LevelNumber;
+        // public int LevelNumber; // No longer needed. Use RoboLevel relation instead.
         //public RoboLevel Level;
         
         private const uint MaxSize = uint.MaxValue;

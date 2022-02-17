@@ -16,6 +16,7 @@ namespace RoboRecords.DbInteraction
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 context.Entry(level).State = EntityState.Modified;
+                record.LevelNumber = level.LevelNumber;
                 level.Records.Add(record);
                 //context.Entry(record).State = EntityState.Detached;
                 context.RoboLevels.Update(level);

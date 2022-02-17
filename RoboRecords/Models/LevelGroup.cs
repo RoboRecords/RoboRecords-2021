@@ -9,6 +9,7 @@ namespace RoboRecords.Models
         
         public string Name;
         public virtual IList<RoboLevel> Levels { get; set; }
+        public virtual RoboGame RoboGame { get; set; }
         public bool WriteLevelNames;
 
         public LevelGroup(string name, List<RoboLevel> levels = null, bool writeLevelNames = false)

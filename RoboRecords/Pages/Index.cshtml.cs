@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RoboRecords.DbInteraction;
 using RoboRecords.Models;
 
 namespace RoboRecords.Pages
@@ -21,6 +22,15 @@ namespace RoboRecords.Pages
 
         public void OnGet()
         {
+            // Test of record selection with accompanying data. Check console or log on run.
+            DbSelector.TryGetRoboRecordWithDataFromDbId(3, out RoboRecord record);
+
+            string levelInfo = $"{record.Level.LevelGroup.RoboGame.Name} - {record.Level.LevelName} Act {record.Level.Act} - "
+                + $"{RoboRecord.GetTimeFromTics(record.Tics)} as {record.Character.Name} "
+                + $"by {record.Uploader.UserNameNoDiscrim}. "
+                + $"It is {((record.Level.Nights != true) ? "not" : "" )} a NiGHTS record.";
+
+            Logger.Log(levelInfo, true);
         }
     }
 }

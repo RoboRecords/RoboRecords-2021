@@ -25,7 +25,25 @@ namespace RoboRecords.DbInteraction
 
             return record != null;
         }
-        
+
+        public static bool TryGetRoboRecordWithDataFromDbId(int dbId, out RoboRecord record)
+        {
+            record = null;
+
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                record = context.RoboRecords
+                    .Include(e => e.Level)
+                    .ThenInclude(l => l.LevelGroup)
+                    .ThenInclude(g => g.RoboGame)
+                    .Include(e => e.Uploader)
+                    .Include(e => e.Character)
+                    .FirstOrDefault(x => x.DbId == dbId);
+            }
+
+            return record != null;
+        }
+
         public static bool TryGetAllGameData(out List<RoboGame> roboGames)
         {
             roboGames = new List<RoboGame>();

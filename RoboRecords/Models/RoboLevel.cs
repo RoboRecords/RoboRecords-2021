@@ -35,6 +35,9 @@ namespace RoboRecords.Models
                 _mapString = MakeMapString(value);
             }
         }
+
+        public virtual LevelGroup LevelGroup { get; set; }
+
         public virtual IList<RoboRecord> Records { get; set; }
         // eg. Green Flower Zone
         public string LevelName;
