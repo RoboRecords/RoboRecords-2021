@@ -104,52 +104,15 @@ namespace RoboRecords.Pages
 
         public IActionResult OnPostUploadAsync()
         {
-            // TODO: Upload things to the server
-
             if (!IsLoggedIn)
                 return null;
 
             foreach (var record in RecordList)
             {
                 // TODO: Make this less horribly inefficient by only reading the file here
-                
                 // Check if this is the best time or worth uploading
                 DbSelector.TryGetGameLevelFromMapId(Game.UrlName, record.LevelNumber.ToString(), out RoboLevel level);
-                if (level == null)
-                {
-                    Logger.Log("Map not found, WTF!?!?", Logger.LogLevel.Error, true);
-                    continue;
-                }
-
-                bool isBest = true;
-                bool isBestNightsScore = level.Nights;
-                // Check if the user is uploading their best time. If yes, upload it to the DB
-                foreach (var levelRecord in level.Records)
-                {
-
-                    if (levelRecord.Uploader.DbId == CurrentUser.DbId && levelRecord.Character.NameId == record.Character.NameId)
-                    {
-                        if (levelRecord.Tics <= record.Tics)
-                        {
-                            isBest = false;
-                        }
-                        else if (level.Nights && levelRecord.Score >= record.Score)
-                        {
-                            isBestNightsScore = false;
-                        }
-
-                        if (!isBest && !isBestNightsScore)
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                if (isBest || isBestNightsScore)
-                {
-                    DbInserter.AddRecordToLevel(record, level);
-                    FileManager.Write(Path.Combine("Replays", $"{record.DbId}.lmp"), record.FileBytes);
-                }
+                DbInserter.AddRecordIfNeeded(record, level);
             }
             
             return RedirectToPage();

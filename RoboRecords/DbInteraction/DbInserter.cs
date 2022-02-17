@@ -5,6 +5,7 @@ using RoboRecords.DatabaseContexts;
 using RoboRecords.Models;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 
 namespace RoboRecords.DbInteraction
 {
@@ -52,6 +53,47 @@ namespace RoboRecords.DbInteraction
             {
                 context.RoboGames.Update(game);
                 context.SaveChangesAsync();
+            }
+        }
+
+        public static void AddRecordIfNeeded(RoboRecord record, RoboLevel level)
+        {
+            RoboUser user = record.Uploader;
+            
+            if (level == null)
+            {
+                Logger.Log("Map not found, WTF!?!?", Logger.LogLevel.Error, true);
+                return;
+            }
+
+            bool isBest = true;
+            bool isBestNightsScore = level.Nights;
+            // Check if the user is uploading their best time. If yes, upload it to the DB
+            foreach (var levelRecord in level.Records)
+            {
+
+                if (levelRecord.Uploader.DbId == user.DbId && levelRecord.Character.NameId == record.Character.NameId)
+                {
+                    if (levelRecord.Tics <= record.Tics)
+                    {
+                        isBest = false;
+                    }
+                    else if (level.Nights && levelRecord.Score >= record.Score)
+                    {
+                        isBestNightsScore = false;
+                    }
+
+                    if (!isBest && !isBestNightsScore)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            if (isBest || isBestNightsScore)
+            {
+                DbInserter.AddRecordToLevel(record, level);
+                FileManager.Write(Path.Combine("Replays", $"{record.DbId}.lmp"), record.FileBytes);
             }
         }
     }
