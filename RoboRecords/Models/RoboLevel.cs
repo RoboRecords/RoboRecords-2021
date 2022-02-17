@@ -126,6 +126,26 @@ namespace RoboRecords.Models
             return bestRecord;
         }
 
+        public RoboRecord GetBestTimeRecord()
+        {
+            if (Records.Count == 0)
+            {
+                return null;
+            }
+            return Records.Aggregate((currentMin, record) =>
+                (currentMin == null || record.Tics < currentMin.Tics ? record : currentMin));
+        }
+        
+        public RoboRecord GetBestScoreRecord()
+        {
+            if (Records.Count == 0)
+            {
+                return null;
+            }
+            return Records.Aggregate((currentMin, record) =>
+                (currentMin == null || record.Score > currentMin.Score ? record : currentMin));
+        }
+        
         public List<RoboRecord> GetBestRecords(bool allowNonStandard = false)
         {
             var records = new List<RoboRecord>();

@@ -51,13 +51,31 @@
                             }
                         </div>
                         <span style="position:absolute; bottom: 4px; left: 4px; text-align: left; line-height: 120%">
-                            @foreach (var character in CharacterManager.StandardCharacters)
+                            @if (!level.Nights)
                             {
-                                var record = level.GetBestRecord(character);
-                                if (record != null)
+                                @foreach (var character in CharacterManager.StandardCharacters)
                                 {
-                                    <img src=@character.IconUrl alt=@character.Name width="24px">
-                                    <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span><span> @record.Uploader.UserNameNoDiscrim</span><br>
+                                    var record = level.GetBestRecord(character);
+                                    if (record != null)
+                                    {
+                                        <img src=@character.IconUrl alt=@character.Name width="24px">
+                                        <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span><span> @record.Uploader.UserNameNoDiscrim</span><br>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                var timeRecord = level.GetBestTimeRecord();
+                                var scoreRecord = level.GetBestScoreRecord();
+                                if (timeRecord != null)
+                                {
+                                    <img src=@timeRecord.Character.IconUrl alt=@timeRecord.Character.Name width="24px">
+                                    <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(timeRecord.Tics) </span><span> @timeRecord.Uploader.UserNameNoDiscrim</span><br>
+                                }
+                                if (scoreRecord != null)
+                                {
+                                    <img src=@scoreRecord.Character.IconUrl alt=@scoreRecord.Character.Name width="24px">
+                                    <span class="number-display" style="font-size: x-large"> @scoreRecord.Score </span><span> @scoreRecord.Uploader.UserNameNoDiscrim</span><br>
                                 }
                             }
                         </span>
