@@ -122,26 +122,30 @@ namespace RoboRecords.Pages
                 }
 
                 bool isBest = true;
+                bool isBestNightsScore = level.Nights;
                 // Check if the user is uploading their best time. If yes, upload it to the DB
                 foreach (var levelRecord in level.Records)
                 {
 
                     if (levelRecord.Uploader.DbId == CurrentUser.DbId && levelRecord.Character.NameId == record.Character.NameId)
                     {
-                        if (levelRecord.Tics < record.Tics)
+                        if (levelRecord.Tics <= record.Tics)
                         {
                             isBest = false;
                         }
-                        else
+                        else if (level.Nights && levelRecord.Score >= record.Score)
                         {
-                            //level.Records.Remove(levelRecord);
-                            //DbDeleter.DeleteRoboRecord(levelRecord);
+                            isBestNightsScore = false;
                         }
-                        break;
+
+                        if (!isBest && !isBestNightsScore)
+                        {
+                            break;
+                        }
                     }
                 }
 
-                if (isBest)
+                if (isBest || isBestNightsScore)
                 {
                     DbInserter.AddRecordToLevel(record, level);
                     FileManager.Write(Path.Combine("Replays", $"{record.DbId}.lmp"), record.FileBytes);

@@ -50,6 +50,8 @@ else
         Submissions:
         @if (Submit.RecordList.Count > 0)
         {
+            RoboGame roboGame = Submit.Game;
+            bool hasNights = Submit.RecordList.Find(record => roboGame.GetLevelByNumber(record.LevelNumber) != null && roboGame.GetLevelByNumber(record.LevelNumber).Nights) != null;
             <div>
                 <table>
                     <tr class="title-font" style="text-align: center">
@@ -62,6 +64,12 @@ else
                         <th style="font-weight: unset">
                             Time
                         </th>
+                        @if (hasNights)
+                        {
+                            <th style="font-weight: unset">
+                                Score
+                            </th>
+                        }
                         <th style="font-weight: unset">
                             Version
                         </th>
@@ -73,11 +81,10 @@ else
                     @for (var recordCount = 0; recordCount < Submit.RecordList.Count; recordCount++)
                     {
                         var record = Submit.RecordList[recordCount];
-                        RoboGame roboGame = Submit.Game;
                         var level = roboGame.GetLevelByNumber(record.LevelNumber);
                         if (level != null)
                         {
-                            var levelString = level.LevelName + " " + level.Act;
+                            var levelString = level.LevelName + (level.Act > 0 ?  " " + level.Act : "");
                             <tr class="title-font" style="text-align: center">
                                 <th style="font-weight: unset">
                                     @if (record.Character != null)
@@ -91,6 +98,12 @@ else
                                 <th style="font-weight: unset">
                                     <span class="number-display" style="font-size: x-large"> @RoboRecord.GetTimeFromTics(record.Tics) </span>
                                 </th>
+                                @if (hasNights)
+                                {
+                                    <th style="font-weight: unset">
+                                        <span class="number-display" style="font-size: x-large"> @record.Score </span>
+                                    </th>
+                                }
                                 <th style="font-weight: unset">
                                     @record.VersionString
                                 </th>
