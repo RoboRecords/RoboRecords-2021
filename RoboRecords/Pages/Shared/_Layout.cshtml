@@ -1,4 +1,5 @@
 ﻿@using RoboRecords.Models
+@using Microsoft.AspNetCore.Http.Extensions
 <!--
  _Layout.cshtml: Default layout for the website's pages
  Copyright (C) 2021, Lemin <Leminn> and Refrag <R3FR4G>
@@ -59,7 +60,7 @@
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" style="color: #0366d6" href="/api/v1/authentication/logout">Log out</a></li>
+                                    <li><a class="dropdown-item" style="color: #0366d6" href="/Logout?last=@Context.Request.GetEncodedUrl()">Log out</a></li>
                                 </ul>
                             </li>
                         }

@@ -22,8 +22,9 @@ namespace RoboRecords.Services
         private SignInManager<IdentityRoboUser> _signInManager;
         private UserManager<IdentityRoboUser> _userManager;
         
-        public RoboUserManager(UserManager<IdentityRoboUser> userManager)
+        public RoboUserManager(SignInManager<IdentityRoboUser> signInManager, UserManager<IdentityRoboUser> userManager)
         {
+            _signInManager = signInManager;
             _userManager = userManager;
         }
 
@@ -50,6 +51,11 @@ namespace RoboRecords.Services
                 Roles = (int)roles
             }
             , password).Result;
+        }
+
+        public async Task SignOut()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }

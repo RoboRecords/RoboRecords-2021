@@ -15,13 +15,5 @@ namespace RoboRecords.Controllers
         {
             _signInManager = signInManager;
         }
-        
-        [HttpGet]
-        [Route("logout")]
-        public IActionResult Logout()
-        {
-            _signInManager.SignOutAsync().Wait();
-            return Ok("Succesfully signed out");
-        }
     }
 }
