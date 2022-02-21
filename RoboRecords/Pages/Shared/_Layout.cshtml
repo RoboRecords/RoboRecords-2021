@@ -19,7 +19,7 @@
     <title>@ViewData["Title"] - RoboRecords</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="icon" type="image/png" href="/assets/favicon.png"/>
+    <link rel="icon" type="image/png" href="@FileManager.AssetsDirectoryName/favicon.png"/>
 </head>
 <body>
     <header>
@@ -67,7 +67,7 @@
                         else
                         {
                             <a class="navbar-brand" href="#">
-                                <img src="assets/guest.png" width="30" height="30" alt="">
+                                <img src="@FileManager.AssetsDirectoryName/guest.png" width="30" height="30" alt="">
                             </a>
                             <li class="nav-item">
                                 <a class="nav-link text-light">Guest</a>

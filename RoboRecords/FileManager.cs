@@ -7,12 +7,16 @@ namespace RoboRecords
 {
     public static class FileManager
     {
+        public const string AssetsDirectoryName = "assets";
+        public const string UserAssetsDirectoryName = "UserAssets";
+        public const string ReplaysDirectoryName = "Replays";
+        
         public static void Initialize()
         {
-            if (!Exists("UserAssets"))
-                CreateDirectory("UserAssets");
-            if (!Exists("Replays"))
-                CreateDirectory("Replays");
+            if (!Exists(UserAssetsDirectoryName))
+                CreateDirectory(UserAssetsDirectoryName);
+            if (!Exists(ReplaysDirectoryName))
+                CreateDirectory(ReplaysDirectoryName);
         }
 
         private static bool LocalTryAction(Action localAction)

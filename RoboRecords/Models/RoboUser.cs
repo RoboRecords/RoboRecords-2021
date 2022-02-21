@@ -52,11 +52,10 @@ namespace RoboRecords.Models
 
         private string GetAvatarPath()
         {
-            // FIXME: Don't hardcode this much stuff!
-            string avatarPath = $"UserAssets/{DbId}/avatar.png";
+            string avatarPath = $"{FileManager.UserAssetsDirectoryName}/{DbId}/avatar.png";
 
             if (!FileManager.Exists(avatarPath))
-                return "assets/guest.png";
+                return $"{FileManager.AssetsDirectoryName}/guest.png";
 
             return avatarPath;
         }

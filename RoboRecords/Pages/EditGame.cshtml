@@ -123,7 +123,7 @@
                             <label for="level_` + groupCount +`_` + levelCount +`_path"></label>
                         </dt>
                         <dd>
-                            <input id="level_` + groupCount +`_` + levelCount +`_path" name="level_` + groupCount +`_` + levelCount +`_path" placeholder="../assets/images/mappics/MAP01P.png" value="` + level.iconPath + `"/>
+                            <input id="level_` + groupCount +`_` + levelCount +`_path" name="level_` + groupCount +`_` + levelCount +`_path" placeholder="@FileManager.AssetsDirectoryName/images/mappics/MAP01P.png" value="` + level.iconPath + `"/>
                         </dd>
                         <button type="button" onclick="remove_level(` + groupCount + `, ` + levelCount + `)">X</button>
                     </div>
@@ -271,7 +271,7 @@
 
 <style>
     body {
-        background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('../assets/images/vanillabg.png');
+        background: linear-gradient( rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75) ), url('@FileManager.AssetsDirectoryName/images/vanillabg.png');
         background-size: cover;
         background-repeat: no-repeat;
     }

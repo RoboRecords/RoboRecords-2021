@@ -17,9 +17,9 @@ namespace RoboRecords
                 // Games / Level Packs
                 var roboGames = new List<RoboGame>
                 {
-                    new RoboGame("Sonic Robo Blast 2 v2.2") { IconPath = "../assets/images/gfz2bg.png" },
-                    new RoboGame("srb2 Cyberdime Realm") { IconPath = "../assets/images/cydmbg.png" },
-                    new RoboGame("Sonic Robo Blast 3 LUL") { IconPath = "../assets/images/dreamhill1.png" }
+                    new RoboGame("Sonic Robo Blast 2 v2.2") { IconPath = $"{FileManager.AssetsDirectoryName}/images/gfz2bg.png" },
+                    new RoboGame("srb2 Cyberdime Realm") { IconPath = $"{FileManager.AssetsDirectoryName}/images/cydmbg.png" },
+                    new RoboGame("Sonic Robo Blast 3 LUL") { IconPath = $"{FileManager.AssetsDirectoryName}/images/dreamhill1.png" }
                 };
 
                 // Levels for vanilla SRB2

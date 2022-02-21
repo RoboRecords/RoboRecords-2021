@@ -93,7 +93,7 @@ namespace RoboRecords.DbInteraction
             if (isBest || isBestNightsScore)
             {
                 DbInserter.AddRecordToLevel(record, level);
-                FileManager.Write(Path.Combine("Replays", $"{record.DbId}.lmp"), record.FileBytes);
+                FileManager.Write(Path.Combine(FileManager.ReplaysDirectoryName, $"{record.DbId}.lmp"), record.FileBytes);
             }
         }
     }

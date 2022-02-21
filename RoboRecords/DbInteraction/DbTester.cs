@@ -34,7 +34,7 @@ namespace RoboRecords.DbInteraction
 
                     if (!exists)
                         group.Levels.Add(new RoboLevel(17, "Red Volcano Zone", 2)
-                        { IconUrl = "../assets/images/mappics/" + RoboLevel.MakeMapString(16) + "P.png" } // Use Act 1's icon
+                        { IconUrl = $"{FileManager.AssetsDirectoryName}/images/mappics/" + RoboLevel.MakeMapString(16) + "P.png" } // Use Act 1's icon
                         );
                 }
             }
@@ -80,7 +80,7 @@ namespace RoboRecords.DbInteraction
                 RoboGame cyberGame = new RoboGame("Cyberdime Realm")
                 {
                     UrlName = "cyber",
-                    IconPath = @"../assets/images/cydmbg.png",
+                    IconPath = $"{FileManager.AssetsDirectoryName}/images/cydmbg.png",
                     LevelGroups = WadReader.GetMainCFGFromPK3(cyberdimeFile)
                 };
                 DbInserter.AddGame(cyberGame);
@@ -99,7 +99,7 @@ namespace RoboRecords.DbInteraction
                 return;
 
             level = new RoboLevel(17, "Red Volcano Zone", 2)
-                        { IconUrl = "../assets/images/mappics/" + RoboLevel.MakeMapString(16) + "P.png" };
+                        { IconUrl = $"{FileManager.AssetsDirectoryName}/images/mappics/" + RoboLevel.MakeMapString(16) + "P.png" };
 
             DbInserter.AddLevelToGame(level, Game);
         }

@@ -51,7 +51,7 @@ namespace RoboRecords.Pages
                 };
                 
                 RecordToDownload = record;
-                FileManager.Read(System.IO.Path.Combine("Replays", $"{record.DbId}.lmp"), out byte[] bytes);
+                FileManager.Read(System.IO.Path.Combine(FileManager.ReplaysDirectoryName, $"{record.DbId}.lmp"), out byte[] bytes);
                 
                 Logger.Log("GET success", true);
                 Response.Headers.Add("Content-Disposition", cd.ToString());

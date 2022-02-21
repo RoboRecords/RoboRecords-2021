@@ -26,14 +26,14 @@ namespace RoboRecords.Pages
 
             RoboUser user = CurrentUser;
 
-            string path = $"UserAssets/{user.DbId}/avatar.png";
+            string path = $"{FileManager.UserAssetsDirectoryName}/{user.DbId}/avatar.png";
             
             var stream = fileUpload.OpenReadStream();
             var bytes = new byte[fileUpload.Length];
             stream.Read(bytes, 0, (int)fileUpload.Length);
 
-            if (!FileManager.Exists($"UserAssets/{user.DbId}"))
-                FileManager.CreateDirectory($"UserAssets/{user.DbId}");
+            if (!FileManager.Exists($"{FileManager.UserAssetsDirectoryName}/{user.DbId}"))
+                FileManager.CreateDirectory($"{FileManager.UserAssetsDirectoryName}/{user.DbId}");
             
             FileManager.Write(path, bytes);
         }

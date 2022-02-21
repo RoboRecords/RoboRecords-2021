@@ -248,7 +248,7 @@ namespace RoboRecords.Models
             Records = new List<RoboRecord>();
 
             // REPLACE WITH SOME DATA BASE STUFF LATER!!!
-            IconUrl = "../assets/images/mappics/" + MapString + "P.png";
+            IconUrl = $"{FileManager.AssetsDirectoryName}/images/mappics/" + MapString + "P.png";
         }
 
         // Needed for the database context
