@@ -25,6 +25,9 @@ namespace RoboRecords.Pages
 
         public void OnPostAsync(IFormFile fileUpload)
         {
+            if (fileUpload is null)
+                return;
+
             if (!IsLoggedIn)
                 return;
 

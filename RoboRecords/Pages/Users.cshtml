@@ -43,7 +43,7 @@
 </style>
 
 <div class="container">
-    <form enctype="multipart/form-data" method="post">
+    <form method="post">
         <br/>
         <br/>
         <div>
@@ -63,7 +63,8 @@
                 <h2>You're not signed in yet</h2>
             }
         </div>
-        
+    </form>
+    <form enctype="multipart/form-data" method="post">
         <br/>
         <br/>
         <br/>
@@ -79,6 +80,6 @@
             </dd>
         </dl>
         <input asp-page-handler="Post" type="submit" value="Upload"/>
-
     </form>
+
 </div>
