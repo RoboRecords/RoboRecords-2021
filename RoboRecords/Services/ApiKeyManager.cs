@@ -22,9 +22,9 @@ namespace RoboRecords.Services
         {
             string hashedKey = HashApiKey(apiKey);
 
-            (roboUser, identityUser) = GetRoboUser(hashedKey);
+            (roboUser, identityUser, bool success) = GetRoboUser(hashedKey);
 
-            return roboUser.UserNameNoDiscrim != "Invalid User";
+            return success;
         }
         
         public string GenerateApiKeyForUser(IdentityRoboUser user)
@@ -73,20 +73,28 @@ namespace RoboRecords.Services
             return hash;
         }
 
-        private (RoboUser user, IdentityRoboUser identityUser) GetRoboUser(string apiKey)
+        private (RoboUser user, IdentityRoboUser identityUser, bool success) GetRoboUser(string apiKey)
         {
             if (_apiKeyCache.ContainsKey(apiKey))
-                return _apiKeyCache.GetRoboUser(apiKey);
+            {
+                (RoboUser cachedUser, IdentityRoboUser cachedIdentityUser) = _apiKeyCache.GetRoboUser(apiKey);
+                return (cachedUser, cachedIdentityUser, true);
+            }
 
+            IdentityRoboUser identityUser = null;
             bool foundUser = DbSelector.TryGetRoboUserFromApiKey(apiKey, out RoboUser user);
-            DbSelector.TryGetIdentityUserFromUserName(user.UserNameNoDiscrim, user.Discriminator, out IdentityRoboUser identityUser);
+            bool foundIdentityUser = false;
+
             
             if (foundUser)
             {
-                _apiKeyCache.AddKey(apiKey, user, identityUser);
+                foundIdentityUser = DbSelector.TryGetIdentityUserFromUserName(user.UserNameNoDiscrim, user.Discriminator, out identityUser);
+                
+                if (foundIdentityUser)
+                    _apiKeyCache.AddKey(apiKey, user, identityUser);
             }
             
-            return (user, identityUser);
+            return (user, identityUser, foundIdentityUser);
         }
     }
 
