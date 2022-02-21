@@ -23,7 +23,7 @@ namespace RoboRecords.Models
 
         public string UserNameNoDiscrim { get; set; }
 
-        public string AvatarData => GetAvatarData();
+        public string AvatarPath => GetAvatarPath();
 
         public RoboUser(string userName, short numberDiscriminator)
         {
@@ -50,24 +50,15 @@ namespace RoboRecords.Models
             
         }
 
-        private string GetAvatarData()
+        private string GetAvatarPath()
         {
-            byte[] avatarData;
-            
             // FIXME: Don't hardcode this much stuff!
             string avatarPath = $"UserAssets/{DbId}/avatar.png";
-            string guestPath = Path.Combine("wwwroot", "assets", "guest.png");
-            
-            if (!FileManager.Exists(avatarPath))
-            {
-                avatarData = File.ReadAllBytes(guestPath);
-                return Convert.ToBase64String(avatarData);
-            }
-            
-            if (!FileManager.Read(avatarPath, out avatarData))
-                avatarData = File.ReadAllBytes(guestPath);
 
-            return Convert.ToBase64String(avatarData);
+            if (!FileManager.Exists(avatarPath))
+                return "assets/guest.png";
+
+            return avatarPath;
         }
         
         public static bool operator ==(RoboUser user1, RoboUser user2)

@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using RoboRecords.DatabaseContexts;
 using RoboRecords.Filters;
 using RoboRecords.Models;
@@ -123,6 +124,11 @@ namespace RoboRecords
             
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(EnvVars.DataPath)
+            });
 
             app.UseRouting();
 

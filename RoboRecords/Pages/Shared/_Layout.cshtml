@@ -50,7 +50,7 @@
                             RoboUser user = Model.CurrentUser;
 
                             <a class="navbar-brand" href="#">
-                                <img src="data:image/png;base64,@user.AvatarData" width="30" height="30" alt="">
+                                <img src="@user.AvatarPath" width="30" height="30" alt="">
                             </a>
                             <li class="nav-item dropdown" id="indexDropDown">
                                 <!-- FIXME: This shouldn't be the right way to do this? Also put actual nice colors for the style -->
@@ -67,7 +67,7 @@
                         else
                         {
                             <a class="navbar-brand" href="#">
-                                <img src="../assets/guest.png" width="30" height="30" alt="">
+                                <img src="assets/guest.png" width="30" height="30" alt="">
                             </a>
                             <li class="nav-item">
                                 <a class="nav-link text-light">Guest</a>

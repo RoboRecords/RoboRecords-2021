@@ -29,7 +29,7 @@ namespace RoboRecords.Models
             nameId ??= regex.Replace(name, "").ToLower();
             NameId = nameId;
 
-            IconUrl = "../assets/images/characters/" + nameId + ".png";
+            IconUrl = "assets/images/characters/" + nameId + ".png";
         }
 
         // Needed for the database context
