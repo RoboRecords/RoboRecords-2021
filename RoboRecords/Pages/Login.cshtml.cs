@@ -16,13 +16,11 @@ namespace RoboRecords.Pages
     {
         private RoboUserManager _roboUserManager;
         private SignInManager<IdentityRoboUser> _signInManager;
-        private ApiKeyManager _apiKeyManager;
 
-        public Login(RoboUserManager roboUserManager, SignInManager<IdentityRoboUser> signInManager, ApiKeyManager apiKeyManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public Login(RoboUserManager roboUserManager, SignInManager<IdentityRoboUser> signInManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _roboUserManager = roboUserManager;
             _signInManager = signInManager;
-            _apiKeyManager = apiKeyManager;
         }
 
         public void OnGet()
@@ -32,16 +30,6 @@ namespace RoboRecords.Pages
             {
                 isModerator = Validator.UserHasRequiredRoles(CurrentIdentityUser, UserRoles.Moderator);
             }
-        }
-
-        //TODO: Give the API key to the user
-        public void OnPostApiKey()
-        {
-            if(!IsLoggedIn)
-                return;
-
-            Logger.Log(_apiKeyManager.GenerateApiKeyForUser(CurrentIdentityUser), Logger.LogLevel.Debug, true);
-            
         }
 
         public class RegisterData

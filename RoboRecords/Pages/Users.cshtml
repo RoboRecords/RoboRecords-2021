@@ -44,17 +44,41 @@
 
 <div class="container">
     <form enctype="multipart/form-data" method="post">
-            <dl>
-                <dt>
-                    <label asp-for="FileUpload"></label>
-                </dt>
-                <dd>
-                    <!-- TODO: Accept more than just PNG files -->
-                    <input asp-for="FileUpload" type="file" accept="image/png"/>
-                    <span asp-validation-for="FileUpload"></span>
-                </dd>
-            </dl>
-            <input asp-page-handler="Post" type="submit" value="Change profile picture" />
-            
-        </form>
+        <br/>
+        <br/>
+        <div>
+            @if (Model.IsLoggedIn)
+            {
+                <h2>Welcome, @Model.CurrentUser.UserNameNoDiscrim!</h2>
+                @if (Model.isModerator)
+                {
+                    <h3>You are a moderator!</h3>}
+                @using (Html.BeginForm(FormMethod.Post))
+                {
+                    <button asp-page-handler="ApiKey">Generate new Api Key</button>
+                }
+            }
+            else
+            {
+                <h2>You're not signed in yet</h2>
+            }
+        </div>
+        
+        <br/>
+        <br/>
+        <br/>
+        
+        <dl>
+            <h2>
+                <label asp-for="FileUpload">Upload profile picture:</label>
+            </h2>
+            <dd>
+                <!-- TODO: Accept more than just PNG files -->
+                <input asp-for="FileUpload" type="file" accept="image/png"/>
+                <span asp-validation-for="FileUpload"></span>
+            </dd>
+        </dl>
+        <input asp-page-handler="Post" type="submit" value="Upload"/>
+
+    </form>
 </div>

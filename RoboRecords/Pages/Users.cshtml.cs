@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RoboRecords.Models;
+using RoboRecords.Services;
 
 namespace RoboRecords.Pages
 {
@@ -10,8 +11,11 @@ namespace RoboRecords.Pages
         [BindProperty]
         public IFormFile FileUpload { get; set; }
         
-        public Users(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        private ApiKeyManager _apiKeyManager;
+        
+        public Users(ApiKeyManager apiKeyManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
+            _apiKeyManager = apiKeyManager;
         }
         
         public void OnGet()
@@ -36,6 +40,16 @@ namespace RoboRecords.Pages
                 FileManager.CreateDirectory($"{FileManager.UserAssetsDirectoryName}/{user.DbId}");
             
             FileManager.Write(path, bytes);
+        }
+        
+        //TODO: Give the API key to the user
+        public void OnPostApiKey()
+        {
+            if(!IsLoggedIn)
+                return;
+
+            Logger.Log(_apiKeyManager.GenerateApiKeyForUser(CurrentIdentityUser), Logger.LogLevel.Debug, true);
+            
         }
     }
 }

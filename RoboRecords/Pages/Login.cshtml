@@ -50,24 +50,6 @@
 </div>
 
 <div class="container">
-    <div>
-        @if (Model.IsLoggedIn)
-        {
-            <h1>Welcome, @Model.CurrentUser.UserNameNoDiscrim!</h1>
-            @if (Model.isModerator)
-            {
-                <h2>You are a moderator!</h2>}
-            @using (Html.BeginForm(FormMethod.Post))
-            {
-                <button asp-page-handler="ApiKey">Generate new Api Key</button>
-            }
-        }
-        else
-        {
-            <h1>You're not signed in yet</h1>
-        }
-    </div>
-    
     <script type="text/javascript">
     
     window.onload = function() {
