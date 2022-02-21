@@ -21,7 +21,7 @@ namespace RoboRecords.DbInteraction
                 level.Records.Add(record);
                 //context.Entry(record).State = EntityState.Detached;
                 context.RoboLevels.Update(level);
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
         }
 
@@ -31,7 +31,7 @@ namespace RoboRecords.DbInteraction
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 context.RoboGames.Add(game);
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
         }
 
@@ -41,7 +41,7 @@ namespace RoboRecords.DbInteraction
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 context.RoboUsers.Add(user);
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
         }
 
@@ -52,7 +52,7 @@ namespace RoboRecords.DbInteraction
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 context.RoboGames.Update(game);
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
         }
 

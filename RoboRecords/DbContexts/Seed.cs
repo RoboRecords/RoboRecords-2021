@@ -139,7 +139,7 @@ namespace RoboRecords
                 foreach (var user in roboUsers)
                     context.RoboUsers.Add(user);
 
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
         }
     }

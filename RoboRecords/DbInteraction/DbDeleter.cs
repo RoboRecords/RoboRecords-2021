@@ -17,7 +17,7 @@ namespace RoboRecords.DbInteraction
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 context.RoboLevels.Remove(level);
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
         }
 
@@ -27,7 +27,7 @@ namespace RoboRecords.DbInteraction
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 context.RoboRecords.Remove(record);
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
         }
 
@@ -37,7 +37,7 @@ namespace RoboRecords.DbInteraction
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 context.RoboGames.Remove(game);
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
         }
     }

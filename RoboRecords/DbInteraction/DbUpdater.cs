@@ -18,7 +18,7 @@ namespace RoboRecords.DbInteraction
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 context.RoboGames.Update(game);
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
         }
 
@@ -27,7 +27,7 @@ namespace RoboRecords.DbInteraction
             using (IdentityContext context = new IdentityContext())
             {
                 context.Users.Update(user);
-                context.SaveChangesAsync();
+                context.SaveChangesAsync().Wait();
             }
         }
     }
