@@ -13,11 +13,12 @@
     <script>
     class LevelForm
     {
-        constructor(name, act, number, iconPath) 
+        constructor(name, act, number, nights, iconPath) 
         {
             this.levelName = name;
             this.act = act;
             this.levelNumber = number;
+            this.nights = nights.toString() === "True";
             this.iconPath = iconPath;
         }
     }
@@ -27,7 +28,7 @@
         constructor(name, writeNames, levels)
         {
             this.groupName = name;
-            this.writeNames = writeNames.toString() === "True" ? true : false;
+            this.writeNames = writeNames.toString() === "True";
             this.levels = levels.slice();
         }
     }
@@ -58,7 +59,7 @@
                 {
                     var level = group.Levels[levelCount];
                     <text>
-                    tempLevels.push(new LevelForm("@level.LevelName", @level.Act, @level.LevelNumber, "@level.IconUrl"));
+                    tempLevels.push(new LevelForm("@level.LevelName", @level.Act, @level.LevelNumber, "@level.Nights", "@level.IconUrl"));
                     </text>
                 }
                 <text>
@@ -99,31 +100,39 @@
                 for (let levelCount = 0; levelCount < group.levels.length; levelCount++)
                 {
                     let level = group.levels[levelCount];
+                    let nights_checked_str = level.nights ? "checked" : "";
+                    let level_str = "level_" + groupCount + "_" + levelCount;
                     html_str += `
                     <div style="background: #408020; padding: 10px; margin-bottom: 10px">
                         <dt>
-                            <label for="level_` + groupCount +`_` + levelCount +`_name">Level Name</label>
+                            <label for="` + level_str + `_name">Level Name</label>
                         </dt>
                         <dd>
-                            <input id="level_` + groupCount +`_` + levelCount +`_name" name="level_` + groupCount +`_` + levelCount +`_name" placeholder="Green Flower Zone" value="` + level.levelName + `"/>
+                            <input id="` + level_str + `_name" name="level_` + groupCount +`_` + levelCount +`_name" placeholder="Green Flower Zone" value="` + level.levelName + `"/>
                         </dd>
                         <dt>
-                            <label for="level_` + groupCount +`_` + levelCount +`_act">Act</label>
+                            <label for="` + level_str + `_act">Act</label>
                         </dt>
                         <dd>
-                            <input type="number" id="level_` + groupCount +`_` + levelCount +`_act" name="level_` + groupCount +`_` + levelCount +`_act" placeholder="` +  (levelCount + 1) +`" value="` + level.act + `"/>
+                            <input type="number" id="` + level_str + `_act" name="` + level_str + `_act" placeholder="` +  (levelCount + 1) +`" value="` + level.act + `"/>
                         </dd>
                         <dt>
-                            <label for="level_` + groupCount +`_` + levelCount +`_number"></label>
+                            <label for="` + level_str + `_number">Level Number</label>
                         </dt>
                         <dd>
-                            <input type="number" id="level_` + groupCount +`_` + levelCount +`_number" name="level_` + groupCount +`_` + levelCount +`_number" placeholder="1" value="` + level.levelNumber + `"/>
+                            <input type="number" id="` + level_str + `_number" name="` + level_str + `_number" placeholder="1" value="` + level.levelNumber + `"/>
                         </dd>
                         <dt>
-                            <label for="level_` + groupCount +`_` + levelCount +`_path"></label>
+                            <label for="` + level_str + `_nights">Nights</label>
                         </dt>
                         <dd>
-                            <input id="level_` + groupCount +`_` + levelCount +`_path" name="level_` + groupCount +`_` + levelCount +`_path" placeholder="@FileManager.AssetsDirectoryName/images/mappics/MAP01P.png" value="` + level.iconPath + `"/>
+                            <input id="` + level_str + `_nights" type="checkbox" name="` + level_str + `_nights" ` + nights_checked_str +`/>
+                        </dd>
+                        <dt>
+                            <label for="` + level_str + `_path">Picture</label>
+                        </dt>
+                        <dd>
+                            <input id="` + level_str + `_path" name="` + level_str + `_path" placeholder="@FileManager.AssetsDirectoryName/images/mappics/MAP01P.png" value="` + level.iconPath + `"/>
                         </dd>
                         <button type="button" onclick="remove_level(` + groupCount + `, ` + levelCount + `)">X</button>
                     </div>
@@ -166,12 +175,13 @@
                     let levelName = document.getElementById(level_str +"_name").value;
                     let act = document.getElementById(level_str +"_act").value;
                     let levelNumber = document.getElementById(level_str +"_number").value;
+                    let nights = document.getElementById(level_str +"_nights").checked ? "True" : "False";
                     let iconPath = document.getElementById(level_str +"_path").value;
-                    let level = new LevelForm(levelName, act,  levelNumber, iconPath);
+                    let level = new LevelForm(levelName, act,  levelNumber, nights, iconPath);
                     
                     levelCount++;
                     
-                    console.log(level.levelName + ", " + level.act + ", " + level.levelNumber + ", " + level.iconPath);
+                    console.log(level.levelName + ", " + level.act + ", " + level.levelNumber + "," +level.nights + ", " + level.iconPath);
                     
                     tempLevels.push(level);
                 }
@@ -203,7 +213,7 @@
     function add_level(group_num)
     {
         editGameForm.read_fields();
-        editGameForm.levelGroups[group_num].levels.push(new LevelForm("New Level", editGameForm.levelGroups[group_num].levels.length + 1, 0, ""));
+        editGameForm.levelGroups[group_num].levels.push(new LevelForm("New Level", editGameForm.levelGroups[group_num].levels.length + 1, 0, false, ""));
         editGameForm.draw();
     }
     
@@ -227,6 +237,38 @@
         editGameForm.levelGroups.splice(group_num, 1);
         editGameForm.draw();
     }
+    function getToken() {
+        return "@Model.Token";
+    }
+    
+    function get(elementIdString) {
+        return document.getElementById(elementIdString);
+    }
+    
+    function save_changes()
+    {
+        console.log("Saving...");
+        $.ajax({
+            type: 'POST',
+            url: '?handler=Save',
+            headers: {
+                "RequestVerificationToken": getToken()
+            },
+            
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ 
+                Name: get("game_name").value,
+                UrlName: get("game_url_name").value,
+                Groups: JSON.stringify(editGameForm.levelGroups),
+            }),
+            success: function (data) {
+                console.log("Saving success!");
+            },
+            error: function (error) {
+                console.log("Saving failure!");
+            }
+        });
+    }
     </script>
 }
 
@@ -237,31 +279,28 @@
 <body>
 <div>
     <h1>Edit game</h1>
-    
-    <form enctype="multipart/form-data" method="post" id="game_div">
-        <dl>
-            <dt>
-                <label asp-for="GameEdit.Name"></label>
-            </dt>
-            <dd>
-                <input asp-for="GameEdit.Name" type="text" placeholder="Sonic Robo Blast 2 v2.2" value="@EditGame.Game.Name"/>
-            </dd>
-            <dt>
-                <label asp-for="GameEdit.UrlName"></label>
-            </dt>
-            <dd>
-                <input asp-for="GameEdit.UrlName" type="text" placeholder="srb2v22" value="@EditGame.Game.UrlName"/>
-            </dd>
-            <dt>
-                <label asp-for="GameEdit.LevelGroups"></label>
-            </dt>
-            
-            <div id="group_div"></div>
-        </dl>
-        <button type="button" onclick="add_group()">Add level group</button>
-        <input type="button" value="Cancel"/>
-        <input type="submit"/>
-    </form>
+    <dl>
+        <dt>
+            <label for="game_name">Game's name</label>
+        </dt>
+        <dd>
+            <input id="game_name" type="text" placeholder="Sonic Robo Blast 2 v2.2" value="@EditGame.Game.Name"/>
+        </dd>
+        <dt>
+            <label for="game_url_name">Name in URL</label>
+        </dt>
+        <dd>
+            <input id="game_url_name" type="text" placeholder="srb2v22" value="@EditGame.Game.UrlName"/>
+        </dd>
+        <dt>
+            <label for="group_div">Level groups:</label>
+        </dt>
+        
+        <div id="group_div"></div>
+    </dl>
+    <button type="button" onclick="add_group()">Add level group</button>
+    <input type="button" value="Cancel"/>
+    <button onclick="save_changes()" >Submit</button>
     <br/>
     <br/>
     <br/>
