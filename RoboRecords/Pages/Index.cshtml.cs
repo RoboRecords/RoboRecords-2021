@@ -22,16 +22,7 @@ namespace RoboRecords.Pages
 
         public void OnGet()
         {
-            // Test of record selection. Check console or log on run.
-            DbSelector.TryGetRoboRecordFromDbId(12, out RoboRecord record);
-
-            Logger.Log(record.ToString(), true);
-            Logger.Log(record.ToStringDetailed(), true);
-
-            DbSelector.TryGetRoboRecordWithDataFromDbId(12, out RoboRecord recordData);
-
-            Logger.Log(recordData.ToString(), true);
-            Logger.Log(recordData.ToStringDetailed(), true);
+            
         }
     }
 }
