@@ -31,6 +31,28 @@ else
     </div>
 }
 
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalTitleText" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #d13532">
+                <h5 class="modal-title" id="errorModalTitleText" >Errors were found in replays:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="errorModalBodyText" class="modal-body" style="background-color: #303030">
+                @foreach (Submit.ErrorMessage message in Submit.ErrorMessages)
+                {
+                    <p>@message.ReplayName: @message.Message</p>
+                }
+            </div>
+            <div class="modal-footer" style="background-color: #303030">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @if (Submit.UserLoggedIn)
 {
     <div class="container">
@@ -139,6 +161,21 @@ else
     </div>
 }
 
+@if (Submit.ErrorMessages.Count > 0)
+{
+    <script type="text/javascript">
+    function showError()
+    {
+        console.log("Calling modal");
+        $('#errorModal').modal()
+        console.log("Modal called");
+    }
+    
+    window.onload = function() {
+        showError();
+    };
+    </script>
+}
 
 
 

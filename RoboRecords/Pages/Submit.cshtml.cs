@@ -40,9 +40,23 @@ namespace RoboRecords.Pages
         {
         }
 
+        public class ErrorMessage
+        {
+            public string ReplayName;
+            public string Message;
+
+            public ErrorMessage(string replayName, string message)
+            {
+                ReplayName = replayName;
+                Message = message;
+            }
+        }
+
+        public static List<ErrorMessage> ErrorMessages;
         public void OnGet()
         {
             RecordList = new List<RoboRecord>();
+            ErrorMessages = new List<ErrorMessage>();
             // TODO: Change to only select current level, as this won't make Entity Framework
             // generate an UPDATE for the whole RoboGame object.
             // Not gonna start changing stuff here, as it might break the Submit page.
@@ -71,6 +85,8 @@ namespace RoboRecords.Pages
                 // TODO: Error message thing or something
                 return null;
             }
+
+            ErrorMessages.Clear();
             List<IFormFile> files = fileUpload.FormFiles;
             long size = files.Sum(f => f.Length);
 
@@ -84,15 +100,35 @@ namespace RoboRecords.Pages
                     var rec = new RoboRecord(CurrentUser, bytes.ToArray());
 
                     // If something went wrong while reading the replay, don't upload it.
-                    if (rec.FileBytes != null && rec.FileBytes.Length > 0)
+                    switch (rec.readStatus)
                     {
-                        RecordList.Add(rec);
+                        case RoboRecord.ReadStatus.Success:
+                            // The condition SHOULD always be true, but let's be careful
+                            if (rec.FileBytes != null && rec.FileBytes.Length > 0)
+                            {
+                                RecordList.Add(rec);
+                            }
+                            else
+                            {
+                                ErrorMessages.Add(new ErrorMessage(formFile.FileName, RoboRecord.MessageErrorUnknown));
+                            }
+                            break;
+                        case RoboRecord.ReadStatus.ErrorInvalid:
+                            ErrorMessages.Add(new ErrorMessage(formFile.FileName, RoboRecord.MessageErrorInvalid));
+                            break;
+                        case RoboRecord.ReadStatus.ErrorReading:
+                            ErrorMessages.Add(new ErrorMessage(formFile.FileName, RoboRecord.MessageErrorReading));
+                            break;
+                        case RoboRecord.ReadStatus.ErrorUnfinished:
+                            ErrorMessages.Add(new ErrorMessage(formFile.FileName, RoboRecord.MessageErrorIncomplete));
+                            break;
+                        case RoboRecord.ReadStatus.ErrorNotSrb2:
+                            ErrorMessages.Add(new ErrorMessage(formFile.FileName, RoboRecord.MessageErrorNotSrb2));
+                            break;
+                        default:
+                            ErrorMessages.Add(new ErrorMessage(formFile.FileName, RoboRecord.MessageErrorUnknown));
+                            break;
                     }
-                    else
-                    {
-                        // TODO: Error message or something
-                    }
-                    
                 }
             }
             // Process uploaded files
@@ -104,6 +140,7 @@ namespace RoboRecords.Pages
 
         public IActionResult OnPostUploadAsync()
         {
+            ErrorMessages.Clear();
             if (!IsLoggedIn)
                 return null;
 
@@ -120,12 +157,14 @@ namespace RoboRecords.Pages
         
         public IActionResult OnPostCancelAsync()
         {
+            ErrorMessages.Clear();
             // Refresh the page to cancel the uploads
             return RedirectToPage();
         }
 
         public IActionResult OnPostDeleteAsync(int rec)
         {
+            ErrorMessages.Clear();
             // Should NEVER happen
             if (RecordList.Count <= rec)
             {

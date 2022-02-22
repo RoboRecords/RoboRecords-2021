@@ -26,6 +26,13 @@ namespace RoboRecords.Models
         public virtual RoboCharacter Character { get; set; }
         public virtual RoboLevel Level { get; set; }
 
+        public const string MessageSuccess = "File read successfully!";
+        public const string MessageErrorReading = "The file could not be read!";
+        public const string MessageErrorInvalid = "The file is not valid!";
+        public const string MessageErrorIncomplete = "The replay is unfinished!";
+        public const string MessageErrorNotSrb2 = "The file not an SRB2 replay!";
+        public const string MessageErrorUnknown = "Unkown error!";
+        
         // 202 -> 2.2
         private int _majorVersion;
         // 9 in 2.2.9
@@ -69,7 +76,7 @@ namespace RoboRecords.Models
         //private static readonly char[] DemoHeaderBytes = { (char)0xF0, 'S', 'R', 'B', '2', 'R', 'e', 'p', 'l', 'a', 'y', (char)0x0F }; // hackish method to spell out "ðSRB2Replay", required for file verification
         private static readonly string DemoHeader = char.ToString((char)0xF0) + "SRB2Replay" + char.ToString((char)0x0F);
 
-        enum  ReadStatus
+        public enum ReadStatus
         {
             Success,
             ErrorNotSrb2,
@@ -77,6 +84,9 @@ namespace RoboRecords.Models
             ErrorUnfinished,
             ErrorReading
         }
+        
+        public ReadStatus readStatus;
+        
         private ReadStatus ReadDemo(byte[] bytes)
         {
             int curByte = 0;
@@ -158,7 +168,7 @@ namespace RoboRecords.Models
         {
             UploadTime = DateTime.Now;
         }
-        
+
         public RoboRecord(RoboUser uploader, byte[] fileBytes)
         {
             Uploader = uploader;
@@ -167,7 +177,6 @@ namespace RoboRecords.Models
             if (fileBytes == null)
                 return;
 
-            ReadStatus readStatus;
             try
             {
                 readStatus = ReadDemo(fileBytes);
@@ -175,29 +184,28 @@ namespace RoboRecords.Models
             catch
             {
                 readStatus = ReadStatus.ErrorReading;
-                Logger.Log("Error: Couldn't read bytes.", Logger.LogLevel.Error, true);
             }
             // Read the file and get tics and shit
             switch (readStatus)
             {
                 case ReadStatus.Success:
                     FileBytes = fileBytes;
-                    Logger.Log("File read successfully!", true);
+                    Logger.Log(MessageSuccess, true);
                     break;
                 case ReadStatus.ErrorInvalid:
-                    Logger.Log("Error: Invalid demo file.", Logger.LogLevel.Error, true);
+                    Logger.Log(MessageErrorInvalid, Logger.LogLevel.Error, true);
                     break;
                 case ReadStatus.ErrorUnfinished:
-                    Logger.Log("Error: Unfinished demo.", Logger.LogLevel.Error, true);
+                    Logger.Log(MessageErrorUnknown, Logger.LogLevel.Error, true);
                     break;
                 case ReadStatus.ErrorNotSrb2:
-                    Logger.Log("Error, not an SRB2 demo!", Logger.LogLevel.Error, true);
+                    Logger.Log(MessageErrorNotSrb2, Logger.LogLevel.Error, true);
                     break;
                 case ReadStatus.ErrorReading:
-                    Logger.Log("Error, couldn't read the demo!", Logger.LogLevel.Error, true);
+                    Logger.Log(MessageErrorReading, Logger.LogLevel.Error, true);
                     break;
                 default:
-                    Logger.Log("Error: Unknown error.", Logger.LogLevel.Error, true);
+                    Logger.Log(MessageErrorUnknown, Logger.LogLevel.Error, true);
                     break;
             }
         }
