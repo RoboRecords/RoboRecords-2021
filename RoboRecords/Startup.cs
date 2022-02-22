@@ -55,10 +55,6 @@ namespace RoboRecords
                 
             }
             
-            //FIXME: This does not seem to properly work in this context, had to put this before the first call to 
-            //EnsureCreated and even then it created errors (but it still worked enough for the register functionality)
-            // FIXED. Issue with Identity using default column lengths that exceed the limits in MySQL.
-            // Limited lengths in OnModelCreating of IdentityContext --- Zenya
             using (var context = new IdentityContext())
             {
                 context.Database.EnsureCreated();

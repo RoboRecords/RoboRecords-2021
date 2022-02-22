@@ -62,8 +62,7 @@ namespace RoboRecords.Pages
 
             string username = splittedUsername[0];
             short discriminator = short.Parse(splittedUsername[1]);
-
-            // TODO: Make a more elegant way to interupt if the discriminator is invalid
+            
             if (discriminator == 0)
             {
                 return BadRequest("No Discriminator");
@@ -99,7 +98,6 @@ namespace RoboRecords.Pages
             string username = splittedUsername[0];
             short discriminator = short.Parse(splittedUsername[1]);
 
-            // TODO: Make a more elegant way to interupt if the discriminator is invalid
             // TODO: Actually allow email login
             if (discriminator == 0)
             {

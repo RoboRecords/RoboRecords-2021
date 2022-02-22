@@ -28,21 +28,8 @@ namespace RoboRecords.Models
         public RoboUser(string userName, short numberDiscriminator)
         {
             Discriminator = numberDiscriminator;
-            // Something = discriminator;
             UserNameNoDiscrim = userName;
-            // UserName = userName + '#' + numberDiscriminator;
         }
-        
-        // We don't need this --- Zenya
-        /*
-        public RoboUser(string email, string userName, short numberDiscriminator)
-        {
-            // Email = email;
-            Discriminator = numberDiscriminator;
-            // Something = discriminator;
-            UserNameNoDiscrim = userName;
-            // UserName = userName + '#' + numberDiscriminator;
-        }*/
 
         // Needed for the database context
         public RoboUser()
