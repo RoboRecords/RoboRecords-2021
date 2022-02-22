@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RoboRecords.Models;
@@ -8,28 +10,32 @@ namespace RoboRecords.Pages
 {
     public class Users : RoboPageModel
     {
-        [BindProperty]
-        public IFormFile FileUpload { get; set; }
-        
         private ApiKeyManager _apiKeyManager;
+
+        private IAntiforgery _antiforgery;
+
+        public string Token;
         
-        public Users(ApiKeyManager apiKeyManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public Users(IAntiforgery antiforgery, ApiKeyManager apiKeyManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
+            _antiforgery = antiforgery;
             _apiKeyManager = apiKeyManager;
         }
         
         public void OnGet()
         {
-            
+            Token = _antiforgery.GetTokens(HttpContext).RequestToken;
         }
 
-        public void OnPostAsync(IFormFile fileUpload)
+        public IActionResult OnPostAvatar()
         {
-            if (fileUpload is null)
-                return;
+            if (Request.Form?.Files?.Count == 0)
+                return BadRequest("No file attached");
 
             if (!IsLoggedIn)
-                return;
+                return BadRequest("Not logged in");
+
+            IFormFile fileUpload = Request.Form.Files[0];
 
             RoboUser user = CurrentUser;
 
@@ -43,16 +49,20 @@ namespace RoboRecords.Pages
                 FileManager.CreateDirectory($"{FileManager.UserAssetsDirectoryName}/{user.DbId}");
             
             FileManager.Write(path, bytes);
+            return Content("Success!");
         }
         
-        //TODO: Give the API key to the user
-        public void OnPostApiKey()
+        public IActionResult OnPostApiKey()
         {
             if(!IsLoggedIn)
-                return;
+                return BadRequest("There is no user logged in");
 
-            Logger.Log(_apiKeyManager.GenerateApiKeyForUser(CurrentIdentityUser), Logger.LogLevel.Debug, true);
+            string apiKey = _apiKeyManager.GenerateApiKeyForUser(CurrentIdentityUser);
             
+            Logger.Log(apiKey, Logger.LogLevel.Debug, true);
+
+
+            return Content(apiKey);
         }
     }
 }

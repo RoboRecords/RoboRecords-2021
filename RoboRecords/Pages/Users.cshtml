@@ -42,44 +42,150 @@
     
 </style>
 
-<div class="container">
-    <form method="post">
-        <br/>
-        <br/>
-        <div>
-            @if (Model.IsLoggedIn)
-            {
-                <h2>Welcome, @Model.CurrentUser.UserNameNoDiscrim!</h2>
-                @if (Model.isModerator)
-                {
-                    <h3>You are a moderator!</h3>}
-                @using (Html.BeginForm(FormMethod.Post))
-                {
-                    <button asp-page-handler="ApiKey">Generate new Api Key</button>
-                }
-            }
-            else
-            {
-                <h2>You're not signed in yet</h2>
-            }
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalTitleText" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #d13532">
+                <h5 class="modal-title" id="errorModalTitleText" ></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="errorModalBodyText" class="modal-body" style="background-color: #303030"></div>
+            <div class="modal-footer" style="background-color: #303030">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div>
-    </form>
-    <form enctype="multipart/form-data" method="post">
-        <br/>
-        <br/>
-        <br/>
+    </div>
+</div>
+
+<div class="modal fade" id="generationSuccessModal" tabindex="-1" role="dialog" aria-labelledby="generationSuccessModalTitleText" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #0bd13b">
+                <h5 class="modal-title" id="generationSuccessModalTitleText"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="generationSuccessModalBodyText" class="modal-body" style="background-color: #303030"></div>
+            <div class="modal-footer" style="background-color: #303030">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function get(elementIdString) {
+        return document.getElementById(elementIdString);
+    }
+    
+    function getToken() {
+        return "@Model.Token"
+    }
+    
+    async function changeAvatar(inputElement) {        
+        var fd = new FormData();
+        fd.append('avatar', inputElement.files[0]);
         
-        <dl>
-            <h2>
-                <label asp-for="FileUpload">Upload profile picture:</label>
-            </h2>
-            <dd>
-                <!-- TODO: Accept more than just PNG files -->
-                <input asp-for="FileUpload" type="file" accept="image/png"/>
-                <span asp-validation-for="FileUpload"></span>
-            </dd>
-        </dl>
-        <input asp-page-handler="Post" type="submit" value="Upload"/>
-    </form>
+        $.ajax({
+            type: 'POST',
+            url: '?handler=Avatar',
+            
+            headers: {
+                "RequestVerificationToken": getToken()
+            },
+            
+            processData: false,
+            contentType: false,
+            data: fd,
+            
+            success: function (data) {
+                location.reload()
+            },
+            error: function (error) {
+                try 
+                {
+                    get("errorModalTitleText").textContent = "Profile picture change error"
+                    get("errorModalBodyText").innerHTML = "An error occured during the change of profile picture:<br><br>" + error.responseText
+                }
+                catch (exception)
+                {
+                    get("errorModalTitleText").textContent = "Internal server error"
+                    get("errorModalBodyText").innerHTML = "An internal error occured during the API Key generation"
+                }
+                    
+                $('#errorModal').modal()
+            }
+        })
+    }
+    
+    function genApiKey() {
+        $.ajax({
+            type: 'POST',
+            url: '?handler=ApiKey',
+            
+            headers: {
+                "RequestVerificationToken": getToken()
+            },
+            
+            success: function (data) {
+                get("generationSuccessModalTitleText").textContent = "API Key generation successful!"
+                get("generationSuccessModalBodyText").innerHTML = "Here is your new API Key:<br><br>" + data
+                $('#generationSuccessModal').modal()
+            },
+            error: function (error) {
+                try 
+                {
+                    get("errorModalTitleText").textContent = "API Key generation error"
+                    get("errorModalBodyText").innerHTML = "An error occured during the API key generation:<br><br>" + error.responseText
+                }
+                catch (exception)
+                {
+                    get("errorModalTitleText").textContent = "Internal server error"
+                    get("errorModalBodyText").innerHTML = "An internal error occured during the API Key generation"
+                }
+                    
+                $('#errorModal').modal()
+            }
+        })
+    }
+</script>
+
+<div class="container">
+    <br/>
+    <br/>
+    <div>
+        @if (Model.IsLoggedIn)
+        {
+            <h2>Welcome, @Model.CurrentUser.UserNameNoDiscrim!</h2>
+            <button onclick="genApiKey()">Generate new Api Key</button>
+
+            if (Model.isModerator)
+            {
+                <h3>You are a moderator!</h3>
+            }
+        }
+        else
+        {
+            <h2>You're not signed in yet</h2>
+        }
+    </div>
+    
+    <br/>
+    <br/>
+    <br/>
+    
+    <dl>
+        <h2>
+            <label>Upload profile picture:</label>
+        </h2>
+        <dd>
+            <!-- TODO: Accept more than just PNG files -->
+            <input onchange="console.log('changed')" id="fileInput" type="file" accept="image/png"/>
+        </dd>
+    </dl>
+    <input onclick="changeAvatar(get('fileInput'))" type="submit" value="Upload"/>
 
 </div>
