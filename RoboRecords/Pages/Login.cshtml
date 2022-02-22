@@ -52,6 +52,10 @@
 <div class="container">
     <script type="text/javascript">
     
+    function getToken() {
+        return "@Model.Token"
+    }
+    
     window.onload = function() {
         get("exampleInputEmail1").addEventListener("keydown", function (e) { handleEnterKey("exampleInputEmail1", e) })
         get("exampleInputUsername1").addEventListener("keydown", function (e) { handleEnterKey("exampleInputUsername1", e) })
@@ -252,6 +256,11 @@
         $.ajax({
             type: 'POST',
             url: '?handler=Register',
+            
+            headers: {
+                "RequestVerificationToken": getToken()
+            },
+            
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ 
                 Email: get("exampleInputEmail1").value,
@@ -284,6 +293,11 @@
         $.ajax({
             type: 'POST',
             url: '?handler=Login',
+            
+            headers: {
+                "RequestVerificationToken": getToken()
+            },
+            
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ 
                 Email: get("exampleInputEmail2").value,

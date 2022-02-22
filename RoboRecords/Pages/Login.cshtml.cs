@@ -1,5 +1,6 @@
 using System;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,20 +12,25 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace RoboRecords.Pages
 {
-    [IgnoreAntiforgeryToken(Order = 2000)] // Note : this is to avoid having to provide the Antiforgery Token when making a ajax request to Register or Login
     public class Login : RoboPageModel
     {
+        private IAntiforgery _antiforgery;
         private RoboUserManager _roboUserManager;
         private SignInManager<IdentityRoboUser> _signInManager;
+        
+        public string Token;
 
-        public Login(RoboUserManager roboUserManager, SignInManager<IdentityRoboUser> signInManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public Login(IAntiforgery antiforgery, RoboUserManager roboUserManager, SignInManager<IdentityRoboUser> signInManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
+            _antiforgery = antiforgery;
             _roboUserManager = roboUserManager;
             _signInManager = signInManager;
         }
 
         public void OnGet()
         {
+            Token = _antiforgery.GetTokens(HttpContext).RequestToken;
+            
             // Improper example of checking if current user is a moderator. To test, manually change Roles column of your IdentityRoboUser entry to 3 and log in.
             if (IsLoggedIn)
             {
