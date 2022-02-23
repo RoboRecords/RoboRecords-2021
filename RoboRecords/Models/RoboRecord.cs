@@ -86,6 +86,25 @@ namespace RoboRecords.Models
         }
         
         public ReadStatus readStatus;
+
+        public static string GetReadStatusMessage(ReadStatus status)
+        {
+            switch (status)
+            {
+                case ReadStatus.Success:
+                    return MessageSuccess;
+                case ReadStatus.ErrorInvalid:
+                    return MessageErrorInvalid;
+                case ReadStatus.ErrorReading:
+                    return MessageErrorReading;
+                case ReadStatus.ErrorUnfinished:
+                    return MessageErrorIncomplete;
+                case ReadStatus.ErrorNotSrb2:
+                    return MessageErrorNotSrb2;
+            }
+
+            return MessageErrorUnknown;
+        }
         
         private ReadStatus ReadDemo(byte[] bytes)
         {
