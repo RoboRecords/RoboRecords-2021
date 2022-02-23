@@ -60,7 +60,7 @@ namespace RoboRecords.DatabaseContexts
             {
                 entity.HasKey(e => e.DbId);
                 entity.Property(e => e.IconUrl).IsRequired();
-                entity.Property(e => e.LevelNumber).IsRequired();
+                entity.Property(e => e.LevelNumber).IsRequired().UsePropertyAccessMode(PropertyAccessMode.Property);
                 entity.HasMany(e => e.Records).WithOne(e => e.Level);
                 entity.Property(e => e.LevelName).IsRequired();
                 entity.Property(e => e.Act).IsRequired();
