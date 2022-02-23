@@ -2,51 +2,56 @@
 @using RoboRecords.Models
 @using Google.Protobuf.WellKnownTypes
 @model RoboRecords.Pages.EditGame
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery _antiforgery
 
 @{
     ViewData["Title"] = "Edit game";
+    
+    var requestToken = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
 <!DOCTYPE html>
+
+<input id="__AntiforgeryToken" type="hidden" value="@requestToken" />
 
 @section Scripts {
     <script>
     class LevelForm
     {
-        constructor(name, act, number, nights, iconPath) 
+        constructor(name, Act, number, Nights, IconPath) 
         {
-            this.levelName = name;
-            this.act = act;
-            this.levelNumber = number;
-            this.nights = nights.toString() === "True";
-            this.iconPath = iconPath;
+            this.LevelName = name;
+            this.Act = Act;
+            this.LevelNumber = number;
+            this.Nights = Nights.toString() === "True";
+            this.IconPath = IconPath;
         }
     }
     
     class LevelGroupForm
     {
-        constructor(name, writeNames, levels)
+        constructor(name, WriteNames, Levels)
         {
-            this.groupName = name;
-            this.writeNames = writeNames.toString() === "True";
-            this.levels = levels.slice();
+            this.GroupName = name;
+            this.WriteNames = WriteNames.toString() === "True";
+            this.Levels = Levels.slice();
         }
     }
 
     class EditGameForm
     {
-        groupName = "";
-        urlName = "";
-        iconPath = "";
-        levelGroups = [];
+        GroupName = "";
+        UrlName = "";
+        IconPath = "";
+        LevelGroups = [];
         
         init()
         {
             console.log("Creating a form object");
             this.name = "@EditGame.Game.Name";
-            this.urlName = "@EditGame.Game.UrlName";
-            this.iconPath = "@EditGame.Game.IconPath";
-            this.levelGroups = [];
+            this.UrlName = "@EditGame.Game.UrlName";
+            this.IconPath = "@EditGame.Game.IconPath";
+            this.LevelGroups = [];
             let tempLevels = [];
             
             @for (var groupCount = 0; groupCount < EditGame.Game.LevelGroups.Count; groupCount++)
@@ -63,7 +68,7 @@
                     </text>
                 }
                 <text>
-                this.levelGroups.push(new LevelGroupForm("@group.Name", "@group.WriteLevelNames", tempLevels))
+                this.LevelGroups.push(new LevelGroupForm("@group.Name", "@group.WriteLevelNames", tempLevels))
                 </text>
             }
             console.log("Created a form object");
@@ -73,10 +78,10 @@
         {
             let formDiv = document.getElementById("group_div");
             let html_str = "";
-            for (let groupCount = 0; groupCount < this.levelGroups.length; groupCount++)
+            for (let groupCount = 0; groupCount < this.LevelGroups.length; groupCount++)
             {
-                let group = this.levelGroups[groupCount];
-                let checked_str = group.writeNames ? "checked" : "";
+                let group = this.LevelGroups[groupCount];
+                let checked_str = group.WriteNames ? "checked" : "";
                 
                 html_str += `
                 <div style="background: #204080; padding: 10px; margin-bottom: 10px">
@@ -84,7 +89,7 @@
                         <label for="group_` + groupCount +`_name">Name</label>
                     </dt>
                     <dd>
-                        <input id="group_` + groupCount +`_name" name="group_` + groupCount +`_name" placeholder="Green Flower Zone" value="` + group.groupName + `"/>
+                        <input id="group_` + groupCount +`_name" name="group_` + groupCount +`_name" placeholder="Green Flower Zone" value="` + group.GroupName + `"/>
                     </dd>
                     <dt>
                         <label for="group_` + groupCount +`_write_names">Write Level Names</label>
@@ -97,10 +102,10 @@
                     </dt>
                 `
                 
-                for (let levelCount = 0; levelCount < group.levels.length; levelCount++)
+                for (let levelCount = 0; levelCount < group.Levels.length; levelCount++)
                 {
-                    let level = group.levels[levelCount];
-                    let nights_checked_str = level.nights ? "checked" : "";
+                    let level = group.Levels[levelCount];
+                    let Nights_checked_str = level.Nights ? "checked" : "";
                     let level_str = "level_" + groupCount + "_" + levelCount;
                     html_str += `
                     <div style="background: #408020; padding: 10px; margin-bottom: 10px">
@@ -108,31 +113,31 @@
                             <label for="` + level_str + `_name">Level Name</label>
                         </dt>
                         <dd>
-                            <input id="` + level_str + `_name" name="level_` + groupCount +`_` + levelCount +`_name" placeholder="Green Flower Zone" value="` + level.levelName + `"/>
+                            <input id="` + level_str + `_name" name="level_` + groupCount +`_` + levelCount +`_name" placeholder="Green Flower Zone" value="` + level.LevelName + `"/>
                         </dd>
                         <dt>
-                            <label for="` + level_str + `_act">Act</label>
+                            <label for="` + level_str + `_Act">Act</label>
                         </dt>
                         <dd>
-                            <input type="number" id="` + level_str + `_act" name="` + level_str + `_act" placeholder="` +  (levelCount + 1) +`" value="` + level.act + `"/>
+                            <input type="number" id="` + level_str + `_Act" name="` + level_str + `_Act" placeholder="` +  (levelCount + 1) +`" value="` + level.Act + `"/>
                         </dd>
                         <dt>
                             <label for="` + level_str + `_number">Level Number</label>
                         </dt>
                         <dd>
-                            <input type="number" id="` + level_str + `_number" name="` + level_str + `_number" placeholder="1" value="` + level.levelNumber + `"/>
+                            <input type="number" id="` + level_str + `_number" name="` + level_str + `_number" placeholder="1" value="` + level.LevelNumber + `"/>
                         </dd>
                         <dt>
-                            <label for="` + level_str + `_nights">Nights</label>
+                            <label for="` + level_str + `_Nights">Nights</label>
                         </dt>
                         <dd>
-                            <input id="` + level_str + `_nights" type="checkbox" name="` + level_str + `_nights" ` + nights_checked_str +`/>
+                            <input id="` + level_str + `_Nights" type="checkbox" name="` + level_str + `_Nights" ` + Nights_checked_str +`/>
                         </dd>
                         <dt>
                             <label for="` + level_str + `_path">Picture</label>
                         </dt>
                         <dd>
-                            <input id="` + level_str + `_path" name="` + level_str + `_path" placeholder="@FileManager.AssetsDirectoryName/images/mappics/MAP01P.png" value="` + level.iconPath + `"/>
+                            <input id="` + level_str + `_path" name="` + level_str + `_path" placeholder="@FileManager.AssetsDirectoryName/images/mappics/MAP01P.png" value="` + level.IconPath + `"/>
                         </dd>
                         <button type="button" onclick="remove_level(` + groupCount + `, ` + levelCount + `)">X</button>
                     </div>
@@ -152,18 +157,18 @@
         
         read_fields()
         {
-            for (let i = 0; i < this.levelGroups.length; i++)    
+            for (let i = 0; i < this.LevelGroups.length; i++)    
             {
-                this.levelGroups[i].levels = [];
+                this.LevelGroups[i].Levels = [];
             }
-            this.levelGroups = [];
+            this.LevelGroups = [];
             
             let groupCount = 0;
             while (document.getElementById("group_" + groupCount +"_name") != null)
             {
                 let group_str = "group_" + groupCount;
-                let groupName = document.getElementById(group_str +"_name").value;
-                let writeNames = document.getElementById(group_str +"_write_names").checked ? "True" : "False";
+                let GroupName = document.getElementById(group_str +"_name").value;
+                let WriteNames = document.getElementById(group_str +"_write_names").checked ? "True" : "False";
                 
                 let levelCount = 0;
                 
@@ -172,21 +177,21 @@
                 while (document.getElementById("level_" + groupCount + "_" + levelCount + "_name") != null)
                 {
                     let level_str = "level_" + groupCount + "_" + levelCount;
-                    let levelName = document.getElementById(level_str +"_name").value;
-                    let act = document.getElementById(level_str +"_act").value;
-                    let levelNumber = document.getElementById(level_str +"_number").value;
-                    let nights = document.getElementById(level_str +"_nights").checked ? "True" : "False";
-                    let iconPath = document.getElementById(level_str +"_path").value;
-                    let level = new LevelForm(levelName, act,  levelNumber, nights, iconPath);
+                    let LevelName = document.getElementById(level_str +"_name").value;
+                    let Act = document.getElementById(level_str +"_Act").value;
+                    let LevelNumber = document.getElementById(level_str +"_number").value;
+                    let Nights = document.getElementById(level_str +"_Nights").checked ? "True" : "False";
+                    let IconPath = document.getElementById(level_str +"_path").value;
+                    let level = new LevelForm(LevelName, Act,  LevelNumber, Nights, IconPath);
                     
                     levelCount++;
                     
-                    console.log(level.levelName + ", " + level.act + ", " + level.levelNumber + "," +level.nights + ", " + level.iconPath);
+                    console.log(level.LevelName + ", " + level.Act + ", " + level.LevelNumber + "," +level.Nights + ", " + level.IconPath);
                     
                     tempLevels.push(level);
                 }
-                let group = new LevelGroupForm(groupName, writeNames, tempLevels);
-                this.levelGroups.push(group);
+                let group = new LevelGroupForm(GroupName, WriteNames, tempLevels);
+                this.LevelGroups.push(group);
                 groupCount++;
             }
         }
@@ -213,32 +218,32 @@
     function add_level(group_num)
     {
         editGameForm.read_fields();
-        editGameForm.levelGroups[group_num].levels.push(new LevelForm("New Level", editGameForm.levelGroups[group_num].levels.length + 1, 0, false, ""));
+        editGameForm.LevelGroups[group_num].Levels.push(new LevelForm("New Level", editGameForm.LevelGroups[group_num].Levels.length + 1, 0, false, ""));
         editGameForm.draw();
     }
     
     function remove_level(group_num, level_num)
     {
         editGameForm.read_fields();
-        editGameForm.levelGroups[group_num].levels.splice(level_num, 1);
+        editGameForm.LevelGroups[group_num].Levels.splice(level_num, 1);
         editGameForm.draw();
     }
     
     function add_group()
     {
         editGameForm.read_fields();
-        editGameForm.levelGroups.push(new LevelGroupForm("New Group", "False", []))
+        editGameForm.LevelGroups.push(new LevelGroupForm("New Group", "False", []))
         editGameForm.draw();
     }
     
     function remove_group(group_num)
     {
         editGameForm.read_fields();
-        editGameForm.levelGroups.splice(group_num, 1);
+        editGameForm.LevelGroups.splice(group_num, 1);
         editGameForm.draw();
     }
     function getToken() {
-        return "@Model.Token";
+        return get("__AntiforgeryToken").value
     }
     
     function get(elementIdString) {
@@ -259,7 +264,7 @@
             data: JSON.stringify({ 
                 Name: get("game_name").value,
                 UrlName: get("game_url_name").value,
-                Groups: JSON.stringify(editGameForm.levelGroups),
+                Groups: editGameForm.LevelGroups,
             }),
             success: function (data) {
                 console.log("Saving success!");

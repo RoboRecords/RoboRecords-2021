@@ -1,5 +1,6 @@
 @page
 @model RoboRecords.Pages.Login
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery _antiforgery
 <!--
  Login.cshtml: FrontEnd for the login website's page
  Copyright (C) 2021, Lemin <Leminn> and Refrag <R3FR4G>
@@ -13,7 +14,11 @@
 
 @{
     ViewData["Title"] = "Login";
+
+    var requestToken = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
+
+<input id="__AntiforgeryToken" type="hidden" value="@requestToken" />
 
 <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalTitleText" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -53,7 +58,7 @@
     <script type="text/javascript">
     
     function getToken() {
-        return "@Model.Token"
+        return get("__AntiforgeryToken").value
     }
     
     window.onload = function() {
