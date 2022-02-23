@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Web;
 using Microsoft.AspNetCore.Antiforgery;
+using RoboRecords.DatabaseContexts;
 using RoboRecords.DbInteraction;
 using RoboRecords.Models;
 
@@ -47,9 +49,49 @@ namespace RoboRecords.Pages
         
         public IActionResult OnPostSaveAsync([FromBody] GameData data)
         {
-            Logger.Log("Length" + data.Groups.Count, true);
-            
             // TODO: Compare the data to existing data, and replace what needs to be replaced in order to edit the game
+            
+            try
+            {
+                string oldUrl = Game.UrlName;
+                Game.Name = data.Name;
+                Game.UrlName = data.UrlName;
+                List<LevelGroup> groups = new List<LevelGroup>();
+                foreach (LevelGroup levelGroup in data.Groups)
+                {
+                    LevelGroup newGroup = new LevelGroup();
+                    newGroup.Name = levelGroup.Name;
+                    newGroup.WriteLevelNames = levelGroup.WriteLevelNames;
+                    newGroup.Levels = new List<RoboLevel>();
+                    foreach (RoboLevel level in levelGroup.Levels)
+                    {
+                        RoboLevel gameLevel = Game.GetLevelByNumber(level.LevelNumber);
+                        RoboLevel newLevel;
+                        if (gameLevel is not null)
+                        {
+                            gameLevel.LevelName = level.LevelName;
+                            gameLevel.Act = level.Act;
+                            gameLevel.Nights = level.Nights;
+                            gameLevel.IconUrl = level.IconUrl;
+                            newLevel = gameLevel;
+                        }
+                        else
+                        {
+                            newLevel = level;
+                        }
+                        newGroup.Levels.Add(newLevel);
+                    }
+                    groups.Add(levelGroup);
+                }
+
+                Game.LevelGroups = groups;
+
+            }
+            catch (Exception e)
+            {
+                Logger.Log("Error while trying to save a game: " + e.Message, Logger.LogLevel.Error);
+                throw;
+            }
             
             return Page();
         }
