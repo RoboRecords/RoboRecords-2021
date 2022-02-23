@@ -137,6 +137,38 @@ namespace RoboRecords.DbInteraction
                 return false;
             }
         }
+        
+        public static bool TryGetGameWithLevelsFromDbID(int id, out RoboGame roboGame)
+        {
+            roboGame = null;
+
+            // SELECT * FROM RoboGames, JOIN levels
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                roboGame = context.RoboGames
+                    .Include(e => e.LevelGroups)
+                    .ThenInclude(levelGroups => levelGroups.Levels)
+                    .Where(e => e.DbId == id)
+                    .FirstOrDefault();
+            }
+
+
+            // Sort the levels by level number, as they may not be in order in the database
+            if (roboGame is not null)
+            {
+                if (roboGame.LevelGroups.Count > 0)
+                    foreach (var levelGroup in roboGame.LevelGroups)
+                    {
+                        List<RoboLevel> sortedList = levelGroup.Levels.OrderBy(l => l.LevelNumber).ToList();
+                        levelGroup.Levels = sortedList;
+                    }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         // Get the game matching the url and include level and record data.
         public static bool TryGetGameWithRecordsFromID(string id, out RoboGame roboGame)
@@ -293,6 +325,22 @@ namespace RoboRecords.DbInteraction
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 roboGame = context.RoboGames.Where(e => e.UrlName == id).FirstOrDefault();
+            }
+
+            if (roboGame is not null)
+                return true;
+            else
+                return false;
+        }
+        
+        public static bool TryGetGameFromDbID(int id, out RoboGame roboGame)
+        {
+            roboGame = null;
+
+            // SELECT * FROM RoboGames WHERE UrlName = id. Return "invalid game" if not found.
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                roboGame = context.RoboGames.Where(e => e.DbId == id).FirstOrDefault();
             }
 
             if (roboGame is not null)
