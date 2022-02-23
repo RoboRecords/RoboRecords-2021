@@ -12,22 +12,24 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace RoboRecords.Models
 {
     public class RoboGame
     {
-        public int DbId;
+        [JsonPropertyName("id")]
+        public int DbId { get; set; }
 
-        public string Name;
-        public string UrlName;
+        public string Name { get; set; }
+        public string UrlName { get; set; }
 
         public string GetAspLink()
         {
             return "/GamePage?id=" + UrlName;
         }
-        public string IconPath;
+        public string IconPath { get; set; }
         public virtual IList<LevelGroup> LevelGroups { get; set; }
 
         public RoboLevel GetLevelByNumber(int number)
