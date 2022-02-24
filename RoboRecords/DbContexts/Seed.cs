@@ -91,20 +91,30 @@ namespace RoboRecords
                     new RoboUser("Red Sonic", 1),
                 };
 
+                var standardCharacters = new List<RoboCharacter>()
+                {
+                    new RoboCharacter("Sonic"),
+                    new RoboCharacter("Tails"),
+                    new RoboCharacter("Knuckles"),
+                    new RoboCharacter("Amy"),
+                    new RoboCharacter("Fang"),
+                    new RoboCharacter("Metal Sonic"),
+                };
+
                 // Sample records
                 var roboRecords = new List<RoboRecord>
                 {
-                    new RoboRecord(roboUsers[0], null) {Tics = 420, Character = CharacterManager.GetCharacterById("sonic")},
-                    new RoboRecord(roboUsers[3], null) {Tics = 421, Character = CharacterManager.GetCharacterById("sonic")},
-                    new RoboRecord(roboUsers[1], null) {Tics = 419, Character = CharacterManager.GetCharacterById("tails")},
-                    new RoboRecord(roboUsers[7], null) {Tics = 666, Character = CharacterManager.GetCharacterById("knuckles")},
-                    new RoboRecord(roboUsers[7], null) {Tics = 6969, Character = CharacterManager.GetCharacterById("knuckles")},
-                    new RoboRecord(roboUsers[2], null) {Tics = 6969, Character = CharacterManager.GetCharacterById("amy")},
-                    new RoboRecord(roboUsers[4], null) {Tics = 54321, Character = CharacterManager.GetCharacterById("fang")},
-                    new RoboRecord(roboUsers[5], null) {Tics = 12345, Character = CharacterManager.GetCharacterById("metalsonic")},
-                    new RoboRecord(roboUsers[3], null) {Tics = 1337, Character = CharacterManager.GetCharacterById("sonic")},
-                    new RoboRecord(roboUsers[3], null) {Tics = 1337, Character = CharacterManager.GetCharacterById("sonic")},
-                    new RoboRecord(roboUsers[6], null) {Tics = 7331, Character = CharacterManager.GetCharacterById("sonic")}
+                    new RoboRecord(roboUsers[0], null) {Tics = 420, Character = standardCharacters.Find(character => character.NameId == "sonic")},
+                    new RoboRecord(roboUsers[3], null) {Tics = 421, Character = standardCharacters.Find(character => character.NameId == "sonic")},
+                    new RoboRecord(roboUsers[1], null) {Tics = 419, Character = standardCharacters.Find(character => character.NameId == "tails")},
+                    new RoboRecord(roboUsers[7], null) {Tics = 666, Character = standardCharacters.Find(character => character.NameId == "knuckles")},
+                    new RoboRecord(roboUsers[7], null) {Tics = 6969, Character = standardCharacters.Find(character => character.NameId == "knuckles")},
+                    new RoboRecord(roboUsers[2], null) {Tics = 6969, Character = standardCharacters.Find(character => character.NameId == "amy")},
+                    new RoboRecord(roboUsers[4], null) {Tics = 54321, Character = standardCharacters.Find(character => character.NameId == "fang")},
+                    new RoboRecord(roboUsers[5], null) {Tics = 12345, Character = standardCharacters.Find(character => character.NameId == "metalsonic")},
+                    new RoboRecord(roboUsers[3], null) {Tics = 1337, Character = standardCharacters.Find(character => character.NameId == "sonic")},
+                    new RoboRecord(roboUsers[3], null) {Tics = 1337, Character = standardCharacters.Find(character => character.NameId == "sonic")},
+                    new RoboRecord(roboUsers[6], null) {Tics = 7331, Character = standardCharacters.Find(character => character.NameId == "sonic")}
                 };
 
                 // Add the records to their levels.
@@ -124,8 +134,11 @@ namespace RoboRecords
                 }
 
                 // Add everything to the context and save to database.
+
                 foreach (var level in roboLevels)
+                {
                     context.RoboLevels.Add(level);
+                }
 
                 foreach (var group in levelGroups)
                     roboGames[0].LevelGroups.Add(group);

@@ -18,9 +18,6 @@ namespace RoboRecords.Models
                 return _standardCharacter;
             }
         }
-
-        // These somehow end up in the database without explicitly being added to the context.
-        // Will investigate. --- Zenya
         static void Init()
         {
             _standardCharacter = new List<RoboCharacter>();

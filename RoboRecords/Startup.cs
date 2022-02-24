@@ -40,6 +40,7 @@ namespace RoboRecords
         
         private static void InitDatabase()
         {
+            // TODO: Implement way to recreate database at will, instead of having to manually drop it.
             // Context is the database reference. 'Using context' means the connection is temporary and will be closed at the end
             using (var context = new RoboRecordsDbContext())
             {
