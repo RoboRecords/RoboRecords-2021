@@ -12,15 +12,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace RoboRecords.Models
 {
     public class RoboLevel
     {
-        public int DbId;
+        [JsonPropertyName("id")]
+        public int DbId { get; set; }
 
-        public string IconUrl;
+        public string IconUrl { get; set; }
         // Map id, Techno Hill Zone 1 = 4
         private int _levelNumber;
         // Map string, eg. "MAP01".
@@ -40,13 +42,13 @@ namespace RoboRecords.Models
 
         public virtual IList<RoboRecord> Records { get; set; }
         // eg. Green Flower Zone
-        public string LevelName;
+        public string LevelName { get; set; }
         // 1 in Green Flower Zone Act 1
-        public int Act;
+        public int Act { get; set; }
         // Read-only, changed by changing the map number
         public string MapString => _mapString;
 
-        public bool Nights;
+        public bool Nights { get; set; }
         
         private const int MaxLevelNumber = 1035;
         public static string MakeMapString(int levelNumber)
@@ -254,6 +256,7 @@ namespace RoboRecords.Models
         // Needed for the database context
         public RoboLevel()
         {
+            
         }
 
         public override string ToString()

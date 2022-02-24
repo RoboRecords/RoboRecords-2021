@@ -56,14 +56,14 @@ namespace RoboRecords.DbInteraction
             }
         }
 
-        public static void AddRecordIfNeeded(RoboRecord record, RoboLevel level)
+        public static bool AddRecordIfNeeded(RoboRecord record, RoboLevel level)
         {
             RoboUser user = record.Uploader;
             
             if (level is null)
             {
                 Logger.Log("Map not found, WTF!?!?", Logger.LogLevel.Error, true);
-                return;
+                return false;
             }
 
             bool isBest = true;
@@ -94,7 +94,10 @@ namespace RoboRecords.DbInteraction
             {
                 DbInserter.AddRecordToLevel(record, level);
                 FileManager.Write(Path.Combine(FileManager.ReplaysDirectoryName, $"{record.DbId}.lmp"), record.FileBytes);
+                return true;
             }
+
+            return false;
         }
     }
 }
