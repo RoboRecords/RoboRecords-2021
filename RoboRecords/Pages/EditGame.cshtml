@@ -18,22 +18,22 @@
     <script>
     class LevelForm
     {
-        constructor(name, Act, number, Nights, IconPath) 
+        constructor(name, Act, number, Nights, IconUrl) 
         {
             this.LevelName = name;
             this.Act = Act;
             this.LevelNumber = number;
             this.Nights = Nights.toString() === "True";
-            this.IconPath = IconPath;
+            this.IconUrl = IconUrl;
         }
     }
     
     class LevelGroupForm
     {
-        constructor(name, WriteNames, Levels)
+        constructor(name, WriteLevelNames, Levels)
         {
-            this.GroupName = name;
-            this.WriteNames = WriteNames.toString() === "True";
+            this.Name = name;
+            this.WriteLevelNames = WriteLevelNames.toString() === "True";
             this.Levels = Levels.slice();
         }
     }
@@ -42,7 +42,7 @@
     {
         GroupName = "";
         UrlName = "";
-        IconPath = "";
+        IconUrl = "";
         LevelGroups = [];
         
         init()
@@ -89,7 +89,7 @@
                         <label for="group_` + groupCount +`_name">Name</label>
                     </dt>
                     <dd>
-                        <input id="group_` + groupCount +`_name" name="group_` + groupCount +`_name" placeholder="Green Flower Zone" value="` + group.GroupName + `"/>
+                        <input id="group_` + groupCount +`_name" name="group_` + groupCount +`_name" placeholder="Green Flower Zone" value="` + group.Name + `"/>
                     </dd>
                     <dt>
                         <label for="group_` + groupCount +`_write_names">Write Level Names</label>
@@ -137,7 +137,7 @@
                             <label for="` + level_str + `_path">Picture</label>
                         </dt>
                         <dd>
-                            <input id="` + level_str + `_path" name="` + level_str + `_path" placeholder="@FileManager.AssetsDirectoryName/images/mappics/MAP01P.png" value="` + level.IconPath + `"/>
+                            <input id="` + level_str + `_path" name="` + level_str + `_path" placeholder="@FileManager.AssetsDirectoryName/images/mappics/MAP01P.png" value="` + level.IconUrl + `"/>
                         </dd>
                         <button type="button" onclick="remove_level(` + groupCount + `, ` + levelCount + `)">X</button>
                     </div>
@@ -181,12 +181,12 @@
                     let Act = document.getElementById(level_str +"_Act").value;
                     let LevelNumber = document.getElementById(level_str +"_number").value;
                     let Nights = document.getElementById(level_str +"_Nights").checked ? "True" : "False";
-                    let IconPath = document.getElementById(level_str +"_path").value;
-                    let level = new LevelForm(LevelName, Act,  LevelNumber, Nights, IconPath);
+                    let IconUrl = document.getElementById(level_str +"_path").value;
+                    let level = new LevelForm(LevelName, Act,  LevelNumber, Nights, IconUrl);
                     
                     levelCount++;
                     
-                    console.log(level.LevelName + ", " + level.Act + ", " + level.LevelNumber + "," +level.Nights + ", " + level.IconPath);
+                    console.log(level.LevelName + ", " + level.Act + ", " + level.LevelNumber + "," +level.Nights + ", " + level.IconUrl);
                     
                     tempLevels.push(level);
                 }
@@ -252,6 +252,7 @@
     
     function save_changes()
     {
+        read_fields();
         console.log("Saving...");
         $.ajax({
             type: 'POST',
@@ -264,7 +265,8 @@
             data: JSON.stringify({ 
                 Name: get("game_name").value,
                 UrlName: get("game_url_name").value,
-                Groups: editGameForm.LevelGroups,
+                IconPath: get("game_icon_path").value,
+                GroupsJson: JSON.stringify(editGameForm.LevelGroups),
             }),
             success: function (data) {
                 console.log("Saving success!");
@@ -298,6 +300,12 @@
             <input id="game_url_name" type="text" placeholder="srb2v22" value="@EditGame.Game.UrlName"/>
         </dd>
         <dt>
+            <label for="game_icon_path">Icon Path</label>
+        </dt>
+        <dd>
+            <input id="game_icon_path" type="text" placeholder="path" value="@EditGame.Game.IconPath"/>
+        </dd>
+        <dt>
             <label for="group_div">Level groups:</label>
         </dt>
         
@@ -306,11 +314,11 @@
     <button type="button" onclick="add_group()">Add level group</button>
     <input type="button" value="Cancel"/>
     <button onclick="save_changes()" >Submit</button>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
 </div>
+<br/>
+<br/>
+<br/>
+<br/>
 </body>
 
 <style>

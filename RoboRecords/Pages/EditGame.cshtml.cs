@@ -40,11 +40,27 @@ namespace RoboRecords.Pages
                 DbSelector.TryGetGameWithLevelsFromID("sonicroboblast2v22", out Game);
             }
         }
+
+        class InterpretedLevel
+        {
+            public string LevelName{ get; set; }
+            public string Act{ get; set; }
+            public string LevelNumber{ get; set; }
+            public bool Nights{ get; set; }
+            public string IconUrl{ get; set; }
+        }
+        class InterpretedGroup
+        {
+            public string Name{ get; set; }
+            public bool WriteLevelNames{ get; set; }
+            public List<InterpretedLevel> Levels{ get; set; }
+        }
         public class GameData
         {
             public string Name { get; set; }
             public string UrlName { get; set; }
-            public List<LevelGroup> Groups { get; set; }
+            public string IconPath { get; set; }
+            public string GroupsJson { get; set; }
         }
         
         public IActionResult OnPostSaveAsync([FromBody] GameData data)
@@ -53,39 +69,59 @@ namespace RoboRecords.Pages
             
             try
             {
-                string oldUrl = Game.UrlName;
-                Game.Name = data.Name;
-                Game.UrlName = data.UrlName;
+                RoboGame game = new RoboGame(data.Name);
+                game.Name = data.Name;
+                game.UrlName = data.UrlName;
+                game.IconPath = data.IconPath;
+
+                List<InterpretedGroup> jsonGroups = System.Text.Json.JsonSerializer.Deserialize<List<InterpretedGroup>>(data.GroupsJson);
+                
+                Logger.Log(game.Name + ", " + game.UrlName);
                 List<LevelGroup> groups = new List<LevelGroup>();
-                foreach (LevelGroup levelGroup in data.Groups)
+                foreach (InterpretedGroup levelGroup in jsonGroups)
                 {
                     LevelGroup newGroup = new LevelGroup();
                     newGroup.Name = levelGroup.Name;
                     newGroup.WriteLevelNames = levelGroup.WriteLevelNames;
+                    Logger.Log("Write names: " + levelGroup.WriteLevelNames + ", Name: " + levelGroup.Name + ", " + levelGroup.Levels.Count);
                     newGroup.Levels = new List<RoboLevel>();
-                    foreach (RoboLevel level in levelGroup.Levels)
+                    foreach (InterpretedLevel level in levelGroup.Levels)
                     {
-                        RoboLevel gameLevel = Game.GetLevelByNumber(level.LevelNumber);
+                        Logger.Log("Url: " + level.IconUrl + ", Act: " + level.Act + ", Nights: " + level.Nights + ", Name: " + level.LevelName);
+                        RoboLevel gameLevel = game.GetLevelByNumber(Int32.Parse(level.LevelNumber) );
                         RoboLevel newLevel;
                         if (gameLevel is not null)
                         {
                             gameLevel.LevelName = level.LevelName;
-                            gameLevel.Act = level.Act;
+                            gameLevel.Act = Int32.Parse(level.Act);
                             gameLevel.Nights = level.Nights;
                             gameLevel.IconUrl = level.IconUrl;
+                            gameLevel.LevelGroup = newGroup;
                             newLevel = gameLevel;
                         }
                         else
                         {
-                            newLevel = level;
+                            newLevel = new RoboLevel(Int32.Parse(level.LevelNumber), level.LevelName, Int32.Parse(level.Act), level.Nights);
+                            newLevel.LevelGroup = newGroup;
                         }
                         newGroup.Levels.Add(newLevel);
                     }
-                    groups.Add(levelGroup);
+
+                    newGroup.RoboGame = game;
+                    groups.Add(newGroup);
                 }
+                game.LevelGroups.Clear();
+                game.LevelGroups = groups;
+                using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+                {
+                    context.RoboGames.Remove(Game);
+                    
+                    Logger.Log("Updating game...");
+                    context.RoboGames.Add(game);
 
-                Game.LevelGroups = groups;
-
+                    Logger.Log("Saving...");
+                    context.SaveChangesAsync().Wait();
+                }
             }
             catch (Exception e)
             {
