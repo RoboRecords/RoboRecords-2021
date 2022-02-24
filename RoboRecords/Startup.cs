@@ -72,6 +72,7 @@ namespace RoboRecords
             services.AddIdentity<IdentityRoboUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
             services.AddScoped<RoboUserManager>();
             services.AddSingleton<ApiKeyManager>();
+            services.AddScoped<AssetManager>();
             
             services.Configure<IdentityOptions>(options =>
             {
