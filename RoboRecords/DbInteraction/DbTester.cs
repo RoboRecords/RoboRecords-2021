@@ -13,6 +13,9 @@ namespace RoboRecords.DbInteraction
     {
         static string cyberdimeFile = @"C:\SRB2\SL_CyberDimeRealm-v1.5.1.pk3";
         // Try adding Red Volcano Act 2 to Red Volcano Zone in SRB2 2.2
+
+        // TODO: Test if the To-Do list is working properly. If you see this, it is.
+
         public static void TestUpdate()
         {
             bool found = DbSelector.TryGetGameWithLevelsFromID("sonicroboblast2v22", out RoboGame Game);
