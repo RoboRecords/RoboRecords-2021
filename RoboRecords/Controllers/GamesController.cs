@@ -8,7 +8,7 @@ namespace RoboRecords.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class GamesController : Controller
+    public class GamesController : ControllerBase
     {
         [HttpGet]
         [Route("{id}")]

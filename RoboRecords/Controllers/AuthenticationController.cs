@@ -7,7 +7,7 @@ namespace RoboRecords.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class AuthenticationController : Controller
+    public class AuthenticationController : ControllerBase
     {
         private SignInManager<IdentityRoboUser> _signInManager;
 
