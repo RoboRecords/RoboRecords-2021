@@ -67,8 +67,8 @@ namespace TestConsole
 
             EnvVars.ParseEnvironmentVariables(Configuration);
 
-            RoboRecordsDbContext.SetConnectionString(Configuration["RoboRecords_MySqlDbConnectionString"]);
-            IdentityContext.SetConnectionString(Configuration["RoboRecords_MySqlUserDbConnectionString"]);
+            RoboRecordsDbContext.SetConnectionString(EnvVars.SqlDbConnection);
+            IdentityContext.SetConnectionString(EnvVars.SqlUserDbConnection);
         }
     }
 }

@@ -36,10 +36,6 @@ namespace RoboRecords
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
-            RoboRecordsDbContext.SetConnectionString(Configuration["RoboRecords_MySqlDbConnectionString"]);
-            IdentityContext.SetConnectionString(Configuration["RoboRecords_MySqlUserDbConnectionString"]);
-            InitDatabase();
         }
         
         private static void InitDatabase()
@@ -121,6 +117,11 @@ namespace RoboRecords
             }
             
             EnvVars.ParseEnvironmentVariables(Configuration);
+            
+            RoboRecordsDbContext.SetConnectionString(EnvVars.SqlDbConnection);
+            IdentityContext.SetConnectionString(EnvVars.SqlUserDbConnection);
+            InitDatabase();
+            
             FileManager.Initialize();
             
             app.UseHttpsRedirection();

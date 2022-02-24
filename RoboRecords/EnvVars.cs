@@ -8,22 +8,25 @@ namespace RoboRecords
     {
         private const string EnvPrefix = "RoboRecords_";
 
+        private const string EnvSqlDbConnection = EnvPrefix + "MySqlDbConnectionString";
+        private const string EnvSqlUserDbConnection = EnvPrefix + "MySqlUserDbConnectionString";
+        
         private const string EnvDataPath = EnvPrefix + "DataPath";
         private const string EnvLogPath = EnvPrefix + "LogPath";
-        private const string EnvSftpKeyPath = EnvPrefix + "SftpKeyPath";
-        private const string EnvSftpHost = EnvPrefix + "SftpHostAddress";
-        private const string EnvSftpUser = EnvPrefix + "SftpUserName";
+        
+        public static string SqlDbConnection;
+        public static string SqlUserDbConnection;
         
         public static string DataPath;
         public static string LogPath;
-        public static string SftpKeyPath;
-        public static string SftpHost;
-        public static string SftpUser;
 
         public static bool IsDevelopment = false;
 
         public static void ParseEnvironmentVariables(IConfiguration configuration)
         {
+            SqlDbConnection = ParseEnvironmentVariable(EnvSqlDbConnection, false, false, true, configuration);
+            SqlUserDbConnection = ParseEnvironmentVariable(EnvSqlUserDbConnection, false, false, true, configuration);
+            
             LogPath = ParseEnvironmentVariable(EnvLogPath, false, true, false, configuration, "Logs");
             DataPath = ParseEnvironmentVariable(EnvDataPath, false, true, true, configuration);
         }
@@ -61,9 +64,9 @@ namespace RoboRecords
         private static void LogAndExit(string varName, bool isPathError)
         {
             if(!isPathError)
-                Logger.Log($"Environment variable {varName} is required but empty", Logger.LogLevel.Error, true);
+                Console.WriteLine($"Environment variable {varName} is required but empty");
             else
-                Logger.Log($"Environment variable {varName} has an invalid path", Logger.LogLevel.Error, true);
+                Console.WriteLine($"Environment variable {varName} has an invalid path");
             Environment.Exit(1);
         }
     }

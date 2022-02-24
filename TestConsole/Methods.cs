@@ -354,7 +354,7 @@ namespace TestConsole
         {
             Console.WriteLine("Enter filename:");
             string filename = Console.ReadLine();
-            Console.WriteLine($"\nTrying to create {filename} at {EnvVars.SftpHost}/RoboRecords\n");
+            Console.WriteLine($"\nTrying to create {filename} at {"EnvVars.SftpHost"}/RoboRecords\n");
             FileManager.Initialize();
             FileManager.CreateFile(filename);
         }
