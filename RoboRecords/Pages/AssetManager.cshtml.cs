@@ -7,9 +7,9 @@ namespace RoboRecords.Pages;
 
 public class AssetManager : RoboPageModel
 {
-    private AssetManager _assetManager;
+    private Services.AssetManager _assetManager;
     
-    public AssetManager(AssetManager assetManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+    public AssetManager(Services.AssetManager assetManager, IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
     {
         _assetManager = assetManager;
     }
