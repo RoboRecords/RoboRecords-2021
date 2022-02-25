@@ -1,6 +1,6 @@
 /*
  * RoboUserManager.cs: APIs to handle database user management and retrieval
- * Copyright (C) 2021, Refrag <R3FR4G>
+ * Copyright (C) 2022, Refrag <Refragg> and Zenya <Zeritar>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

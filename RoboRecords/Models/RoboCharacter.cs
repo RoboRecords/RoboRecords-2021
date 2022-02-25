@@ -1,6 +1,6 @@
 /*
- * RoboLevel.cs
- * Copyright (C) 2021, Ors <Riku-S>
+ * RoboCharacter.cs
+ * Copyright (C) 2022, Ors <Riku-S> and Refrag <Refragg>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

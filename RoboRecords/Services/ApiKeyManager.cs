@@ -1,3 +1,14 @@
+/*
+ * ApiKeyManager.cs: Service to store and manage creation, edition and deletion of Web API keys
+ * Copyright (C) 2022, Refrag <Refragg>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * See the 'LICENSE' file for more details.
+ */
+
 using System;
 using System.Collections;
 using System.Collections.Specialized;

@@ -1,6 +1,6 @@
 /*
- * Submit.cshtml.cs: the website main configuration
- * Copyright (C) 2021, Ors <Riku-S>
+ * Submit.cshtml.cs: Backend for the replay submission page
+ * Copyright (C) 2022, Ors <Riku-S>, Zenya <Zeritar> and Refrag <Refragg>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

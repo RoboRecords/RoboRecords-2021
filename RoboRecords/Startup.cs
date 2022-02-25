@@ -1,6 +1,6 @@
 /*
  * Startup.cs: the website main configuration
- * Copyright (C) 2021, Lemin <Leminn> and Refrag <R3FR4G>
+ * Copyright (C) 2022, Lemin <Leminn>, Refrag <Refragg> and Zenya <Zeritar>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
