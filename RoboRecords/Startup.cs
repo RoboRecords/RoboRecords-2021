@@ -72,7 +72,7 @@ namespace RoboRecords
             services.AddIdentity<IdentityRoboUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
             services.AddScoped<RoboUserManager>();
             services.AddSingleton<ApiKeyManager>();
-            services.AddScoped<AssetManager>();
+            services.AddSingleton<AssetManager>();
             
             services.Configure<IdentityOptions>(options =>
             {
@@ -100,6 +100,7 @@ namespace RoboRecords
             { 
                 options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                options.JsonSerializerOptions.Converters.Add(new LazyJsonConverter()); // Not actually sure that this does much here... probably needs more testing
             });
         }
 

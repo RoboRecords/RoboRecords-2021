@@ -1,5 +1,6 @@
 @page
 @model RoboRecords.Pages.AssetManager
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery _antiforgery
 
 <!--
  AssetManager.cshtml: Frontend of the Asset Manager website's page
@@ -14,38 +15,163 @@
 
 @{
     ViewData["Title"] = "Asset Manager";
+    var requestToken = _antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
 
+<input id="__AntiforgeryToken" type="hidden" value="@requestToken" />
+
 <script type="text/javascript">
+    var games
+    var characters
+    
+    window.onload = function() {
+        $.ajax({
+            type: 'GET',
+            url: '?handler=Games',
+            headers: {
+                "RequestVerificationToken": getToken()
+            },
+            success: function (data) {
+                games = data
+                
+                var gamesSelectionElement = get("gamesSelection")
+                        
+                for (var index in games) {
+                    var element = document.createElement("option")
+                    element.setAttribute("value", games[index].id)
+                    element.textContent = games[index].name
+                    gamesSelectionElement.appendChild(element)
+                }
+            },
+            error: function (error) {
+                alert("Error getting the games")
+            }
+        })
+        
+        $.ajax({
+            type: 'GET',
+            url: '?handler=Characters',
+            headers: {
+                "RequestVerificationToken": getToken()
+            },
+            success: function (data) {
+                characters = data
+                
+                var characterSelectionElement = get("charactersSelection")
+                        
+                for (var index in characters) {
+                    var element = document.createElement("option")
+                    element.setAttribute("value", characters[index].id) 
+                    element.textContent = characters[index].name
+                    characterSelectionElement.appendChild(element)
+                }
+            },
+            error: function (error) {
+                alert("Error getting the characters")
+            }
+        })
+    }
+
+    function getToken() {
+        return get("__AntiforgeryToken").value
+    }
+
     function get(elementIdString) {
         return document.getElementById(elementIdString)
     }
     
     function handleTabClick(element) {
         var siteTab = get("siteTab")
-        var charactersTab = get("charactersTab")
         var gamesTab = get("gamesTab")
+        var charactersTab = get("charactersTab")
+        
+        var gamesSelection = get("gamesSelection")
+        var charactersSelection = get("charactersSelection")
         
         get("siteNavLink").setAttribute("class", "nav-link")
         siteTab.setAttribute("style", "display: none")
-        get("charactersNavLink").setAttribute("class", "nav-link")
-        charactersTab.setAttribute("style", "display: none")
         get("gamesNavLink").setAttribute("class", "nav-link")
         gamesTab.setAttribute("style", "display: none")
+        get("charactersNavLink").setAttribute("class", "nav-link")
+        charactersTab.setAttribute("style", "display: none")
+        
+        gamesSelection.setAttribute("style", "display: none")
+        charactersSelection.setAttribute("style", "display: none")
         
         element.setAttribute("class", "nav-link active")
         switch (element.id)
         {
             case "siteNavLink":
+                refreshSiteAssetsView()
                 siteTab.removeAttribute("style")
                 break;
-            case "charactersNavLink":
-                charactersTab.removeAttribute("style")
-                break;
             case "gamesNavLink":
+                refreshGameAssetsView(gamesSelection)
                 gamesTab.removeAttribute("style")
+                gamesSelection.removeAttribute("style")
+                break;
+            case "charactersNavLink":
+                refreshCharacterAssetsView(charactersSelection)
+                charactersTab.removeAttribute("style")
+                charactersSelection.removeAttribute("style")
                 break;
         }
+    }
+    
+    function refreshSiteAssetsView() {
+        $.ajax({
+            type: 'GET',
+            url: '?handler=SiteAssets',
+            headers: {
+                "RequestVerificationToken": getToken()
+            },
+            success: function (data) {
+                
+            },
+            error: function (error) {
+                
+            }
+        })
+    }
+    
+    function refreshGameAssetsView(element) {
+        $.ajax({
+            type: 'GET',
+            url: '?handler=GameAssets&id=' + element.value,
+            headers: {
+                "RequestVerificationToken": getToken()
+            },
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    }
+    
+    function refreshCharacterAssetsView(element) {
+        $.ajax({
+            type: 'GET',
+            url: '?handler=CharacterAssets&id=' + element.value,
+            headers: {
+                "RequestVerificationToken": getToken()
+            },
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        })
+    }
+    
+    function handleGamesSelectionChange(element) {
+        refreshGameAssetsView(element)
+    }
+    
+    function handleCharactersSelectionChange(element) {
+        refreshCharacterAssetsView(element)
     }
 </script>
 
@@ -54,31 +180,71 @@
     <h2 class="lead">Manage the assets for the website and the games</h2>
 </div>
 
-<ul class="nav nav-tabs" style="border-top-right-radius: 10px; border-top-left-radius: 10px; width: fit-content; background: rgba(0, 0, 0, 0.45); position: center">
-    <li class="nav-item">
-        <a class="nav-link active" id="siteNavLink" onclick="handleTabClick(get('siteNavLink'))" href="#">Site</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="charactersNavLink" onclick="handleTabClick(get('charactersNavLink'))" href="#">Characters</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="gamesNavLink" onclick="handleTabClick(get('gamesNavLink'))" href="#">Games</a>
-    </li>
-</ul>
+<div class="flex-container" style="position: relative">
+    <ul class="left-element nav nav-tabs" style="border-top-right-radius: 10px; border-top-left-radius: 10px; width: fit-content; background: rgba(0, 0, 0, 0.45); position: center">
+        <li class="nav-item">
+            <a class="nav-link active" id="siteNavLink" onclick="handleTabClick(get('siteNavLink'))" href="#">Site</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="gamesNavLink" onclick="handleTabClick(get('gamesNavLink'))" href="#">Games</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="charactersNavLink" onclick="handleTabClick(get('charactersNavLink'))" href="#">Characters</a>
+        </li>
+    </ul>
+    <div class="right-element">
+        <select onchange="handleGamesSelectionChange(get('gamesSelection'))" id="gamesSelection" class="custom-select" style="display: none">
+            <!-- The options will be filled out by the script when the page loads -->
+        </select>
+        <select onchange="handleCharactersSelectionChange(get('charactersSelection'))" id="charactersSelection" class="custom-select" style="display: none">
+            <!-- The options will be filled out by the script when the page loads -->
+        </select>
+    </div>
+</div>
 
 <div class="assetmanager-tab-content" id="siteTab">
-    <h1>Site tab</h1>
-</div>
-<div class="assetmanager-tab-content" id="charactersTab" style="display: none">
-    <h1>Characters tab</h1>
+    <div class="bottom-right-with-padding">
+            <button class="btn btn-primary btn-lg">Save</button>
+            <button class="btn btn-secondary btn-lg">Revert</button>
+    </div>
 </div>
 <div class="assetmanager-tab-content" id="gamesTab" style="display: none">
-    <h1>Games tab</h1>
+    <div class="bottom-right-with-padding">
+        <button class="btn btn-primary btn-lg">Save Game</button>
+        <button class="btn btn-secondary btn-lg">Revert Game</button>
+    </div>
+</div>
+<div class="assetmanager-tab-content" id="charactersTab" style="display: none">
+    <div class="bottom-right-with-padding">
+            <button class="btn btn-primary btn-lg">Save Character</button>
+            <button class="btn btn-secondary btn-lg">Revert Character</button>
+    </div>
 </div>
 
 <style>
+    .left-element {
+        float: left;
+    }
+    
+    .right-element {
+        position: absolute;
+        right: 0;
+        float: right;
+    }
+
+    .bottom-right-with-padding {
+      position: absolute;
+      bottom: 2%;
+      right: 2%;
+    }
+
     .assetmanager-tab-content {
-        border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; width: 100%; height: 80%; background: rgba(0, 0, 0, 0.45); position: center
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        width: 100%; height: 80%;
+        background: rgba(0, 0, 0, 0.45);
+        position: relative;
     }
 
     .container {

@@ -10,8 +10,10 @@
  */
 
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
+using RoboRecords.DbInteraction;
 using RoboRecords.Models;
 
 namespace RoboRecords.Pages;
@@ -28,5 +30,46 @@ public class AssetManager : RoboPageModel
     public void OnGet()
     {
         
+    }
+
+    public IActionResult OnGetGames()
+    {
+        DbSelector.TryGetGames(out List<RoboGame> games);
+        return new JsonResult(games);
+    }
+    
+    public IActionResult OnGetCharacters()
+    {
+        DbSelector.TryGetCharacters(out List<RoboCharacter> characters);
+        return new JsonResult(characters);
+    }
+
+    public IActionResult OnGetSiteAssets()
+    {
+        List<SiteAsset> siteAssets = _assetManager.GetSiteAssets();
+        return siteAssets is not null ? new JsonResult(siteAssets) : NotFound();
+    }
+    
+    public IActionResult OnGetGameAssets([FromQuery] int id)
+    {
+        DbSelector.TryGetGameFromDbID(id, out RoboGame game);
+        
+        return new JsonResult(_assetManager.GetGameAssets(game));
+    }
+    
+    public IActionResult OnGetCharacterAssets([FromQuery] int id)
+    {
+        DbSelector.TryGetCharacterFromDbId(id, out RoboCharacter character);
+        
+        return new JsonResult(_assetManager.GetCharacterAssets(character));
+    }
+    
+    public IActionResult OnPostTest([FromBody] SiteAsset asset)
+    {
+        Console.WriteLine(asset.DbId);
+        Console.WriteLine(asset.Name);
+        Console.WriteLine(asset.ImageInfo.IsValueCreated);
+        Console.WriteLine(asset.ImageInfo.Value.Width);
+        return Content("");
     }
 }

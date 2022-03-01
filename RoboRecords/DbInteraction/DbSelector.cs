@@ -235,6 +235,20 @@ namespace RoboRecords.DbInteraction
 
             return roboGames.Count != 0; // FIXME: This might be bad if for some reason all of the games were to be removed, figure out if this can be a problem or not
         }
+        
+        public static bool TryGetCharacters(out List<RoboCharacter> roboCharacters)
+        {
+            roboCharacters = new List<RoboCharacter>();
+
+            // SELECT * FROM RoboGames, no JOINs. Used for Games page.
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                roboCharacters = context.RoboCharacters
+                    .ToListAsync().Result;
+            }
+
+            return roboCharacters.Count != 0; // FIXME: This might be bad if for some reason all of the characters were to be removed, figure out if this can be a problem or not
+        }
 
         public static bool TryGetRoboUserFromUserName(string uname, short disc, out RoboUser roboUser)
         {
@@ -425,6 +439,68 @@ namespace RoboRecords.DbInteraction
             }
 
             return false;
+        }
+        
+        public static bool TryGetAllSiteAssets(out List<SiteAsset> siteAssets)
+        {
+            siteAssets = null;
+            
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                siteAssets = context.SiteAssets.ToListAsync().Result;
+            }
+
+            return true;
+        }
+        
+        public static bool TryGetGameAssetsFromGame(RoboGame roboGame, out List<GameAsset> gameAssets)
+        {
+            gameAssets = null;
+            
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                gameAssets = context.GameAssets.Include(e => e.Game)
+                    .Where(asset => asset.Game == roboGame).ToListAsync().Result;
+            }
+
+            return true;
+        }
+        
+        public static bool TryGetCharacterAssetsFromCharacter(RoboCharacter roboCharacter, out List<CharacterAsset> characterAssets)
+        {
+            characterAssets = null;
+            
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                characterAssets = context.CharacterAssets.Include(e => e.Character)
+                    .Where(asset => asset.Character == roboCharacter).ToListAsync().Result;
+            }
+
+            return true;
+        }
+        
+        public static bool TryGetAllGameAssets(out List<GameAsset> gameAssets)
+        {
+            gameAssets = null;
+            
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                gameAssets = context.GameAssets.Include(e => e.Game).ToListAsync().Result;
+            }
+
+            return true;
+        }
+        
+        public static bool TryGetAllCharacterAssets(out List<CharacterAsset> characterAssets)
+        {
+            characterAssets = null;
+            
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                characterAssets = context.CharacterAssets.Include(e => e.Character).ToListAsync().Result;
+            }
+
+            return true;
         }
     }
 }

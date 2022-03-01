@@ -110,5 +110,34 @@ namespace RoboRecords.DbInteraction
 
             return false;
         }
+        
+        public static void AddSiteAsset(SiteAsset siteAsset)
+        {
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                context.SiteAssets.Add(siteAsset);
+                context.SaveChangesAsync().Wait();
+            }
+        }
+        
+        public static void AddGameAsset(GameAsset gameAsset)
+        {
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                context.Entry(gameAsset).State = EntityState.Modified;
+                context.GameAssets.Add(gameAsset);
+                context.SaveChangesAsync().Wait();
+            }
+        }
+        
+        public static void AddCharacterAsset(CharacterAsset characterAsset)
+        {
+            using (RoboRecordsDbContext context = new RoboRecordsDbContext())
+            {
+                context.Entry(characterAsset).State = EntityState.Modified;
+                context.CharacterAssets.Add(characterAsset);
+                context.SaveChangesAsync().Wait();
+            }
+        }
     }
 }

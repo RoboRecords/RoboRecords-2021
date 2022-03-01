@@ -18,6 +18,11 @@ namespace RoboRecords
 {
     public static class FileManager
     {
+        public const string NewAssetsDirectoryName = "Assets";
+        public const string SiteAssetsDirectoryName = "SiteAssets";
+        public const string CharactersAssetsDirectoryName = "CharacterAssets";
+        public const string GamesAssetsDirectoryName = "GameAssets";
+        
         public const string AssetsDirectoryName = "assets";
         public const string UserAssetsDirectoryName = "UserAssets";
         public const string ReplaysDirectoryName = "Replays";
@@ -28,6 +33,20 @@ namespace RoboRecords
                 CreateDirectory(UserAssetsDirectoryName);
             if (!Exists(ReplaysDirectoryName))
                 CreateDirectory(ReplaysDirectoryName);
+
+            CreateDirectories(UserAssetsDirectoryName, ReplaysDirectoryName, NewAssetsDirectoryName,
+                Path.Combine(NewAssetsDirectoryName, SiteAssetsDirectoryName),
+                Path.Combine(NewAssetsDirectoryName, CharactersAssetsDirectoryName),
+                Path.Combine(NewAssetsDirectoryName, GamesAssetsDirectoryName));
+        }
+
+        private static void CreateDirectories(params string[] directories)
+        {
+            foreach (string directory in directories)
+            {
+                if (!Exists(directory))
+                    CreateDirectory(directory);
+            }
         }
 
         private static bool LocalTryAction(Action localAction)
@@ -151,6 +170,11 @@ namespace RoboRecords
         public static bool Write(string relativePath, string[] lines)
         {
             return LocalTryAction(() => File.WriteAllLines(Path.Combine(EnvVars.DataPath, relativePath), lines));
+        }
+
+        public static string GetAbsolutePath(string relativePath)
+        {
+            return Path.GetFullPath(Path.Combine(EnvVars.DataPath, relativePath));
         }
     }
 }

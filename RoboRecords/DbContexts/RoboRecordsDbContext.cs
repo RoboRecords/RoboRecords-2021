@@ -33,6 +33,10 @@ namespace RoboRecords.DatabaseContexts
         public DbSet<RoboLevel> RoboLevels { get; set; }
 
         public DbSet<RoboRecord> RoboRecords { get; set; }
+        
+        public DbSet<SiteAsset> SiteAssets { get; set; }
+        public DbSet<CharacterAsset> CharacterAssets { get; set; }
+        public DbSet<GameAsset> GameAssets { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -98,6 +102,26 @@ namespace RoboRecords.DatabaseContexts
                 entity.Property(e => e.UploadTime).IsRequired();
 
                 entity.Property(e => e.LevelNumber).IsRequired();
+            });
+            
+            modelBuilder.Entity<SiteAsset>(entity =>
+            {
+                entity.HasKey(e => e.DbId);
+                entity.Property(e => e.Name).IsRequired();
+            });
+            
+            modelBuilder.Entity<GameAsset>(entity =>
+            {
+                entity.HasKey(e => e.DbId);
+                entity.Property(e => e.Name).IsRequired();
+                entity.HasOne(e => e.Game);
+            });
+            
+            modelBuilder.Entity<CharacterAsset>(entity =>
+            {
+                entity.HasKey(e => e.DbId);
+                entity.Property(e => e.Name).IsRequired();
+                entity.HasOne(e => e.Character);
             });
         }
     }

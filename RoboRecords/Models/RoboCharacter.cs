@@ -9,15 +9,17 @@
  * See the 'LICENSE' file for more details.
  */
 
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace RoboRecords.Models
 {
     public class RoboCharacter
     {
-        public int DbId;
+        [JsonPropertyName("id")]
+        public int DbId { get; set; }
         
-        public string Name;
+        public string Name { get; set; }
         public string NameId;
         public string IconUrl;
 
