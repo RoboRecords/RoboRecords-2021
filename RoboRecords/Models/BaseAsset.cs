@@ -23,6 +23,7 @@ public class BaseAsset
     [JsonPropertyName("id")]
     public int DbId { get; set; }
     public string Name { get; init; }
+    public string FileExtension { get; set; }
     
     // Note: we don't want this to be included in the database, for some reason, it gets included without even being in the model in the DbContext
     [NotMapped]
@@ -37,9 +38,10 @@ public class BaseAsset
         ImageInfo = new Lazy<IImageInfo>(LoadImageInfo);
     }
     
-    public BaseAsset(string name)
+    public BaseAsset(string name, string fileExtension)
     {
         Name = name;
+        FileExtension = fileExtension;
         ImageInfo = new Lazy<IImageInfo>(LoadImageInfo);
     }
 
@@ -50,17 +52,17 @@ public class BaseAsset
 
     public override string ToString()
     {
-        return $"Asset: ID: {DbId}, Name: {Name}, Path: {GetFullPath()}";
+        return $"Asset: ID: {DbId}, Name: {Name}, Ext: {FileExtension}, Path: {GetFullPath()}";
     }
     
     public string ToStringWithImageInfo()
     {
-        return $"Asset: ID: {DbId}, Name: {Name}, Path: {GetFullPath()}\nImage: Width: {ImageInfo.Value.Width}, Height: {ImageInfo.Value.Height}";
+        return $"Asset: ID: {DbId}, Name: {Name}, FileExtension: {FileExtension}, Path: {GetFullPath()}\nImage: Width: {ImageInfo.Value.Width}, Height: {ImageInfo.Value.Height}";
     }
     
     private string GetFullPath()
     {
-        return System.IO.Path.Combine(FileManager.NewAssetsDirectoryName, Path, DbId.ToString());
+        return System.IO.Path.Combine(FileManager.NewAssetsDirectoryName, Path, $"{DbId.ToString()}.{FileExtension}");
     }
 }
 

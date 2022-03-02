@@ -70,6 +70,8 @@
                 alert("Error getting the characters")
             }
         })
+        
+        refreshSiteAssetsView()
     }
 
     function getToken() {
@@ -78,6 +80,18 @@
 
     function get(elementIdString) {
         return document.getElementById(elementIdString)
+    }
+    
+    function getSiteAssetFullPath(asset) {
+        return "@FileManager.NewAssetsDirectoryName/@FileManager.SiteAssetsDirectoryName/" + asset.id + "." + asset.fileExtension
+    }
+    
+    function getGameAssetFullPath(asset) {
+        return "@FileManager.NewAssetsDirectoryName/@FileManager.GamesAssetsDirectoryName/" + asset.id + "." + asset.fileExtension
+    }
+        
+    function getCharacterAssetFullPath(asset) {
+        return "@FileManager.NewAssetsDirectoryName/@FileManager.CharactersAssetsDirectoryName/" + asset.id + "." + asset.fileExtension
     }
     
     function handleTabClick(element) {
@@ -119,6 +133,11 @@
     }
     
     function refreshSiteAssetsView() {
+        var contentElement = get("siteTabContent")
+        for (let i = contentElement.children.length - 1; i >= 0; i--) {
+            contentElement.children[i].remove()
+        }
+        
         $.ajax({
             type: 'GET',
             url: '?handler=SiteAssets',
@@ -126,10 +145,33 @@
                 "RequestVerificationToken": getToken()
             },
             success: function (data) {
-                
+                for (var index in data) {
+                    var siteAsset = data[index]
+                    
+                    var div = document.createElement("div")
+                    div.setAttribute("class", "assetmanager-asset")
+                    
+                    var imageContainer = document.createElement("div")
+                    imageContainer.setAttribute("class", "assetmanager-asset-image-container")
+                    
+                    var imageElement = document.createElement("img")
+                    imageElement.setAttribute("src", getSiteAssetFullPath(siteAsset))
+                    imageElement.setAttribute("class", "assetmanager-asset-image img-fluid")
+                    
+                    imageContainer.appendChild(imageElement)
+                    
+                    var labelElement = document.createElement("p")
+                    labelElement.setAttribute("class", "assetmanager-asset-text")
+                    labelElement.innerText = siteAsset.name
+                    
+                    div.appendChild(imageContainer)
+                    div.appendChild(labelElement)
+                    
+                    contentElement.appendChild(div)
+                }
             },
             error: function (error) {
-                
+                alert("Error getting the site assets")
             }
         })
     }
@@ -145,12 +187,14 @@
                 console.log(data)
             },
             error: function (error) {
-                console.log(error);
+                alert("Error getting the assets for this game")
             }
         })
     }
     
     function refreshCharacterAssetsView(element) {
+        
+        
         $.ajax({
             type: 'GET',
             url: '?handler=CharacterAssets&id=' + element.value,
@@ -161,7 +205,7 @@
                 console.log(data)
             },
             error: function (error) {
-                console.log(error);
+                alert("Error getting the assets for this character")
             }
         })
     }
@@ -203,21 +247,30 @@
 </div>
 
 <div class="assetmanager-tab-content" id="siteTab">
+    <div class="container assetmanager-assets-list" id="siteTabContent">
+        <!-- This will be filled when the tab is selected -->
+    </div>
     <div class="bottom-right-with-padding">
-            <button class="btn btn-primary btn-lg">Save</button>
-            <button class="btn btn-secondary btn-lg">Revert</button>
+        <button class="btn btn-primary btn-lg">Save</button>
+        <button class="btn btn-secondary btn-lg">Revert</button>
     </div>
 </div>
 <div class="assetmanager-tab-content" id="gamesTab" style="display: none">
+    <div class="container assetmanager-assets-list" id="gamesTabContent">
+        <!-- This will be filled when the tab is selected -->
+    </div>
     <div class="bottom-right-with-padding">
         <button class="btn btn-primary btn-lg">Save Game</button>
         <button class="btn btn-secondary btn-lg">Revert Game</button>
     </div>
 </div>
 <div class="assetmanager-tab-content" id="charactersTab" style="display: none">
+    <div class="container assetmanager-assets-list" id="charactersTabContent">
+        <!-- This will be filled when the tab is selected -->
+    </div>
     <div class="bottom-right-with-padding">
-            <button class="btn btn-primary btn-lg">Save Character</button>
-            <button class="btn btn-secondary btn-lg">Revert Character</button>
+        <button class="btn btn-primary btn-lg">Save Character</button>
+        <button class="btn btn-secondary btn-lg">Revert Character</button>
     </div>
 </div>
 
@@ -245,6 +298,56 @@
         width: 100%; height: 80%;
         background: rgba(0, 0, 0, 0.45);
         position: relative;
+    }
+    
+    /* FIXME: WARNING!!! This is some serious css magic happening for this to render properly.....
+       Fix this mess at some point */
+    
+    .assetmanager-assets-list {
+        width: 95%;
+        overflow-y: auto;
+        padding-top: 10px;
+        padding-bottom: 20px;
+    }
+    
+    .assetmanager-asset {
+        width: 200px;
+        height: 195px;
+        padding-inline: 15px;
+        padding-top: 10px;
+        display: inline-block;
+    }
+    
+    .assetmanager-asset-image-container {
+        position: relative;
+        width: 100%;
+        height: 62px;
+    }
+    
+    .assetmanager-asset-image {
+        position: absolute;
+        image-rendering: crisp-edges;
+        margin: auto;
+        top: 100%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: auto;
+        height: auto;
+        max-height: 132px;
+    }
+    
+    .assetmanager-asset-text {
+        position: relative;
+        top: 36%;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        text-align: center;
     }
 
     .container {

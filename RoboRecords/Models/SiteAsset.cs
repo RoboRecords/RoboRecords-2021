@@ -24,7 +24,7 @@ public sealed class SiteAsset : BaseAsset
     {
     }
     
-    public SiteAsset(string name) : base(name)
+    public SiteAsset(string name, string fileExtension) : base(name, fileExtension)
     {
     }
 }

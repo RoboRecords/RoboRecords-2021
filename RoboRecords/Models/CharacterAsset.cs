@@ -25,7 +25,7 @@ public class CharacterAsset : BaseAsset
     {
     }
 
-    public CharacterAsset(RoboCharacter character, string name) : base(name)
+    public CharacterAsset(RoboCharacter character, string name, string fileExtension) : base(name, fileExtension)
     {
         Character = character;
     }

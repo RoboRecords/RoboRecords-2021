@@ -19,12 +19,12 @@ namespace RoboRecords.Services;
 public class AssetManager
 {
 
-    public SiteAsset CreateSiteAsset(string name, byte[] file)
+    public SiteAsset CreateSiteAsset(string name, string fileExtension, byte[] file)
     {
-        SiteAsset asset = new SiteAsset(name);
+        SiteAsset asset = new SiteAsset(name, fileExtension);
 
         DbInserter.AddSiteAsset(asset);
-        string path = $"Assets/SiteAssets/{asset.DbId}";
+        string path = $"{FileManager.NewAssetsDirectoryName}/{FileManager.SiteAssetsDirectoryName}/{asset.DbId}.{asset.FileExtension}";
 
         FileManager.Write(path, file);
 
@@ -32,12 +32,12 @@ public class AssetManager
         return asset;
     }
     
-    public GameAsset CreateGameAsset(RoboGame game, string name, byte[] file)
+    public GameAsset CreateGameAsset(RoboGame game, string name, string fileExtension, byte[] file)
     {
-        GameAsset asset = new GameAsset(game, name);
+        GameAsset asset = new GameAsset(game, name, fileExtension);
 
         DbInserter.AddGameAsset(asset);
-        string path = $"Assets/GameAssets/{asset.DbId}";
+        string path = $"{FileManager.NewAssetsDirectoryName}/{FileManager.GamesAssetsDirectoryName}/{asset.DbId}.{asset.FileExtension}";
 
         FileManager.Write(path, file);
 
@@ -45,12 +45,12 @@ public class AssetManager
         return asset;
     }
     
-    public CharacterAsset CreateCharacterAsset(RoboCharacter character, string name, byte[] file)
+    public CharacterAsset CreateCharacterAsset(RoboCharacter character, string name, string fileExtension, byte[] file)
     {
-        CharacterAsset asset = new CharacterAsset(character, name);
+        CharacterAsset asset = new CharacterAsset(character, name, fileExtension);
 
         DbInserter.AddCharacterAsset(asset);
-        string path = $"Assets/CharacterAssets/{asset.DbId}";
+        string path = $"{FileManager.NewAssetsDirectoryName}/{FileManager.CharactersAssetsDirectoryName}/{asset.DbId}.{asset.FileExtension}";
 
         FileManager.Write(path, file);
 

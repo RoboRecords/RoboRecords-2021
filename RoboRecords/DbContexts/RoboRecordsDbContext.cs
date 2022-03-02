@@ -108,12 +108,14 @@ namespace RoboRecords.DatabaseContexts
             {
                 entity.HasKey(e => e.DbId);
                 entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.FileExtension).IsRequired();
             });
             
             modelBuilder.Entity<GameAsset>(entity =>
             {
                 entity.HasKey(e => e.DbId);
                 entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.FileExtension).IsRequired();
                 entity.HasOne(e => e.Game);
             });
             
@@ -121,6 +123,7 @@ namespace RoboRecords.DatabaseContexts
             {
                 entity.HasKey(e => e.DbId);
                 entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.FileExtension).IsRequired();
                 entity.HasOne(e => e.Character);
             });
         }

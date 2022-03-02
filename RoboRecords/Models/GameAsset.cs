@@ -24,7 +24,7 @@ public class GameAsset : BaseAsset
     {
     }
 
-    public GameAsset(RoboGame game, string name) : base(name)
+    public GameAsset(RoboGame game, string name, string fileExtension) : base(name, fileExtension)
     {
         Game = game;
     }
