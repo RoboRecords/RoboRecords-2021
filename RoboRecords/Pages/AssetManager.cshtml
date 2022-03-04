@@ -24,6 +24,10 @@
     var games
     var characters
     
+    var siteAssets
+    var gameAssets
+    var characterAssets
+    
     window.onload = function() {
         $.ajax({
             type: 'GET',
@@ -132,6 +136,29 @@
         }
     }
     
+    function getAssetFromElement(assetElement)
+    {
+        var splittedId = assetElement.id.split('-')
+        
+        var index = parseInt(splittedId[1])
+        
+        switch (splittedId[0])
+        {
+            case "siteAsset":
+                return siteAssets[index]
+            case "gameAsset":
+                return gameAssets[index]
+            case "characterAsset":
+                return characterAssets[index]
+        }
+    }
+    
+    function handleSiteAssetClick(assetElement) {
+        var siteAsset = getAssetFromElement(assetElement)
+        
+        console.log("clicked on " + siteAsset.name)
+    }
+    
     function refreshSiteAssetsView() {
         var contentElement = get("siteTabContent")
         for (let i = contentElement.children.length - 1; i >= 0; i--) {
@@ -145,11 +172,19 @@
                 "RequestVerificationToken": getToken()
             },
             success: function (data) {
-                for (var index in data) {
-                    var siteAsset = data[index]
+                siteAssets = data
+                
+                for (var index in siteAssets) {
+                    var siteAsset = siteAssets[index]
                     
                     var div = document.createElement("div")
                     div.setAttribute("class", "assetmanager-asset")
+                    div.setAttribute("id", "siteAsset-" + index)
+                    
+                    div.addEventListener("mouseover", function (e) { e.currentTarget.setAttribute("class", "assetmanager-asset asset-hovered") })
+                    div.addEventListener("mouseout", function (e) { e.currentTarget.setAttribute("class", "assetmanager-asset") })
+                    
+                    div.addEventListener("click", function (e) { handleSiteAssetClick(e.currentTarget) })
                     
                     var imageContainer = document.createElement("div")
                     imageContainer.setAttribute("class", "assetmanager-asset-image-container")
@@ -217,6 +252,31 @@
     function handleCharactersSelectionChange(element) {
         refreshCharacterAssetsView(element)
     }
+    
+    function handleSiteAssetAddClick() {
+        
+    }
+    
+    function handleSiteAssetSelectClick() {
+            
+    }
+
+    function handleGameAssetAddClick() {
+            
+    }
+    
+    function handleGameAssetSelectClick() {
+            
+    }
+    
+    function handleCharacterAssetAddClick() {
+            
+    }
+    
+    function handleCharacterAssetSelectClick() {
+            
+    }
+    
 </script>
 
 <div class="text-center">
@@ -250,6 +310,10 @@
     <div class="container assetmanager-assets-list" id="siteTabContent">
         <!-- This will be filled when the tab is selected -->
     </div>
+    <div class="bottom-left-with-padding">
+        <button onclick="handleSiteAssetAddClick()" class="btn btn-success btn-lg">+</button>
+        <button onclick="handleSiteAssetSelectClick()" class="btn btn-info btn-lg">Select</button>
+    </div>
     <div class="bottom-right-with-padding">
         <button class="btn btn-primary btn-lg">Save</button>
         <button class="btn btn-secondary btn-lg">Revert</button>
@@ -259,6 +323,10 @@
     <div class="container assetmanager-assets-list" id="gamesTabContent">
         <!-- This will be filled when the tab is selected -->
     </div>
+    <div class="bottom-left-with-padding">
+        <button onclick="handleGameAssetAddClick()" class="btn btn-success btn-lg">+</button>
+        <button onclick="handleGameAssetSelectClick()" class="btn btn-info btn-lg">Select</button>
+    </div>
     <div class="bottom-right-with-padding">
         <button class="btn btn-primary btn-lg">Save Game</button>
         <button class="btn btn-secondary btn-lg">Revert Game</button>
@@ -267,6 +335,10 @@
 <div class="assetmanager-tab-content" id="charactersTab" style="display: none">
     <div class="container assetmanager-assets-list" id="charactersTabContent">
         <!-- This will be filled when the tab is selected -->
+    </div>
+    <div class="bottom-left-with-padding">
+        <button onclick="handleCharacterAssetAddClick()" class="btn btn-success btn-lg">+</button>
+        <button onclick="handleCharacterAssetSelectClick()" class="btn btn-info btn-lg">Select</button>
     </div>
     <div class="bottom-right-with-padding">
         <button class="btn btn-primary btn-lg">Save Character</button>
@@ -285,10 +357,16 @@
         float: right;
     }
 
+    .bottom-left-with-padding {
+        position: absolute;
+        bottom: 2%;
+        left: 2%;
+    }
+
     .bottom-right-with-padding {
-      position: absolute;
-      bottom: 2%;
-      right: 2%;
+        position: absolute;
+        bottom: 2%;
+        right: 2%;
     }
 
     .assetmanager-tab-content {
@@ -316,6 +394,10 @@
         padding-inline: 15px;
         padding-top: 10px;
         display: inline-block;
+    }
+    
+    .asset-hovered {
+        background: rgba(0, 50, 170, 255); /* TODO: Figure out a way to have some transparency; changing the alpha value doesn't seem to do anything here*/
     }
     
     .assetmanager-asset-image-container {
