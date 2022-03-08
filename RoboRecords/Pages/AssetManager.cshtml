@@ -86,16 +86,15 @@
         return document.getElementById(elementIdString)
     }
     
-    function getSiteAssetFullPath(asset) {
-        return "@FileManager.NewAssetsDirectoryName/@FileManager.SiteAssetsDirectoryName/" + asset.id + "." + asset.fileExtension
-    }
-    
-    function getGameAssetFullPath(asset) {
-        return "@FileManager.NewAssetsDirectoryName/@FileManager.GamesAssetsDirectoryName/" + asset.id + "." + asset.fileExtension
-    }
+    function getAssetFullPath(asset) {
         
-    function getCharacterAssetFullPath(asset) {
-        return "@FileManager.NewAssetsDirectoryName/@FileManager.CharactersAssetsDirectoryName/" + asset.id + "." + asset.fileExtension
+        if (asset.character)
+            return "@FileManager.NewAssetsDirectoryName/@FileManager.CharactersAssetsDirectoryName/" + asset.id + "." + asset.fileExtension
+        else if (asset.game)
+            return "@FileManager.NewAssetsDirectoryName/@FileManager.GamesAssetsDirectoryName/" + asset.id + "." + asset.fileExtension
+        else
+            return "@FileManager.NewAssetsDirectoryName/@FileManager.SiteAssetsDirectoryName/" + asset.id + "." + asset.fileExtension
+        
     }
     
     function handleTabClick(element) {
@@ -153,10 +152,39 @@
         }
     }
     
-    function handleSiteAssetClick(assetElement) {
-        var siteAsset = getAssetFromElement(assetElement)
+    function addAssetToTab(asset, assetHtmlId, tabElement) {
+        var div = document.createElement("div")
+        div.setAttribute("class", "assetmanager-asset")
+        div.setAttribute("id", assetHtmlId)
         
-        console.log("clicked on " + siteAsset.name)
+        div.addEventListener("mouseover", function (e) { e.currentTarget.setAttribute("class", "assetmanager-asset asset-hovered") })
+        div.addEventListener("mouseout", function (e) { e.currentTarget.setAttribute("class", "assetmanager-asset") })
+        
+        div.addEventListener("click", function (e) { handleAssetClick(e.currentTarget) })
+        
+        var imageContainer = document.createElement("div")
+        imageContainer.setAttribute("class", "assetmanager-asset-image-container")
+        
+        var imageElement = document.createElement("img")
+        imageElement.setAttribute("src", getAssetFullPath(asset))
+        imageElement.setAttribute("class", "assetmanager-asset-image img-fluid")
+        
+        imageContainer.appendChild(imageElement)
+        
+        var labelElement = document.createElement("p")
+        labelElement.setAttribute("class", "assetmanager-asset-text")
+        labelElement.innerText = asset.name
+        
+        div.appendChild(imageContainer)
+        div.appendChild(labelElement)
+        
+        tabElement.appendChild(div)
+    }
+    
+    function handleAssetClick(assetElement) {
+        var asset = getAssetFromElement(assetElement)
+        
+        console.log("clicked on " + asset.name)
     }
     
     function refreshSiteAssetsView() {
@@ -175,34 +203,7 @@
                 siteAssets = data
                 
                 for (var index in siteAssets) {
-                    var siteAsset = siteAssets[index]
-                    
-                    var div = document.createElement("div")
-                    div.setAttribute("class", "assetmanager-asset")
-                    div.setAttribute("id", "siteAsset-" + index)
-                    
-                    div.addEventListener("mouseover", function (e) { e.currentTarget.setAttribute("class", "assetmanager-asset asset-hovered") })
-                    div.addEventListener("mouseout", function (e) { e.currentTarget.setAttribute("class", "assetmanager-asset") })
-                    
-                    div.addEventListener("click", function (e) { handleSiteAssetClick(e.currentTarget) })
-                    
-                    var imageContainer = document.createElement("div")
-                    imageContainer.setAttribute("class", "assetmanager-asset-image-container")
-                    
-                    var imageElement = document.createElement("img")
-                    imageElement.setAttribute("src", getSiteAssetFullPath(siteAsset))
-                    imageElement.setAttribute("class", "assetmanager-asset-image img-fluid")
-                    
-                    imageContainer.appendChild(imageElement)
-                    
-                    var labelElement = document.createElement("p")
-                    labelElement.setAttribute("class", "assetmanager-asset-text")
-                    labelElement.innerText = siteAsset.name
-                    
-                    div.appendChild(imageContainer)
-                    div.appendChild(labelElement)
-                    
-                    contentElement.appendChild(div)
+                    addAssetToTab(siteAssets[index], "siteAsset-" + index, contentElement)
                 }
             },
             error: function (error) {
@@ -212,6 +213,11 @@
     }
     
     function refreshGameAssetsView(element) {
+        var contentElement = get("gamesTabContent")
+        for (let i = contentElement.children.length - 1; i >= 0; i--) {
+            contentElement.children[i].remove()
+        }
+        
         $.ajax({
             type: 'GET',
             url: '?handler=GameAssets&id=' + element.value,
@@ -219,7 +225,11 @@
                 "RequestVerificationToken": getToken()
             },
             success: function (data) {
-                console.log(data)
+                gameAssets = data
+                                
+                for (var index in gameAssets) {
+                    addAssetToTab(gameAssets[index], "gameAsset-" + index, contentElement)
+                }
             },
             error: function (error) {
                 alert("Error getting the assets for this game")
@@ -228,7 +238,10 @@
     }
     
     function refreshCharacterAssetsView(element) {
-        
+        var contentElement = get("charactersTabContent")
+        for (let i = contentElement.children.length - 1; i >= 0; i--) {
+            contentElement.children[i].remove()
+        }
         
         $.ajax({
             type: 'GET',
@@ -237,7 +250,11 @@
                 "RequestVerificationToken": getToken()
             },
             success: function (data) {
-                console.log(data)
+                characterAssets = data
+                                
+                for (var index in characterAssets) {
+                    addAssetToTab(characterAssets[index], "characterAsset-" + index, contentElement)
+                }
             },
             error: function (error) {
                 alert("Error getting the assets for this character")
