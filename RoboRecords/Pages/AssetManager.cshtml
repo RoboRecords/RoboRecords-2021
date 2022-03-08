@@ -25,8 +25,22 @@
     var characters
     
     var siteAssets
+    var newSiteAssets = []
+    var deletedSiteAssets = []
+    var editedSiteAssets = []
+    
     var gameAssets
+    var newGameAssets = []
+    var deletedGameAssets = []
+    var editedGameAssets = []
+    
     var characterAssets
+    var newCharacterAssets = []
+    var deletedCharacterAssets = []
+    var editedCharacterAssets = []
+    
+    var assetAddInputElementValid = false
+    var assetAddImagePresent = false
     
     window.onload = function() {
         $.ajax({
@@ -97,6 +111,19 @@
         
     }
     
+    function getActiveTab() {
+        var siteTab = get("siteTab")
+        var gamesTab = get("gamesTab")
+        var charactersTab = get("charactersTab")
+        
+        if (get("siteNavLink").getAttribute("class").includes("active"))
+            return siteTab
+        else if (get("gamesNavLink").getAttribute("class").includes("active"))
+            return gamesTab
+        else
+            return charactersTab
+    }
+    
     function handleTabClick(element) {
         var siteTab = get("siteTab")
         var gamesTab = get("gamesTab")
@@ -143,16 +170,24 @@
         
         switch (splittedId[0])
         {
+            case "newSiteAsset":
+                return newSiteAssets[index]
             case "siteAsset":
                 return siteAssets[index]
+                
+            case "newGameAsset":
+                return newGameAssets[index]
             case "gameAsset":
                 return gameAssets[index]
+                
+            case "newCharacterAsset":
+                return newCharacterAssets[index]
             case "characterAsset":
                 return characterAssets[index]
         }
     }
     
-    function addAssetToTab(asset, assetHtmlId, tabElement) {
+    function addAssetToTab(asset, assetHtmlId, tabElement, assetImagePath = undefined) {
         var div = document.createElement("div")
         div.setAttribute("class", "assetmanager-asset")
         div.setAttribute("id", assetHtmlId)
@@ -166,7 +201,10 @@
         imageContainer.setAttribute("class", "assetmanager-asset-image-container")
         
         var imageElement = document.createElement("img")
-        imageElement.setAttribute("src", getAssetFullPath(asset))
+        if (assetImagePath)
+            imageElement.setAttribute("src", assetImagePath)
+        else
+            imageElement.setAttribute("src", getAssetFullPath(asset))
         imageElement.setAttribute("class", "assetmanager-asset-image img-fluid")
         
         imageContainer.appendChild(imageElement)
@@ -205,6 +243,10 @@
                 for (var index in siteAssets) {
                     addAssetToTab(siteAssets[index], "siteAsset-" + index, contentElement)
                 }
+                for (index in newSiteAssets) {
+                    var asset = newSiteAssets[index]
+                    addAssetToTab(asset, "newCharacterAsset-" + index, contentElement, asset.localPath)
+                }
             },
             error: function (error) {
                 alert("Error getting the site assets")
@@ -229,6 +271,10 @@
                                 
                 for (var index in gameAssets) {
                     addAssetToTab(gameAssets[index], "gameAsset-" + index, contentElement)
+                }
+                for (index in newGameAssets) {
+                    var asset = newGameAssets[index]
+                    addAssetToTab(asset, "newCharacterAsset-" + index, contentElement, asset.localPath)
                 }
             },
             error: function (error) {
@@ -255,11 +301,96 @@
                 for (var index in characterAssets) {
                     addAssetToTab(characterAssets[index], "characterAsset-" + index, contentElement)
                 }
+                for (index in newCharacterAssets) {
+                    var asset = newCharacterAssets[index]
+                    addAssetToTab(asset, "newCharacterAsset-" + index, contentElement, asset.localPath)
+                }
             },
             error: function (error) {
                 alert("Error getting the assets for this character")
             }
         })
+    }
+    
+    function assetNameOnChange(inputElement) {
+        if (inputElement.value) {
+            inputElement.setAttribute("class", "form-control is-valid")
+            assetAddInputElementValid = true
+        }
+        else {
+            inputElement.setAttribute("class", "form-control is-invalid")
+            assetAddInputElementValid = false
+        }
+        updateAddButton()
+    }
+    
+    function inputFileOnChange(fileInputElement) {
+        if (fileInputElement.files.length !== 0) {
+            get("imagePreview").src = URL.createObjectURL(fileInputElement.files[0])
+            assetAddImagePresent = true
+        }
+        else {
+            assetAddImagePresent = false
+        }
+        updateAddButton()
+    }
+    
+    function updateAddButton() {        
+        var addButton = get("assetAddButton")
+        
+        if (assetAddInputElementValid && assetAddImagePresent) {
+            addButton.removeAttribute("disabled")
+        }
+        else {
+            addButton.setAttribute("disabled", "")
+        }
+    }
+    
+    function confirmAssetAdd(inputElement, fileInputElement) {
+        var asset = {
+            name: inputElement.value,
+            localPath: URL.createObjectURL(fileInputElement.files[0])
+        }
+        switch (getActiveTab().id)
+        {
+            case "siteTab":
+                var index = newSiteAssets.push(asset) - 1
+                var contentElement = get("siteTabContent")
+                addAssetToTab(asset, "newSiteAsset-" + index, contentElement, asset.localPath)
+                break
+            case "gamesTab":
+                asset.game = true
+                index = newGameAssets.push(asset) - 1
+                contentElement = get("gamesTabContent")
+                addAssetToTab(asset, "newGameAsset-" + index, contentElement, asset.localPath)
+                break
+            case "charactersTab":
+                asset.character = true
+                index = newCharacterAssets.push(asset) - 1
+                contentElement = get("charactersTabContent")
+                addAssetToTab(asset, "newCharacterAsset-" + index, contentElement, asset.localPath)
+                break
+        }
+    }
+    
+    function resetAssetAddModal() {
+        var imagePreview = get("imagePreview")
+        var addButton = get("assetAddButton")
+        var inputElement = get("assetNameInput")
+        
+        imagePreview.src = "@FileManager.AssetsDirectoryName/guest.png"
+        
+        addButton.setAttribute("disabled", "")
+        
+        inputElement.value = "";
+        inputElement.setAttribute("class", "form-control")
+        
+        assetAddImagePresent = false
+        assetAddInputElementValid = false
+    }
+    
+    function cancelAssetAdd() {
+        console.log("cancel")
     }
     
     function handleGamesSelectionChange(element) {
@@ -271,7 +402,8 @@
     }
     
     function handleSiteAssetAddClick() {
-        
+        resetAssetAddModal()
+        $('#assetAddModal').modal()
     }
     
     function handleSiteAssetSelectClick() {
@@ -279,7 +411,8 @@
     }
 
     function handleGameAssetAddClick() {
-            
+        resetAssetAddModal()
+        $('#assetAddModal').modal()
     }
     
     function handleGameAssetSelectClick() {
@@ -287,7 +420,8 @@
     }
     
     function handleCharacterAssetAddClick() {
-            
+        resetAssetAddModal()
+        $('#assetAddModal').modal()
     }
     
     function handleCharacterAssetSelectClick() {
@@ -295,6 +429,35 @@
     }
     
 </script>
+
+<div class="modal fade" id="assetAddModal" tabindex="-1" role="dialog" aria-labelledby="assetAddModalTitleText" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #303030">
+                <h5 class="modal-title" id="assetAddModalTitleText">Add an asset</h5>
+                <button onclick="cancelAssetAdd()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="assetAddModalBody" class="modal-body text-center" style="margin: 0; background-color: #303030">
+                <img class="img-thumbnail rounded assetmanager-add-preview" src="@FileManager.AssetsDirectoryName/guest.png" id="imagePreview" alt="Image preview" />
+                
+                <br/>
+                <input class="form-control-file" onchange="inputFileOnChange(get('fileInput'))" id="fileInput" type="file" accept="image/*" style="display: flex; text-align: center" />
+                <br/>
+                <br/>
+                <div style="display: flex">
+                    <label for="assetNameInput" style="width: 270px; height: 38px; line-height: 38px; padding: 0;">Asset name:</label>
+                    <input oninput="assetNameOnChange(get('assetNameInput'))" onchange="assetNameOnChange(get('assetNameInput'))" class="form-control" id="assetNameInput" />
+                </div>
+            </div>
+            <div class="modal-footer" style="background-color: #303030">
+                <button onclick="confirmAssetAdd(get('assetNameInput'), get('fileInput'))" id="assetAddButton" type="button" class="btn btn-primary" data-dismiss="modal" disabled >Add</button>
+                <button onclick="cancelAssetAdd()" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="text-center">
     <h1 class="">Asset Manager</h1>
@@ -384,6 +547,20 @@
         position: absolute;
         bottom: 2%;
         right: 2%;
+    }
+    
+    .img-thumbnail {
+        background-color: #1b1bff;
+        border: 0;
+    }
+    
+    .assetmanager-add-preview {
+        
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        width: auto;
+        height: 200px;
     }
 
     .assetmanager-tab-content {
