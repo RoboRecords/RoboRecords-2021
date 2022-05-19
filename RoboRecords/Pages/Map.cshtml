@@ -215,7 +215,7 @@ function downloadReplay(record)
                                         @characterRecord.UploadTime.ToString("d")
                                     </td>
                                     <td>
-                                        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                                        <a onclick="downloadReplay(@characterRecord.DbId)" href="#">
                                             <img class="icon-link" src="@FileManager.AssetsDirectoryName/images/icons/download.png" alt="DL" width="32px">
                                         </a>
                                     </td>
