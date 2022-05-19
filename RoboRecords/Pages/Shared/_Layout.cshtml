@@ -1,4 +1,4 @@
-﻿@using RoboRecords.Models
+@using RoboRecords.Models
 @using Microsoft.AspNetCore.Http.Extensions
 
 <!--
@@ -20,7 +20,7 @@
     <title>@ViewData["Title"] - RoboRecords</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="icon" type="image/png" href="@FileManager.AssetsDirectoryName/favicon.png"/>
+    <link rel="icon" type="image/x-icon" href="@FileManager.AssetsDirectoryName/favicon.ico"/>
 </head>
 <body>
     <header>
@@ -55,7 +55,7 @@
                             </a>
                             <li class="nav-item dropdown" id="indexDropDown">
                                 <!-- FIXME: This shouldn't be the right way to do this? Also put actual nice colors for the style -->
-                                <a class="nav-link text-light dropdown-toggle" href="javascript:toggleDropDown(document.getElementById('navbarScrollingDropdown'))" role="button" data-bs-toggle="dropdown">@user.UserNameNoDiscrim#@user.Discriminator</a>
+                                <a class="nav-link text-light dropdown-toggle" href="javascript:toggleDropDown(document.getElementById('navbarScrollingDropdown'))" role="button" data-bs-toggle="dropdown">@user.UserName</a>
                                 <ul class="dropdown-menu dropdown-menu-right" style="background-color: #303030" id="navbarScrollingDropdown">
                                     <li><a class="dropdown-item" style="color: #0366d6" href="/Users/@user.DbId">View Profile</a></li>
                                     <li>
