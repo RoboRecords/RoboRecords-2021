@@ -97,7 +97,6 @@ namespace RoboRecords.Pages
         
         public IActionResult OnPostLogin([FromBody] LoginData data)
         {
-            
             string usernamewithdiscrim = data.Email;
             string password = data.Password;
             
@@ -106,19 +105,27 @@ namespace RoboRecords.Pages
             string username = splittedUsername[0];
             short discriminator = short.Parse(splittedUsername[1]);
 
-            // TODO: Actually allow email login
+            IdentityRoboUser userToLogin;
+
             if (discriminator == 0)
             {
-                return BadRequest("No Discriminator");
+                // Invalid username format. Check if they entered an email address instead.
+                if (Validator.ValidateEmail(usernamewithdiscrim))
+                {
+                    DbSelector.TryGetIdentityUserFromEmail(usernamewithdiscrim, out userToLogin);
+                    if (userToLogin is null)
+                        return BadRequest("No user with this email address was found");
+                }
+                else
+                    return BadRequest("Invalid username/email entered.");
             }
-
-            // RoboUser userToLogin = DbSelector.GetRoboUserFromUserName(username, discriminator);
-
-            // IdentityUser has discrim included in username
-            DbSelector.TryGetIdentityUserFromUserName(usernamewithdiscrim, out IdentityRoboUser userToLogin);
-
-            if (userToLogin is null)
-                return BadRequest("No user with this username / discriminator combination was found");
+            else
+            {
+                // IdentityUser has discrim included in username
+                DbSelector.TryGetIdentityUserFromUserName(usernamewithdiscrim, out userToLogin);
+                if (userToLogin is null)
+                    return BadRequest("No user with this username / discriminator combination was found");
+            }
 
             SignInResult result = _signInManager.PasswordSignInAsync(userToLogin, password, true, false).Result;
             

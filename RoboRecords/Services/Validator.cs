@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using RoboRecords.Models;
 using RoboRecords.DbInteraction;
+using System.Net.Mail;
 
 namespace RoboRecords.Services
 {
@@ -73,6 +74,20 @@ namespace RoboRecords.Services
         {
             user.Roles = user.Roles & (int.MaxValue ^ (int)roles);
             DbUpdater.UpdateIdentityUser(user);
+        }
+
+        public static bool ValidateEmail(string email)
+        {
+            try
+            {
+                MailAddress m = new MailAddress(email);
+
+                return true;
+            }
+            catch(FormatException)
+            {
+                return false;
+            }
         }
     }
 }

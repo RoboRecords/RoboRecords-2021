@@ -229,7 +229,7 @@
     }
     
     function loginUsernameOnChange(element, help) {
-        if (checkUsername(element.value))
+        if (checkUsername(element.value) || validateEmail(element.value))
         {
             loginUsernameValid = true
             element.setAttribute("class", "form-control is-valid")

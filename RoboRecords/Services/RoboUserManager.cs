@@ -33,7 +33,7 @@ namespace RoboRecords.Services
             // return _userManager.CreateAsync(new RoboUser(email, userName, discriminator), password).Result;
             return _userManager.CreateAsync(new IdentityRoboUser()
             {
-                UserName = $"{userName}#{discriminator}",
+                UserName = $"{userName}#{discriminator.ToString().PadLeft(4,'0')}",
                 Email = email,
                 Roles = (int)UserRoles.User
             }
@@ -46,7 +46,7 @@ namespace RoboRecords.Services
             // return _userManager.CreateAsync(new RoboUser(email, userName, discriminator), password).Result;
             return _userManager.CreateAsync(new IdentityRoboUser()
             {
-                UserName = $"{userName}#{discriminator}",
+                UserName = $"{userName}#{discriminator.ToString().PadLeft(4, '0')}",
                 Email = email,
                 Roles = (int)roles
             }

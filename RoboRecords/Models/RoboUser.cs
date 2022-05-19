@@ -25,6 +25,8 @@ namespace RoboRecords.Models
 
         public string AvatarPath => GetAvatarPath();
 
+        public string UserName => $"{UserNameNoDiscrim}#{Discriminator.ToString().PadLeft(4,'0')}";
+
         public RoboUser(string userName, short numberDiscriminator)
         {
             Discriminator = numberDiscriminator;

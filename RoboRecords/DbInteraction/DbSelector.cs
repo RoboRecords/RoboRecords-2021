@@ -305,6 +305,24 @@ namespace RoboRecords.DbInteraction
             return TryGetIdentityUserFromUserName($"{uname}#{disc}", out iUser);
         }
 
+        public static bool TryGetIdentityUserFromEmail(string email, out IdentityRoboUser iUser)
+        {
+            iUser = null;
+            if (string.IsNullOrEmpty(email))
+                return false;
+
+            // Return user with given email. Return "invalid user" if not found.
+            using (IdentityContext context = new IdentityContext())
+            {
+                iUser = context.Users.Where(e => e.NormalizedEmail == email.ToUpper()).FirstOrDefault();
+            }
+
+            if (iUser is not null)
+                return true;
+            else
+                return false;
+        }
+
         public static bool TryGetRoboUserFromApiKey(string apiKey, out RoboUser roboUser)
         {
             roboUser = null;
