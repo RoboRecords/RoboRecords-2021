@@ -115,17 +115,17 @@ namespace RoboRecords
                 // Sample records
                 var roboRecords = new List<RoboRecord>
                 {
-                    new RoboRecord(roboUsers[0], null) {Tics = 420, Character = standardCharacters.Find(character => character.NameId == "sonic")},
-                    new RoboRecord(roboUsers[3], null) {Tics = 421, Character = standardCharacters.Find(character => character.NameId == "sonic")},
-                    new RoboRecord(roboUsers[1], null) {Tics = 419, Character = standardCharacters.Find(character => character.NameId == "tails")},
-                    new RoboRecord(roboUsers[7], null) {Tics = 666, Character = standardCharacters.Find(character => character.NameId == "knuckles")},
-                    new RoboRecord(roboUsers[7], null) {Tics = 6969, Character = standardCharacters.Find(character => character.NameId == "knuckles")},
-                    new RoboRecord(roboUsers[2], null) {Tics = 6969, Character = standardCharacters.Find(character => character.NameId == "amy")},
-                    new RoboRecord(roboUsers[4], null) {Tics = 54321, Character = standardCharacters.Find(character => character.NameId == "fang")},
-                    new RoboRecord(roboUsers[5], null) {Tics = 12345, Character = standardCharacters.Find(character => character.NameId == "metalsonic")},
-                    new RoboRecord(roboUsers[3], null) {Tics = 1337, Character = standardCharacters.Find(character => character.NameId == "sonic")},
-                    new RoboRecord(roboUsers[3], null) {Tics = 1337, Character = standardCharacters.Find(character => character.NameId == "sonic")},
-                    new RoboRecord(roboUsers[6], null) {Tics = 7331, Character = standardCharacters.Find(character => character.NameId == "sonic")}
+                    new RoboRecord(roboUsers[0], null) {Tics = 420, Character = standardCharacters.Find(character => character.NameId == "sonic"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                    new RoboRecord(roboUsers[3], null) {Tics = 421, Character = standardCharacters.Find(character => character.NameId == "sonic"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                    new RoboRecord(roboUsers[1], null) {Tics = 419, Character = standardCharacters.Find(character => character.NameId == "tails"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                    new RoboRecord(roboUsers[7], null) {Tics = 666, Character = standardCharacters.Find(character => character.NameId == "knuckles"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                    new RoboRecord(roboUsers[7], null) {Tics = 6969, Character = standardCharacters.Find(character => character.NameId == "knuckles"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                    new RoboRecord(roboUsers[2], null) {Tics = 6969, Character = standardCharacters.Find(character => character.NameId == "amy"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                    new RoboRecord(roboUsers[4], null) {Tics = 54321, Character = standardCharacters.Find(character => character.NameId == "fang"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                    new RoboRecord(roboUsers[5], null) {Tics = 12345, Character = standardCharacters.Find(character => character.NameId == "metalsonic"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                    new RoboRecord(roboUsers[3], null) {Tics = 1337, Character = standardCharacters.Find(character => character.NameId == "sonic"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                    new RoboRecord(roboUsers[3], null) {Tics = 1337, Character = standardCharacters.Find(character => character.NameId == "sonic"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+                    new RoboRecord(roboUsers[6], null) {Tics = 7331, Character = standardCharacters.Find(character => character.NameId == "sonic"), Description = "Pog", VideoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
                 };
 
                 // Add the records to their levels.

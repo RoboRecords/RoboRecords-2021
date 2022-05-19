@@ -102,6 +102,8 @@ namespace RoboRecords.DatabaseContexts
                 entity.Property(e => e.UploadTime).IsRequired();
 
                 entity.Property(e => e.LevelNumber).IsRequired();
+
+                entity.Property(m => m.Description).HasMaxLength(256);
             });
             
             modelBuilder.Entity<SiteAsset>(entity =>

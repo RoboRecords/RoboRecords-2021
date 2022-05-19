@@ -25,6 +25,8 @@ namespace RoboRecords.Models
         public long Score;
         public virtual RoboCharacter Character { get; set; }
         public virtual RoboLevel Level { get; set; }
+        public string VideoLink;
+        public string Description;
 
         public const string MessageSuccess = "File read successfully!";
         public const string MessageErrorReading = "The file could not be read!";
