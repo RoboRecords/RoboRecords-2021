@@ -59,7 +59,7 @@ namespace RoboRecords.DbInteraction
         public static void AddLevelToGame(RoboLevel level, RoboGame game)
         {
             // INSERT the given RoboLevel into the given RoboGame
-            game.LevelGroups =  WadReader.SortLevelsToGroups(new List<RoboLevel>() {level}, game.LevelGroups.ToList());
+            game.LevelGroups = CommonMethods.SortLevelsToGroups(new List<RoboLevel>() {level}, game.LevelGroups.ToList());
             using (RoboRecordsDbContext context = new RoboRecordsDbContext())
             {
                 context.RoboGames.Update(game);
@@ -103,7 +103,7 @@ namespace RoboRecords.DbInteraction
 
             if (isBest || isBestNightsScore)
             {
-                DbInserter.AddRecordToLevel(record, level);
+                AddRecordToLevel(record, level);
                 FileManager.Write(Path.Combine(FileManager.ReplaysDirectoryName, $"{record.DbId}.lmp"), record.FileBytes);
                 return true;
             }
