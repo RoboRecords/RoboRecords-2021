@@ -43,12 +43,12 @@ namespace RoboRecords.Pages
 
             if (id != null)
             {
-                DbSelector.TryGetGameWithLevelsFromID(id, out Game);
+                DbSelector.TryGetGameWithRecordsFromID(id, out Game);
             }
             else
             {
                 // SRB2 2.2 default for testing. Should be changed to throw an error.
-                DbSelector.TryGetGameWithLevelsFromID("sonicroboblast2v22", out Game);
+                DbSelector.TryGetGameWithRecordsFromID("sonicroboblast2v22", out Game);
             }
         }
 
@@ -99,22 +99,24 @@ namespace RoboRecords.Pages
                     foreach (InterpretedLevel level in levelGroup.Levels)
                     {
                         Logger.Log("Url: " + level.IconUrl + ", Act: " + level.Act + ", Nights: " + level.Nights + ", Name: " + level.LevelName);
-                        RoboLevel gameLevel = game.GetLevelByNumber(Int32.Parse(level.LevelNumber) );
-                        RoboLevel newLevel;
+                        RoboLevel gameLevel = Game.GetLevelByNumber(Int32.Parse(level.LevelNumber) );
+                        RoboLevel newLevel = new RoboLevel(Int32.Parse(level.LevelNumber), level.LevelName, Int32.Parse(level.Act), level.Nights);
+                        
+                        newLevel.IconUrl = level.IconUrl;
+                        newLevel.LevelGroup = newGroup;
+                        
                         if (gameLevel is not null)
                         {
-                            gameLevel.LevelName = level.LevelName;
-                            gameLevel.Act = Int32.Parse(level.Act);
-                            gameLevel.Nights = level.Nights;
-                            gameLevel.IconUrl = level.IconUrl;
-                            gameLevel.LevelGroup = newGroup;
-                            newLevel = gameLevel;
+                            //newLevel.Records = gameLevel.Records;
+                            IList<RoboRecord> records = new List<RoboRecord>();
+                            foreach (RoboRecord record in gameLevel.Records)
+                            {
+                                record.Level = newLevel;
+                                records.Add(record);
+                            }
+                            newLevel.Records = records;
                         }
-                        else
-                        {
-                            newLevel = new RoboLevel(Int32.Parse(level.LevelNumber), level.LevelName, Int32.Parse(level.Act), level.Nights);
-                            newLevel.LevelGroup = newGroup;
-                        }
+                        
                         newGroup.Levels.Add(newLevel);
                     }
 
@@ -125,8 +127,31 @@ namespace RoboRecords.Pages
                 game.LevelGroups = groups;
                 using (RoboRecordsDbContext context = new RoboRecordsDbContext())
                 {
+                    /*
+                    foreach (LevelGroup group in Game.LevelGroups)
+                    {
+                        foreach (RoboLevel level in group.Levels)
+                        {
+                            if (level.Records is not null)
+                            {
+                                foreach (RoboRecord record in level.Records)
+                                {
+                                    Logger.Log("Removing record...");
+                                    context.RoboRecords.Remove(record);
+                                }
+                                context.Update(level);
+                            }
+                            Logger.Log("Removing level...");
+                            context.RoboLevels.Remove(level);
+                            context.Update(group);
+                        }
+                        Logger.Log("Removing group...");
+                        context.LevelGroups.Remove(group);
+                        context.Update(Game);
+                    }*/
+                    Logger.Log("Removing game...");
                     context.RoboGames.Remove(Game);
-                    
+
                     Logger.Log("Updating game...");
                     context.RoboGames.Add(game);
 

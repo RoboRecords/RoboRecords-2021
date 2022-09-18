@@ -434,3 +434,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 RoboRecords/Properties/launchSettings.json
+
+[Rr]eplays/

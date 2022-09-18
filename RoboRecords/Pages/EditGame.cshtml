@@ -39,10 +39,10 @@
     
     class LevelGroupForm
     {
-        constructor(name, WriteLevelNames, Levels)
+        constructor(name, writeLevelNames, Levels)
         {
             this.Name = name;
-            this.WriteLevelNames = WriteLevelNames.toString() === "True";
+            this.WriteLevelNames = writeLevelNames.toString() === "True";
             this.Levels = Levels.slice();
         }
     }
@@ -90,7 +90,7 @@
             for (let groupCount = 0; groupCount < this.LevelGroups.length; groupCount++)
             {
                 let group = this.LevelGroups[groupCount];
-                let checked_str = group.WriteNames ? "checked" : "";
+                let checked_str = group.WriteLevelNames ? "checked" : "";
                 
                 html_str += `
                 <div style="background: #204080; padding: 10px; margin-bottom: 10px">
@@ -104,7 +104,7 @@
                         <label for="group_` + groupCount +`_write_names">Write Level Names</label>
                     </dt>
                     <dd>
-                        <input id="group_` + groupCount +`_write_names" type="checkbox" e="group_` + groupCount +`_write_names" ` + checked_str +`/>
+                        <input id="group_` + groupCount +`_write_names" type="checkbox" name="group_` + groupCount +`_write_names" ` + checked_str +`/>
                     </dd>
                     <dt>
                         <label>Levels</label>
